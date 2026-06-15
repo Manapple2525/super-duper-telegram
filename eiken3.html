@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英検3級 単語フラッシュカード</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;}
+#app{max-width:600px;margin:0 auto;padding:1rem;}
+
+/* トップページ */
+.home-title{font-size:13px;color:#888;text-align:center;margin-bottom:4px;letter-spacing:0.05em;}
+.home-heading{font-size:22px;font-weight:500;text-align:center;margin-bottom:6px;}
+.home-sub{font-size:13px;color:#888;text-align:center;margin-bottom:24px;}
+.phase-section{margin-bottom:20px;}
+.phase-label{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.phase-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.phase-title{font-size:14px;font-weight:500;color:#1a1a1a;}
+.phase-desc{font-size:12px;color:#888;margin-left:32px;margin-bottom:8px;margin-top:-4px;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
+.cat-card{border:1px solid #e0ddd6;border-radius:12px;padding:12px 14px;background:#fff;cursor:pointer;transition:all 0.15s;position:relative;}
+.cat-card:hover:not(.disabled){border-color:#aaa;background:#faf9f7;}
+.cat-card:active:not(.disabled){transform:scale(0.98);}
+.cat-card.disabled{opacity:0.45;cursor:not-allowed;background:#f9f8f5;}
+.cat-card.active-card{border-color:#1D9E75;background:#f0faf6;}
+.cat-name{font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:3px;}
+.cat-count{font-size:11px;color:#888;}
+.cat-badge{position:absolute;top:8px;right:8px;font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500;}
+.badge-ready{background:#e1f5ee;color:#0F6E56;}
+.badge-soon{background:#f1efe8;color:#888;}
+.home-btn{width:100%;padding:12px;background:#1a1a1a;color:#fff;border:none;border-radius:10px;font-size:15px;font-family:inherit;cursor:pointer;margin-top:8px;transition:opacity 0.15s;}
+.home-btn:hover{opacity:0.85;}
+.home-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.progress-summary{background:#fff;border:1px solid #e0ddd6;border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.prog-item{text-align:center;}
+.prog-num{font-size:20px;font-weight:500;color:#1a1a1a;}
+.prog-label{font-size:11px;color:#888;margin-top:2px;}
+.divider{border:none;border-top:1px solid #e8e5de;margin:20px 0;}
+
+/* 学習画面 */
+.back-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:#888;cursor:pointer;margin-bottom:16px;background:none;border:none;font-family:inherit;padding:0;}
+.back-btn:hover{color:#1a1a1a;}
+.screen-title{font-size:16px;font-weight:500;margin-bottom:16px;}
+.nav{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
+.nav-btn{padding:7px 14px;border-radius:20px;border:1px solid #ccc;background:#fff;font-size:13px;cursor:pointer;white-space:nowrap;color:#555;transition:all 0.15s;}
+.nav-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.mode-toggle{display:flex;border:1px solid #ccc;border-radius:8px;overflow:hidden;}
+.mode-btn{padding:6px 12px;font-size:12px;background:transparent;border:none;cursor:pointer;color:#888;}
+.mode-btn.active{background:#1a1a1a;color:#fff;}
+.progress-bar{height:3px;background:#ddd;border-radius:2px;overflow:hidden;margin-bottom:12px;}
+.progress-fill{height:100%;background:#1D9E75;border-radius:2px;transition:width 0.3s;}
+.stat-row{display:flex;gap:12px;justify-content:center;font-size:12px;color:#888;margin-bottom:14px;}
+.stat-val{font-weight:600;color:#1a1a1a;}
+.card-wrap{perspective:1200px;height:240px;cursor:pointer;margin-bottom:12px;}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(.4,0,.2,1);}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;border:1px solid #e0ddd6;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+.card-front{background:#fff;}
+.card-back{background:#f9f8f5;transform:rotateY(180deg);overflow-y:auto;justify-content:flex-start;padding:1rem 1.25rem;-webkit-overflow-scrolling:touch;}
+.front-label{font-size:11px;color:#aaa;letter-spacing:0.07em;margin-bottom:8px;}
+.front-word{font-size:28px;font-weight:500;color:#1a1a1a;text-align:center;line-height:1.3;}
+.front-blank{font-size:15px;color:#1a1a1a;text-align:center;line-height:1.8;}
+.blank-span{display:inline-block;border-bottom:2px solid #1a1a1a;min-width:90px;background:#e0ddd6;border-radius:2px;color:transparent;user-select:none;}
+.front-hint{font-size:11px;color:#ccc;margin-top:10px;}
+.back-word{font-size:20px;font-weight:500;color:#1a1a1a;margin:0 0 2px;}
+.back-pron{font-size:13px;color:#888;margin:0 0 6px;display:flex;align-items:center;gap:6px;}
+.audio-btn{font-size:18px;cursor:pointer;background:none;border:none;padding:0;line-height:1;}
+hr.div{border:none;border-top:1px solid #e8e5de;margin:7px 0;}
+.pos{font-size:10px;font-weight:600;color:#185FA5;background:#deeaf9;padding:2px 6px;border-radius:4px;margin-right:4px;display:inline-block;vertical-align:middle;}
+.meaning-text{font-size:13px;color:#1a1a1a;vertical-align:middle;}
+.example{font-size:12px;color:#666;margin:3px 0 2px;padding-left:4px;font-style:italic;line-height:1.5;}
+.example-ja{font-size:11px;color:#999;padding-left:4px;line-height:1.4;margin-bottom:4px;}
+.deriv-box{background:#fff;border:1px solid #e8e5de;border-radius:8px;padding:8px 10px;margin-top:8px;}
+.deriv-label{font-size:10px;font-weight:600;color:#3B6D11;letter-spacing:0.05em;margin-bottom:5px;}
+.deriv-item{font-size:12px;color:#555;margin-bottom:3px;line-height:1.5;}
+.idiom-box{background:#fff;border:1px solid #e8e5de;border-radius:8px;padding:8px 10px;margin-top:6px;}
+.idiom-label{font-size:10px;font-weight:600;color:#854F0B;letter-spacing:0.05em;margin-bottom:5px;}
+.idiom-item{font-size:12px;color:#555;margin-bottom:4px;line-height:1.5;}
+.idiom-phrase{font-weight:600;color:#1a1a1a;}
+.etym-box{background:#fff;border:1px solid #e8e5de;border-radius:8px;padding:8px 10px;margin-top:6px;}
+.etym-label{font-size:10px;font-weight:600;color:#993C1D;letter-spacing:0.05em;margin-bottom:4px;}
+.etym-text{font-size:12px;color:#777;line-height:1.6;}
+.btn-row{display:flex;gap:8px;justify-content:center;margin-top:6px;}
+.btn{padding:10px 22px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.btn:hover{background:#f0ede8;}
+.btn:active{transform:scale(0.97);}
+.btn.ok{border-color:#1D9E75;color:#0F6E56;}
+.btn.ng{border-color:#D85A30;color:#993C1D;}
+.btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+.result-box{text-align:center;padding:2.5rem 0;}
+.result-num{font-size:52px;font-weight:500;color:#1a1a1a;}
+.result-sub{font-size:15px;color:#888;margin-top:8px;}
+.result-btns{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.saved-note{font-size:11px;color:#1D9E75;text-align:center;margin-bottom:6px;}
+.upload-zone{border:2px dashed #ccc;border-radius:14px;padding:2rem 1.5rem;text-align:center;cursor:pointer;background:#fff;transition:background 0.2s;}
+.upload-zone:hover{background:#f5f4f0;}
+.upload-icon{font-size:36px;margin-bottom:10px;}
+.upload-title{font-size:15px;font-weight:500;margin-bottom:4px;}
+.upload-sub{font-size:13px;color:#888;}
+#preview-img{width:100%;max-height:180px;object-fit:contain;border-radius:10px;border:1px solid #e0ddd6;margin-top:12px;display:none;}
+.num-row{display:flex;align-items:center;gap:10px;margin:12px 0;}
+#ai-status{font-size:13px;color:#888;text-align:center;margin:10px 0;min-height:18px;}
+.edit-area{background:#fff;border:1px solid #e0ddd6;border-radius:12px;padding:1rem;margin-bottom:10px;}
+.edit-area h3{font-size:14px;font-weight:500;margin-bottom:10px;color:#555;}
+.edit-area input,.edit-area textarea{width:100%;border:1px solid #ddd;border-radius:6px;padding:7px 10px;font-size:13px;font-family:inherit;margin-bottom:6px;}
+.edit-area textarea{resize:vertical;min-height:55px;}
+.word-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid #e8e5de;border-radius:8px;margin-bottom:6px;background:#fff;font-size:13px;}
+.word-item-del{background:none;border:none;color:#D85A30;cursor:pointer;font-size:16px;padding:0 4px;}
+.section{display:none;}
+.section.active{display:block;}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:6px;vertical-align:middle;}
+.badge-review{background:#faeeda;color:#854F0B;}
+.badge-new{background:#e1f5ee;color:#0F6E56;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ホーム画面 -->
+  <div id="screen-home">
+    <div style="padding-top:1rem;">
+      <div class="home-title">EIKEN GRADE 3</div>
+      <a href="index.html" class="back-btn" style="display:inline-flex;text-decoration:none;margin-bottom:8px;">← 科目選択に戻る</a>
+      <div class="home-heading">英検3級 単語学習</div>
+      <div class="home-sub">テーマ・フェーズ別に単語を学ぼう</div>
+
+      <div class="progress-summary" id="home-progress">
+        <div class="prog-item"><div class="prog-num" id="hp-total">0</div><div class="prog-label">総単語数</div></div>
+        <div class="prog-item"><div class="prog-num" id="hp-learned">0</div><div class="prog-label">覚えた</div></div>
+        <div class="prog-item"><div class="prog-num" id="hp-missed">0</div><div class="prog-label">要復習</div></div>
+        <div class="prog-item"><div class="prog-num" id="hp-pct">0%</div><div class="prog-label">達成率</div></div>
+      </div>
+
+      <!-- フェーズ1 -->
+      <div class="phase-section">
+        <div class="phase-label">
+          <div class="phase-num" style="background:#e1f5ee;color:#0F6E56;">1</div>
+          <div class="phase-title">基礎テーマ（日常・学校生活）</div>
+        </div>
+        <div class="phase-desc">最頻出。まずここを固める。</div>
+        <div class="cat-grid">
+          <div class="cat-card active-card" onclick="selectCat('school')">
+            <span class="cat-badge badge-ready">学習可</span>
+            <div class="cat-name">学校・勉強</div>
+            <div class="cat-count" id="cnt-school">0語</div>
+          </div>
+          <div class="cat-card active-card" onclick="selectCat('family')">
+            <span class="cat-badge badge-ready">学習可</span>
+            <div class="cat-name">家族・日常生活</div>
+            <div class="cat-count" id="cnt-family">0語</div>
+          </div>
+          <div class="cat-card active-card" onclick="selectCat('food')">
+            <span class="cat-badge badge-ready">学習可</span>
+            <div class="cat-name">食べ物・料理</div>
+            <div class="cat-count" id="cnt-food">0語</div>
+          </div>
+          <div class="cat-card active-card" onclick="selectCat('health')">
+            <span class="cat-badge badge-ready">学習可</span>
+            <div class="cat-name">健康・身体</div>
+            <div class="cat-count" id="cnt-health">0語</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- フェーズ2 -->
+      <div class="phase-section">
+        <div class="phase-label">
+          <div class="phase-num" style="background:#E6F1FB;color:#185FA5;">2</div>
+          <div class="phase-title">社会・文化テーマ</div>
+        </div>
+        <div class="phase-desc">長文・ライティングで頻出。</div>
+        <div class="cat-grid">
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">環境・自然</div>
+            <div class="cat-count">約60語</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">文化・社会</div>
+            <div class="cat-count">約60語</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">旅行・交通</div>
+            <div class="cat-count">約50語</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">歴史・地理</div>
+            <div class="cat-count">約40語</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- フェーズ3 -->
+      <div class="phase-section">
+        <div class="phase-label">
+          <div class="phase-num" style="background:#FAEEDA;color:#854F0B;">3</div>
+          <div class="phase-title">頻出動詞・形容詞・副詞</div>
+        </div>
+        <div class="phase-desc">空所補充で直接問われる品詞。</div>
+        <div class="cat-grid">
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">頻出動詞</div>
+            <div class="cat-count">約100語</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">頻出形容詞</div>
+            <div class="cat-count">約80語</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">頻出副詞</div>
+            <div class="cat-count">約40語</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- フェーズ4 -->
+      <div class="phase-section">
+        <div class="phase-label">
+          <div class="phase-num" style="background:#FAECE7;color:#993C1D;">4</div>
+          <div class="phase-title">熟語・定型表現・会話表現</div>
+        </div>
+        <div class="phase-desc">会話文・ライティング・面接で必須。</div>
+        <div class="cat-grid">
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">動詞句・熟語</div>
+            <div class="cat-count">約80語</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">会話表現</div>
+            <div class="cat-count">約50語</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- フェーズ5 -->
+      <div class="phase-section">
+        <div class="phase-label">
+          <div class="phase-num" style="background:#EEEDFE;color:#534AB7;">5</div>
+          <div class="phase-title">語源グループ（横断学習）</div>
+        </div>
+        <div class="phase-desc">知らない単語でも意味を推測できるようにする。</div>
+        <div class="cat-grid">
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">接頭辞グループ</div>
+            <div class="cat-count">横断</div>
+          </div>
+          <div class="cat-card disabled">
+            <span class="cat-badge badge-soon">準備中</span>
+            <div class="cat-name">接尾辞グループ</div>
+            <div class="cat-count">横断</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <button class="home-btn" id="review-all-btn" onclick="goReviewAll()" disabled>🔁 全カテゴリの復習をする</button>
+    </div>
+  </div>
+
+  <!-- 学習画面 -->
+  <div id="screen-study" style="display:none;">
+    <button class="back-btn" onclick="goHome()">← ホームに戻る</button>
+    <div class="screen-title" id="study-title"></div>
+
+    <div class="nav">
+      <button class="nav-btn active" onclick="showTab('tab-quiz')">📖 学習</button>
+      <button class="nav-btn" onclick="showTab('tab-review')">🔁 復習</button>
+      <button class="nav-btn" onclick="showTab('tab-photo')">📷 写真から追加</button>
+      <button class="nav-btn" onclick="showTab('tab-edit')">✏️ 単語を追加</button>
+    </div>
+
+    <!-- 学習タブ -->
+    <div id="tab-quiz" class="section active">
+      <div id="quiz-inner">
+        <div class="top-bar">
+          <div style="font-size:13px;color:#888;" id="mode-label">英語 → 日本語</div>
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="btn-en" onclick="setMode('en')">英→日</button>
+            <button class="mode-btn" id="btn-ja" onclick="setMode('ja')">日→英</button>
+          </div>
+        </div>
+        <div id="saved-note" class="saved-note" style="display:none;">✓ 前回の続きから再開しています</div>
+        <div class="progress-bar"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+        <div class="stat-row">
+          <span><span class="stat-val" id="cur">1</span> / <span id="total">0</span></span>
+          <span>✓ <span class="stat-val" id="ok-cnt">0</span></span>
+          <span>✗ <span class="stat-val" id="ng-cnt">0</span></span>
+        </div>
+        <div class="card-wrap" onclick="flip()">
+          <div class="card-inner" id="inner">
+            <div class="card-face card-front">
+              <div class="front-label" id="front-label">単語</div>
+              <div id="front-content"></div>
+              <div class="front-hint">タップしてめくる</div>
+            </div>
+            <div class="card-face card-back">
+              <div id="back-content"></div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-row" id="btn-row" style="display:none;">
+          <button class="btn ng" onclick="answer(false)">✗ もう一度</button>
+          <button class="btn ok" onclick="answer(true)">✓ 覚えた！</button>
+        </div>
+      </div>
+      <div id="quiz-result" style="display:none;">
+        <div class="result-box">
+          <div class="result-num" id="r-score"></div>
+          <div class="result-sub" id="r-sub"></div>
+          <div class="result-btns">
+            <button class="btn" onclick="restartQuiz('en')">英→日 でもう一度</button>
+            <button class="btn" onclick="restartQuiz('ja')">日→英 でもう一度</button>
+            <button class="btn primary" onclick="showTab('tab-review')">間違いを復習する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 復習タブ -->
+    <div id="tab-review" class="section">
+      <div id="review-empty" style="text-align:center;padding:3rem 0;color:#888;font-size:14px;">
+        まだ間違えた単語がありません。<br>学習モードで問題を解いてから来てください！
+      </div>
+      <div id="review-inner" style="display:none;">
+        <div class="top-bar">
+          <div style="font-size:13px;color:#D85A30;font-weight:500;">🔁 復習モード <span class="badge badge-review" id="review-badge">0語</span></div>
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="rbtn-en" onclick="setReviewMode('en')">英→日</button>
+            <button class="mode-btn" id="rbtn-ja" onclick="setReviewMode('ja')">日→英</button>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="rpfill" style="width:0%"></div></div>
+        <div class="stat-row">
+          <span><span class="stat-val" id="rcur">1</span> / <span id="rtotal">0</span></span>
+          <span>✓ <span class="stat-val" id="rok-cnt">0</span></span>
+          <span>✗ <span class="stat-val" id="rng-cnt">0</span></span>
+        </div>
+        <div class="card-wrap" onclick="rflip()">
+          <div class="card-inner" id="rinner">
+            <div class="card-face card-front">
+              <div class="front-label" id="rfront-label">単語</div>
+              <div id="rfront-content"></div>
+              <div class="front-hint">タップしてめくる</div>
+            </div>
+            <div class="card-face card-back">
+              <div id="rback-content"></div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-row" id="rbtn-row" style="display:none;">
+          <button class="btn ng" onclick="ranswer(false)">✗ まだ覚えてない</button>
+          <button class="btn ok" onclick="ranswer(true)">✓ 覚えた！</button>
+        </div>
+      </div>
+      <div id="review-result" style="display:none;">
+        <div class="result-box">
+          <div class="result-num" id="rr-score"></div>
+          <div class="result-sub" id="rr-sub"></div>
+          <div class="result-btns">
+            <button class="btn" onclick="startReview()">もう一度復習</button>
+            <button class="btn primary" onclick="showTab('tab-quiz')">学習に戻る</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 写真タブ -->
+    <div id="tab-photo" class="section">
+      <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-in').click()">
+        <input type="file" id="file-in" accept="image/*" style="display:none;" onchange="loadFile(this.files[0])">
+        <div class="upload-icon">📷</div>
+        <div class="upload-title">教科書・参考書の写真をアップロード</div>
+        <div class="upload-sub">タップして選ぶ、またはドラッグ＆ドロップ</div>
+        <img id="preview-img" alt="プレビュー">
+      </div>
+      <div class="num-row" style="margin-top:14px;">
+        <label style="font-size:13px;color:#888;white-space:nowrap;" for="num-q">生成する問題数</label>
+        <input type="range" id="num-q" min="3" max="10" value="5" step="1" style="flex:1;" oninput="document.getElementById('num-out').textContent=this.value">
+        <span id="num-out" style="font-size:13px;font-weight:500;min-width:20px;">5</span>問
+      </div>
+      <button id="gen-btn" class="btn primary" style="display:none;width:100%;padding:12px;font-size:15px;" onclick="generateFromPhoto()">この写真から単語カードを生成する</button>
+      <div id="ai-status"></div>
+    </div>
+
+    <!-- 編集タブ -->
+    <div id="tab-edit" class="section">
+      <div class="edit-area">
+        <h3>単語を追加する</h3>
+        <input type="text" id="new-word" placeholder="英単語（例: beautiful）">
+        <input type="text" id="new-pron" placeholder="発音記号（例: bjuːtɪfl）">
+        <input type="text" id="new-def" placeholder="意味（例: 美しい）">
+        <input type="text" id="new-ex" placeholder="例文（英語）">
+        <input type="text" id="new-exja" placeholder="例文（日本語訳）">
+        <textarea id="new-etym" placeholder="語源・語幹（任意）"></textarea>
+        <textarea id="new-deriv" placeholder="派生語（1行1語）"></textarea>
+        <textarea id="new-idiom" placeholder="イディオム（1行1つ。例: look up / 調べる）"></textarea>
+        <button class="btn primary" style="width:100%;margin-top:4px;" onclick="addWord()">追加する</button>
+      </div>
+      <div class="edit-area">
+        <h3>登録済み単語一覧 <span class="badge badge-new" id="word-count-badge">0語</span></h3>
+        <div id="word-list"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ===================== データ定義 =====================
+var CATALOG = {
+  school: {
+    name: '学校・勉強',
+    phase: 1,
+    words: [
+      {word:'subject',pron:'ˈsʌbdʒɪkt',meanings:[{pos:'名',def:'教科、科目；主題',ex:'Math is my favorite subject.',exJa:'数学は私の好きな教科です。'},{pos:'形',def:'支配されている、～を受けやすい',ex:'We are subject to the rules.',exJa:'私たちは規則に従わなければならない。'}],etym:'ラテン語 subjectus ← sub-（下に）+ jacere（投げる）。「下に置かれたもの」→「テーマ・主題」。',derivatives:['subjective（形）主観的な','subjectively（副）主観的に'],idioms:['on the subject of / ～について','change the subject / 話題を変える']},
+      {word:'grade',pron:'ɡreɪd',meanings:[{pos:'名',def:'成績、評点；学年',ex:'She got a good grade on the test.',exJa:'彼女はテストで良い成績をとった。'},{pos:'動',def:'採点する',ex:'The teacher is grading papers.',exJa:'先生がテストを採点している。'}],etym:'ラテン語 gradus（歩み、段階）から。「段階」→「評価の段階」。',derivatives:['gradual（形）段階的な','gradually（副）徐々に','upgrade（動）グレードアップする'],idioms:['make the grade / 合格する、基準を満たす','grade school / 小学校']},
+      {word:'exam',pron:'ɪɡˈzæm',meanings:[{pos:'名',def:'試験、検査',ex:'I have an English exam tomorrow.',exJa:'明日英語の試験があります。'}],etym:'examination の短縮形。ラテン語 examinare（量る、調べる）← ex-（外へ）+ agere（動かす）。',derivatives:['examination（名）試験、検査','examine（動）調べる、試験する','examiner（名）試験官'],idioms:['pass an exam / 試験に合格する','fail an exam / 試験に落ちる','take an exam / 試験を受ける']},
+      {word:'graduate',pron:'ˈɡrædʒueɪt',meanings:[{pos:'動',def:'卒業する',ex:'She will graduate from high school next year.',exJa:'彼女は来年高校を卒業する。'},{pos:'名',def:'卒業生',ex:'He is a university graduate.',exJa:'彼は大学の卒業生です。'}],etym:'ラテン語 graduari（段階を上がる）← gradus（段階）。「次の段階へ進む」が原義。',derivatives:['graduation（名）卒業','postgraduate（形/名）大学院の・大学院生','undergraduate（名）学部生'],idioms:['graduation ceremony / 卒業式','graduate school / 大学院']},
+      {word:'homework',pron:'ˈhoʊmwɜːrk',meanings:[{pos:'名',def:'宿題',ex:'I forgot to do my homework.',exJa:'宿題をするのを忘れた。'}],etym:'home（家）+ work（仕事）。家でやる勉強のこと。',derivatives:[],idioms:['do homework / 宿題をする','hand in homework / 宿題を提出する']},
+      {word:'classmate',pron:'ˈklæsmeɪt',meanings:[{pos:'名',def:'クラスメート、同級生',ex:'My classmates are very friendly.',exJa:'クラスメートはとても友好的です。'}],etym:'class（クラス）+ mate（仲間）。',derivatives:[],idioms:[]},
+      {word:'textbook',pron:'ˈtekstbʊk',meanings:[{pos:'名',def:'教科書',ex:'Please open your textbook to page 10.',exJa:'教科書の10ページを開いてください。'}],etym:'text（本文）+ book（本）。',derivatives:[],idioms:[]},
+      {word:'library',pron:'ˈlaɪbreri',meanings:[{pos:'名',def:'図書館、図書室',ex:'I study at the library after school.',exJa:'放課後、図書館で勉強します。'}],etym:'ラテン語 liber（本）+ -ary（場所）。「本のある場所」。',derivatives:['librarian（名）図書館員'],idioms:['public library / 公共図書館']},
+      {word:'dormitory',pron:'ˈdɔːrmɪtɔːri',meanings:[{pos:'名',def:'寮、寄宿舎',ex:'He lives in a school dormitory.',exJa:'彼は学校の寮に住んでいます。'}],etym:'ラテン語 dormitorium ← dormire（眠る）。「眠る場所」。',derivatives:[],idioms:[]},
+      {word:'scholarship',pron:'ˈskɒlərʃɪp',meanings:[{pos:'名',def:'奨学金、学識',ex:'She received a scholarship to study abroad.',exJa:'彼女は留学のための奨学金をもらった。'}],etym:'scholar（学者）+ -ship（状態・資格）。',derivatives:['scholar（名）学者、奨学生','scholarly（形）学術的な'],idioms:['win a scholarship / 奨学金を得る']},
+      {word:'absent',pron:'ˈæbsənt',meanings:[{pos:'形',def:'欠席している、不在の',ex:'He was absent from school yesterday.',exJa:'彼は昨日学校を欠席した。'}],etym:'ラテン語 absens ← ab-（離れて）+ esse（ある）。「その場にいない」。',derivatives:['absence（名）欠席、不在','absentee（名）欠席者'],idioms:['be absent from / ～を欠席する']},
+      {word:'attendance',pron:'əˈtendəns',meanings:[{pos:'名',def:'出席、参加',ex:'Attendance is required for all students.',exJa:'すべての生徒の出席が必要です。'}],etym:'attend（出席する）+ -ance（名詞語尾）。attend はラテン語 attendere ← ad-（～へ）+ tendere（伸ばす）。',derivatives:['attend（動）出席する','attendant（名）付き添い、係員','attentive（形）注意深い'],idioms:['take attendance / 出席をとる','poor attendance / 出席率が低い']},
+      {word:'assignment',pron:'əˈsaɪnmənt',meanings:[{pos:'名',def:'課題、割り当て',ex:'The assignment is due on Friday.',exJa:'課題の提出は金曜日が締め切りです。'}],etym:'assign（割り当てる）+ -ment（名詞語尾）。assign はラテン語 assignare ← ad-（～へ）+ signare（印をつける）。',derivatives:['assign（動）割り当てる','reassign（動）再配属する'],idioms:['do an assignment / 課題をやる','hand in an assignment / 課題を提出する']},
+      {word:'semester',pron:'sɪˈmestər',meanings:[{pos:'名',def:'学期（半期）',ex:'We have exams at the end of each semester.',exJa:'毎学期末に試験があります。'}],etym:'ラテン語 semestris（6ヶ月の）← sex（6）+ mensis（月）。',derivatives:[],idioms:['fall semester / 秋学期','spring semester / 春学期']},
+      {word:'principal',pron:'ˈprɪnsɪpəl',meanings:[{pos:'名',def:'校長、代表者',ex:'The principal gave a speech at the ceremony.',exJa:'校長が式典でスピーチをした。'},{pos:'形',def:'主要な、主な',ex:'The principal reason is cost.',exJa:'主な理由はコストです。'}],etym:'ラテン語 principalis（第一の）← princeps（最初の人）← primus（第一）+ capere（取る）。',derivatives:['principally（副）主として','principle（名）原則（同音異義語）'],idioms:['principal office / 校長室']},
+      {word:'gymnasium',pron:'dʒɪmˈneɪziəm',meanings:[{pos:'名',def:'体育館',ex:'We play basketball in the gymnasium.',exJa:'体育館でバスケットボールをします。'}],etym:'ギリシャ語 gymnasion ← gymnazein（裸で運動する）。',derivatives:['gym（名）体育館（短縮形）','gymnastics（名）体操'],idioms:[]},
+      {word:'curriculum',pron:'kəˈrɪkjʊləm',meanings:[{pos:'名',def:'カリキュラム、教育課程',ex:'The school has a strong science curriculum.',exJa:'その学校は充実した理科のカリキュラムを持っています。'}],etym:'ラテン語 curriculum（走路）← currere（走る）。「学ぶべきコース」。',derivatives:[],idioms:['school curriculum / 学校のカリキュラム']},
+      {word:'lesson',pron:'ˈlesən',meanings:[{pos:'名',def:'授業、レッスン；教訓',ex:'The piano lesson starts at 3 p.m.',exJa:'ピアノのレッスンは午後3時に始まります。'}],etym:'ラテン語 lectio（読むこと）← legere（読む）。',derivatives:[],idioms:['learn a lesson / 教訓を学ぶ','music lesson / 音楽のレッスン']},
+      {word:'club',pron:'klʌb',meanings:[{pos:'名',def:'クラブ、部活動',ex:'She is a member of the drama club.',exJa:'彼女は演劇部のメンバーです。'}],etym:'古ノルド語 klubba（棍棒）から。「集まり」の意に発展。',derivatives:['clubroom（名）部室'],idioms:['join a club / クラブに入る','after-school club / 放課後のクラブ活動']},
+      {word:'diploma',pron:'dɪˈploʊmə',meanings:[{pos:'名',def:'卒業証書、資格証明書',ex:'She received her diploma at the graduation ceremony.',exJa:'彼女は卒業式で卒業証書を受け取った。'}],etym:'ギリシャ語 diploma（折り畳まれた紙）← diploun（二重にする）。',derivatives:['diplomatic（形）外交的な'],idioms:['high school diploma / 高校卒業証書']},
+      {word:'scholarship',pron:'ˈskɒlərʃɪp',meanings:[{pos:'名',def:'奨学金',ex:'He applied for a scholarship.',exJa:'彼は奨学金に申請した。'}],etym:'scholar（学者）+ -ship（状態）。',derivatives:['scholar（名）学者'],idioms:[]},
+      {word:'report',pron:'rɪˈpɔːrt',meanings:[{pos:'名',def:'レポート、報告書',ex:'I need to write a report on the environment.',exJa:'環境についてのレポートを書かなければならない。'},{pos:'動',def:'報告する',ex:'Please report to the office.',exJa:'事務所に報告してください。'}],etym:'ラテン語 reportare ← re-（戻る）+ portare（運ぶ）。「情報を持ち帰る」が原義。',derivatives:['reporter（名）レポーター','reporting（名）報道'],idioms:['book report / 読書感想文','report card / 成績表']},
+      {word:'practice',pron:'ˈpræktɪs',meanings:[{pos:'名',def:'練習、実践',ex:'Practice makes perfect.',exJa:'練習が上達の鍵。'},{pos:'動',def:'練習する',ex:'She practices piano every day.',exJa:'彼女は毎日ピアノを練習します。'}],etym:'ギリシャ語 praktike（実践的なこと）← prassein（行う）。',derivatives:['practical（形）実用的な','practically（副）実際には'],idioms:['in practice / 実際には','out of practice / 練習不足で']},
+      {word:'concentrate',pron:'ˈkɒnsəntreɪt',meanings:[{pos:'動',def:'集中する',ex:'It is hard to concentrate in a noisy room.',exJa:'うるさい部屋では集中するのが難しい。'}],etym:'ラテン語 concentrare ← con-（共に）+ centrum（中心）。「中心に向かって集まる」。',derivatives:['concentration（名）集中','concentrated（形）集中した、濃縮した'],idioms:['concentrate on / ～に集中する']},
+      {word:'memorize',pron:'ˈmeməraɪz',meanings:[{pos:'動',def:'暗記する',ex:'I need to memorize these vocabulary words.',exJa:'これらの単語を暗記しなければならない。'}],etym:'memory（記憶）+ -ize（動詞語尾）。',derivatives:['memory（名）記憶','memorable（形）忘れられない','memorial（名）記念碑'],idioms:[]},
+      {word:'understand',pron:'ˌʌndəˈstænd',meanings:[{pos:'動',def:'理解する、わかる',ex:'Do you understand this sentence?',exJa:'この文章を理解できますか？'}],etym:'古英語 understandan ← under-（下に）+ standan（立つ）。「根底を把握する」が原義。',derivatives:['understanding（名）理解','misunderstand（動）誤解する'],idioms:['make oneself understood / 自分の意図を伝える']},
+      {word:'review',pron:'rɪˈvjuː',meanings:[{pos:'動',def:'復習する、見直す',ex:'Let us review the main points.',exJa:'要点を復習しましょう。'},{pos:'名',def:'復習、レビュー、批評',ex:'The movie got good reviews.',exJa:'その映画は好評だった。'}],etym:'ラテン語 re-（再び）+ videre（見る）。「もう一度見る」。',derivatives:['reviewer（名）批評家'],idioms:['under review / 検討中','book review / 書評']},
+      {word:'explain',pron:'ɪkˈspleɪn',meanings:[{pos:'動',def:'説明する',ex:'Can you explain this word to me?',exJa:'この単語を説明してもらえますか？'}],etym:'ラテン語 explanare ← ex-（外へ）+ planare（平らにする）。「明らかにする」が原義。',derivatives:['explanation（名）説明','explanatory（形）説明的な'],idioms:[]},
+      {word:'submit',pron:'səbˈmɪt',meanings:[{pos:'動',def:'提出する、従う',ex:'Please submit your report by Friday.',exJa:'レポートを金曜日までに提出してください。'}],etym:'ラテン語 submittere ← sub-（下に）+ mittere（送る）。「下に送る」→「提出する」。',derivatives:['submission（名）提出','submissive（形）従順な'],idioms:['submit to / ～に従う']},
+      {word:'achieve',pron:'əˈtʃiːv',meanings:[{pos:'動',def:'達成する、成し遂げる',ex:'She achieved her goal.',exJa:'彼女は目標を達成した。'}],etym:'古フランス語 achever ← a-（～へ）+ chief（頭）← ラテン語 caput（頭）。',derivatives:['achievement（名）達成、業績','achievable（形）達成可能な'],idioms:['achieve a goal / 目標を達成する','sense of achievement / 達成感']}
+    ]
+  },
+  family: {
+    name: '家族・日常生活',
+    phase: 1,
+    words: [
+      {word:'relative',pron:'ˈrelətɪv',meanings:[{pos:'名',def:'親戚',ex:'We visited our relatives during the holidays.',exJa:'休暇中に親戚を訪問した。'},{pos:'形',def:'相対的な',ex:'Everything is relative.',exJa:'すべては相対的です。'}],etym:'ラテン語 relativus ← relatus（関係する）← re-（戻る）+ latus（運ぶ）。',derivatives:['relation（名）関係','relationship（名）関係','relatively（副）比較的'],idioms:['close relative / 近親者']},
+      {word:'neighbor',pron:'ˈneɪbər',meanings:[{pos:'名',def:'隣人、近所の人',ex:'My neighbor is very kind.',exJa:'私の隣人はとても親切です。'}],etym:'古英語 neahgebur ← neah（近く）+ gebur（住人）。',derivatives:['neighborhood（名）近所','neighboring（形）隣の'],idioms:['next-door neighbor / 隣の家の人','good neighbor / よき隣人']},
+      {word:'chore',pron:'tʃɔːr',meanings:[{pos:'名',def:'家事、雑用',ex:'Doing the dishes is my daily chore.',exJa:'皿洗いが私の日課です。'}],etym:'古英語 cerr（仕事、用事）から。',derivatives:[],idioms:['do chores / 家事をする','household chores / 家事']},
+      {word:'errand',pron:'ˈerənd',meanings:[{pos:'名',def:'使い、お使い',ex:'I need to run some errands this afternoon.',exJa:'今日の午後、いくつかのお使いをしなければならない。'}],etym:'古英語 ærende（使命）から。',derivatives:[],idioms:['run an errand / お使いをする','errand boy / 使い走り']},
+      {word:'routine',pron:'ruːˈtiːn',meanings:[{pos:'名',def:'ルーティン、日課',ex:'Morning exercise is part of my routine.',exJa:'朝の運動は私の日課の一部です。'},{pos:'形',def:'日常的な、ルーティンの',ex:'This is a routine check.',exJa:'これは定期検査です。'}],etym:'フランス語 route（道）+ -ine（接尾辞）。「いつも通る道」→「決まったやり方」。',derivatives:['routinely（副）日常的に'],idioms:['daily routine / 日課','routine check / 定期検査']},
+      {word:'anniversary',pron:'ˌænɪˈvɜːrsəri',meanings:[{pos:'名',def:'記念日',ex:'Today is our parents\' wedding anniversary.',exJa:'今日は両親の結婚記念日です。'}],etym:'ラテン語 anniversarius ← annus（年）+ vertere（回る）。「毎年やってくる日」。',derivatives:[],idioms:['wedding anniversary / 結婚記念日']},
+      {word:'generation',pron:'ˌdʒenəˈreɪʃn',meanings:[{pos:'名',def:'世代',ex:'Young people of my generation use smartphones.',exJa:'私の世代の若者はスマートフォンを使います。'}],etym:'ラテン語 generatio ← generare（生む）← genus（種族）。',derivatives:['generate（動）生み出す','generator（名）発電機'],idioms:['generation gap / ジェネレーションギャップ','younger generation / 若い世代']},
+      {word:'household',pron:'ˈhaʊshəʊld',meanings:[{pos:'名',def:'世帯、家庭',ex:'Both parents work in many households.',exJa:'多くの世帯で両親が働いています。'},{pos:'形',def:'家庭の',ex:'household items',exJa:'家庭用品'}],etym:'house（家）+ hold（保持）。「家を維持すること、その単位」。',derivatives:[],idioms:['household chores / 家事','household name / 誰もが知る名前']},
+      {word:'allowance',pron:'əˈlaʊəns',meanings:[{pos:'名',def:'お小遣い、手当',ex:'I get a weekly allowance from my parents.',exJa:'両親から週ごとのお小遣いをもらいます。'}],etym:'allow（許可する）+ -ance（名詞語尾）。',derivatives:['allow（動）許可する'],idioms:['pocket money / お小遣い（英）']},
+      {word:'sibling',pron:'ˈsɪblɪŋ',meanings:[{pos:'名',def:'兄弟姉妹',ex:'She has two siblings, a brother and a sister.',exJa:'彼女には兄弟姉妹が2人、兄と妹がいます。'}],etym:'古英語 sibling ← sib（親族）+ -ling（小さいもの）。',derivatives:[],idioms:[]},
+      {word:'laundry',pron:'ˈlɔːndri',meanings:[{pos:'名',def:'洗濯物、クリーニング',ex:'I do the laundry on weekends.',exJa:'週末に洗濯をします。'}],etym:'ラテン語 lavandaria ← lavare（洗う）。',derivatives:[],idioms:['do the laundry / 洗濯をする','laundry room / 洗濯室']},
+      {word:'appointment',pron:'əˈpɔɪntmənt',meanings:[{pos:'名',def:'予約、約束；任命',ex:'I have a dentist appointment tomorrow.',exJa:'明日、歯医者の予約があります。'}],etym:'appoint（指定する）+ -ment（名詞語尾）。ラテン語 ad punctum（時点に）から。',derivatives:['appoint（動）任命する、指定する','appointed（形）指定された'],idioms:['make an appointment / 予約をする','by appointment / 予約制で']},
+      {word:'conversation',pron:'ˌkɒnvəˈseɪʃn',meanings:[{pos:'名',def:'会話',ex:'We had a long conversation about our future.',exJa:'将来について長い会話をしました。'}],etym:'ラテン語 conversatio ← conversari（共に暮らす）← con-（共に）+ versare（回る）。',derivatives:['converse（動）会話する','conversational（形）会話の'],idioms:['make conversation / 会話する','have a conversation / 会話をする']},
+      {word:'basement',pron:'ˈbeɪsmənt',meanings:[{pos:'名',def:'地下室',ex:'We store boxes in the basement.',exJa:'地下室に箱を保管しています。'}],etym:'base（基礎）+ -ment（名詞語尾）。「建物の基礎の下の部分」。',derivatives:['base（名）基礎、土台'],idioms:[]},
+      {word:'furniture',pron:'ˈfɜːrnɪtʃər',meanings:[{pos:'名',def:'家具',ex:'We bought new furniture for the living room.',exJa:'リビングに新しい家具を買いました。'}],etym:'フランス語 fourniture ← fournir（供給する）。「部屋に供給するもの」。',derivatives:[],idioms:['piece of furniture / 家具一点']},
+      {word:'organize',pron:'ˈɔːrɡənaɪz',meanings:[{pos:'動',def:'整理する、計画する',ex:'I need to organize my room.',exJa:'部屋を整理しなければならない。'}],etym:'ギリシャ語 organon（道具）+ -ize（動詞語尾）。「機能するように整える」。',derivatives:['organization（名）組織、整理','organized（形）整理された','organizer（名）主催者'],idioms:[]},
+      {word:'repair',pron:'rɪˈpeər',meanings:[{pos:'動',def:'修理する',ex:'Can you repair my bicycle?',exJa:'自転車を修理してもらえますか？'},{pos:'名',def:'修理',ex:'The car needs a repair.',exJa:'車の修理が必要です。'}],etym:'ラテン語 reparare ← re-（再び）+ parare（準備する）。「再び使えるようにする」。',derivatives:['repairable（形）修理できる','irreparable（形）修復不可能な'],idioms:['in good repair / よく手入れされた','under repair / 修理中']},
+      {word:'privacy',pron:'ˈprɪvəsi',meanings:[{pos:'名',def:'プライバシー、個人の秘密',ex:'Everyone has the right to privacy.',exJa:'誰もがプライバシーの権利を持っています。'}],etym:'ラテン語 privatus（個人の）← privare（引き離す）。「公共から切り離された状態」。',derivatives:['private（形）私的な、個人の','privately（副）内密に'],idioms:['right to privacy / プライバシーの権利','invasion of privacy / プライバシーの侵害']},
+      {word:'responsible',pron:'rɪˈspɒnsɪbl',meanings:[{pos:'形',def:'責任がある',ex:'You are responsible for your actions.',exJa:'自分の行動に責任を持ちなさい。'}],etym:'respond（応答する）+ -ible（形容詞語尾）。',derivatives:['responsibility（名）責任','responsibly（副）責任を持って','irresponsible（形）無責任な'],idioms:['be responsible for / ～の責任がある']},
+      {word:'community',pron:'kəˈmjuːnɪti',meanings:[{pos:'名',def:'地域社会、コミュニティ',ex:'We should help our local community.',exJa:'地域社会を助けるべきです。'}],etym:'ラテン語 communitas ← communis（共通の）← com-（共に）+ munus（義務）。',derivatives:['communal（形）共同の','commune（名）共同体'],idioms:['local community / 地域コミュニティ','sense of community / 共同体意識']}
+    ]
+  },
+  food: {
+    name: '食べ物・料理',
+    phase: 1,
+    words: [
+      {word:'ingredient',pron:'ɪnˈɡriːdiənt',meanings:[{pos:'名',def:'材料、成分',ex:'What ingredients do you need for this recipe?',exJa:'このレシピに何の材料が必要ですか？'}],etym:'ラテン語 ingrediens ← ingredi（中に入る）← in-（中に）+ gradi（歩く）。「入っているもの」。',derivatives:[],idioms:['secret ingredient / 秘密の材料']},
+      {word:'recipe',pron:'ˈresɪpi',meanings:[{pos:'名',def:'レシピ、調理法',ex:'Can you share your recipe for this cake?',exJa:'このケーキのレシピを教えてもらえますか？'}],etym:'ラテン語 recipe（受け取れ）← recipere（受け取る）。',derivatives:[],idioms:[]},
+      {word:'delicious',pron:'dɪˈlɪʃəs',meanings:[{pos:'形',def:'とてもおいしい',ex:'This food is absolutely delicious.',exJa:'この料理はとてもおいしい。'}],etym:'ラテン語 deliciosus ← deliciae（喜び）← de-（強調）+ lacere（誘惑する）。',derivatives:['deliciously（副）おいしく'],idioms:[]},
+      {word:'flavor',pron:'ˈfleɪvər',meanings:[{pos:'名',def:'風味、味',ex:'This soup has a rich flavor.',exJa:'このスープは深い風味があります。'},{pos:'動',def:'風味をつける',ex:'Flavor the dish with herbs.',exJa:'ハーブで料理に風味をつける。'}],etym:'古フランス語 flaour（香り）から。',derivatives:['flavorful（形）風味豊かな','flavoring（名）調味料'],idioms:['full of flavor / 風味豊かな']},
+      {word:'vegetarian',pron:'ˌvedʒɪˈteəriən',meanings:[{pos:'名',def:'菜食主義者',ex:'She is a vegetarian and does not eat meat.',exJa:'彼女は菜食主義者で肉を食べません。'},{pos:'形',def:'菜食の',ex:'a vegetarian diet',exJa:'菜食ダイエット'}],etym:'vegetable（野菜）から派生。',derivatives:['vegetarianism（名）菜食主義'],idioms:[]},
+      {word:'appetite',pron:'ˈæpɪtaɪt',meanings:[{pos:'名',def:'食欲',ex:'Exercise gives me a good appetite.',exJa:'運動すると食欲が出ます。'}],etym:'ラテン語 appetitus ← appetere（欲する）← ad-（～へ）+ petere（求める）。',derivatives:[],idioms:['lose one\'s appetite / 食欲をなくす','work up an appetite / 食欲を高める']},
+      {word:'cuisine',pron:'kwɪˈziːn',meanings:[{pos:'名',def:'料理（の種類）、料理法',ex:'Japanese cuisine is popular around the world.',exJa:'日本料理は世界中で人気があります。'}],etym:'フランス語 cuisine ← ラテン語 coquina（台所）← coquere（料理する）。',derivatives:[],idioms:['Italian cuisine / イタリア料理']},
+      {word:'nutrition',pron:'njuːˈtrɪʃn',meanings:[{pos:'名',def:'栄養、栄養摂取',ex:'Good nutrition is important for health.',exJa:'良い栄養摂取は健康に大切です。'}],etym:'ラテン語 nutritio ← nutrire（養う）。',derivatives:['nutritious（形）栄養のある','nutritional（形）栄養の','nutrient（名）栄養素'],idioms:[]},
+      {word:'portion',pron:'ˈpɔːrʃn',meanings:[{pos:'名',def:'部分、1人前',ex:'The portion size is very large.',exJa:'1人前のサイズがとても大きい。'}],etym:'ラテン語 portio（部分）← portare（運ぶ）。',derivatives:[],idioms:['portion size / 量、1人前の大きさ']},
+      {word:'seasoning',pron:'ˈsiːzənɪŋ',meanings:[{pos:'名',def:'調味料、味付け',ex:'Add some seasoning to the soup.',exJa:'スープに調味料を加えてください。'}],etym:'season（味をつける）+ -ing（名詞語尾）。',derivatives:['season（動）味付けする','seasonal（形）季節の'],idioms:[]},
+      {word:'leftover',pron:'ˈleftˌoʊvər',meanings:[{pos:'名',def:'残り物（料理）',ex:'We had leftovers from last night\'s dinner.',exJa:'昨夜の夕食の残り物があった。'}],etym:'left（残った）+ over（余った）。',derivatives:[],idioms:[]},
+      {word:'beverage',pron:'ˈbevərɪdʒ',meanings:[{pos:'名',def:'飲み物',ex:'What beverage would you like?',exJa:'どのような飲み物がよろしいですか？'}],etym:'古フランス語 beivre（飲む）から。',derivatives:[],idioms:[]},
+      {word:'nourish',pron:'ˈnʌrɪʃ',meanings:[{pos:'動',def:'栄養を与える、養う',ex:'A balanced diet nourishes the body.',exJa:'バランスの取れた食事が体に栄養を与えます。'}],etym:'ラテン語 nutrire（養う）← nourrir（フランス語）。',derivatives:['nourishment（名）栄養、食物','nourishing（形）栄養のある'],idioms:[]},
+      {word:'prepare',pron:'prɪˈpeər',meanings:[{pos:'動',def:'準備する、料理する',ex:'I am preparing dinner.',exJa:'夕食を準備しています。'}],etym:'ラテン語 praeparare ← prae-（前に）+ parare（用意する）。',derivatives:['preparation（名）準備','preparatory（形）準備の'],idioms:['prepare for / ～の準備をする']},
+      {word:'frozen',pron:'ˈfroʊzən',meanings:[{pos:'形',def:'冷凍の、凍った',ex:'I bought some frozen vegetables.',exJa:'冷凍野菜を買いました。'}],etym:'freeze（凍る）の過去分詞形。',derivatives:['freeze（動）凍る、凍らせる','freezer（名）冷凍庫'],idioms:['frozen food / 冷凍食品']},
+      {word:'organic',pron:'ɔːrˈɡænɪk',meanings:[{pos:'形',def:'有機の、オーガニックの',ex:'She buys organic vegetables.',exJa:'彼女は有機野菜を買います。'}],etym:'ギリシャ語 organikos（道具の）← organon（道具、器官）。「生命の器官に関係する」。',derivatives:['organism（名）生物','organize（動）整理する（同語源）'],idioms:['organic food / オーガニック食品']},
+      {word:'appetite',pron:'ˈæpɪtaɪt',meanings:[{pos:'名',def:'食欲',ex:'I have a big appetite today.',exJa:'今日は食欲がある。'}],etym:'ラテン語 appetitus（欲望）。',derivatives:[],idioms:[]},
+      {word:'serving',pron:'ˈsɜːrvɪŋ',meanings:[{pos:'名',def:'1人前、一盛り',ex:'One serving of rice contains 200 calories.',exJa:'ご飯1人前は200カロリーです。'}],etym:'serve（給仕する）+ -ing（名詞語尾）。',derivatives:['serve（動）給仕する、提供する','server（名）給仕、サーバー'],idioms:[]},
+      {word:'digest',pron:'daɪˈdʒest',meanings:[{pos:'動',def:'消化する',ex:'It takes time to digest heavy food.',exJa:'重い食事の消化には時間がかかります。'}],etym:'ラテン語 digerere ← di-（離れて）+ gerere（運ぶ）。「バラバラに運ぶ」→「消化する」。',derivatives:['digestion（名）消化','digestive（形）消化の'],idioms:[]},
+      {word:'dietary',pron:'ˈdaɪətri',meanings:[{pos:'形',def:'食事の、食事療法の',ex:'She has special dietary needs.',exJa:'彼女には特別な食事上の必要がある。'}],etym:'diet（食事）+ -ary（形容詞語尾）。',derivatives:['diet（名）食事、ダイエット'],idioms:['dietary restriction / 食事制限']}
+    ]
+  },
+  health: {
+    name: '健康・身体',
+    phase: 1,
+    words: [
+      {word:'symptom',pron:'ˈsɪmptəm',meanings:[{pos:'名',def:'症状',ex:'A headache is a common symptom of a cold.',exJa:'頭痛は風邪の一般的な症状です。'}],etym:'ギリシャ語 symptoma ← sym-（共に）+ piptein（落ちる）。「同時に起こるもの」。',derivatives:['symptomatic（形）症状を示す'],idioms:[]},
+      {word:'medicine',pron:'ˈmedɪsɪn',meanings:[{pos:'名',def:'薬、医学',ex:'Please take this medicine after meals.',exJa:'この薬を食後に飲んでください。'}],etym:'ラテン語 medicina ← medicus（医師）← mederi（治療する）。',derivatives:['medical（形）医学の','medicate（動）薬で治療する','medication（名）薬、投薬'],idioms:['take medicine / 薬を飲む']},
+      {word:'surgeon',pron:'ˈsɜːrdʒən',meanings:[{pos:'名',def:'外科医',ex:'The surgeon performed a difficult operation.',exJa:'外科医は難しい手術を行った。'}],etym:'ギリシャ語 cheirourgos ← cheir（手）+ ergon（仕事）。「手で仕事をする人」。',derivatives:['surgery（名）外科手術','surgical（形）外科の'],idioms:[]},
+      {word:'fever',pron:'ˈfiːvər',meanings:[{pos:'名',def:'発熱',ex:'The child has a high fever.',exJa:'その子どもは高熱があります。'}],etym:'ラテン語 febris（熱）から。',derivatives:['feverish（形）熱がある、興奮した'],idioms:['have a fever / 熱がある','run a fever / 熱を出す']},
+      {word:'nutrition',pron:'njuːˈtrɪʃn',meanings:[{pos:'名',def:'栄養',ex:'Proper nutrition is key to staying healthy.',exJa:'適切な栄養が健康維持の鍵です。'}],etym:'ラテン語 nutrire（養う）から。',derivatives:['nutritious（形）栄養のある','nutrient（名）栄養素'],idioms:[]},
+      {word:'prescription',pron:'prɪˈskrɪpʃn',meanings:[{pos:'名',def:'処方箋',ex:'You need a prescription for this medicine.',exJa:'この薬には処方箋が必要です。'}],etym:'ラテン語 praescriptio ← prae-（前に）+ scribere（書く）。「前もって書いたもの」。',derivatives:['prescribe（動）処方する','prescribed（形）処方された'],idioms:[]},
+      {word:'allergy',pron:'ˈælədʒi',meanings:[{pos:'名',def:'アレルギー',ex:'She has an allergy to nuts.',exJa:'彼女はナッツアレルギーがあります。'}],etym:'ギリシャ語 allos（別の）+ ergon（反応）。「異常な反応」。',derivatives:['allergic（形）アレルギーの','allergen（名）アレルゲン'],idioms:['food allergy / 食物アレルギー']},
+      {word:'injury',pron:'ˈɪndʒəri',meanings:[{pos:'名',def:'けが、傷害',ex:'He suffered a serious injury in the accident.',exJa:'彼は事故で重傷を負った。'}],etym:'ラテン語 injuria ← in-（否定）+ jus（正義・法）。「不当な扱い」→「けが」。',derivatives:['injure（動）けがをさせる','injured（形）けがをした'],idioms:['serious injury / 重傷']},
+      {word:'recovery',pron:'rɪˈkʌvəri',meanings:[{pos:'名',def:'回復',ex:'Wishing you a speedy recovery.',exJa:'早い回復をお祈りします。'}],etym:'recover（回復する）+ -y（名詞語尾）。ラテン語 recuperare（取り戻す）から。',derivatives:['recover（動）回復する','recoverable（形）回復できる'],idioms:['make a full recovery / 完全に回復する']},
+      {word:'exercise',pron:'ˈeksərsaɪz',meanings:[{pos:'名',def:'運動、練習',ex:'Regular exercise is good for your health.',exJa:'定期的な運動は健康に良い。'},{pos:'動',def:'運動する',ex:'I exercise every morning.',exJa:'毎朝運動します。'}],etym:'ラテン語 exercitium ← exercere（訓練する）← ex-（外へ）+ arcere（閉じ込める）。',derivatives:['exerciser（名）運動する人'],idioms:['do exercise / 運動する','physical exercise / 身体運動']},
+      {word:'mental',pron:'ˈmentl',meanings:[{pos:'形',def:'精神の、心の',ex:'Mental health is as important as physical health.',exJa:'精神的な健康は身体的な健康と同様に重要です。'}],etym:'ラテン語 mentalis ← mens（心、精神）。',derivatives:['mentally（副）精神的に','mentality（名）考え方、精神状態'],idioms:['mental health / メンタルヘルス']},
+      {word:'stress',pron:'stres',meanings:[{pos:'名',def:'ストレス、強調',ex:'Too much stress can make you sick.',exJa:'過度のストレスは体調を悪くさせます。'},{pos:'動',def:'強調する',ex:'He stressed the importance of sleep.',exJa:'彼は睡眠の重要性を強調した。'}],etym:'古フランス語 estresse（苦難）から。',derivatives:['stressful（形）ストレスの多い','stressed（形）ストレスを感じている'],idioms:['under stress / ストレス下で','stress out / ストレスになる']},
+      {word:'hygiene',pron:'ˈhaɪdʒiːn',meanings:[{pos:'名',def:'衛生、清潔',ex:'Good hygiene prevents disease.',exJa:'良い衛生習慣が病気を予防します。'}],etym:'ギリシャ語 hygieia（健康）← Hygieia（健康の女神）。',derivatives:['hygienic（形）衛生的な'],idioms:['personal hygiene / 個人衛生','dental hygiene / 歯の衛生']},
+      {word:'diabetes',pron:'ˌdaɪəˈbiːtɪz',meanings:[{pos:'名',def:'糖尿病',ex:'He was diagnosed with diabetes.',exJa:'彼は糖尿病と診断された。'}],etym:'ギリシャ語 diabainein（通り抜ける）← dia-（通って）+ bainein（行く）。',derivatives:['diabetic（形/名）糖尿病の/患者'],idioms:[]},
+      {word:'vaccine',pron:'ˈvæksiːn',meanings:[{pos:'名',def:'ワクチン',ex:'Children should receive vaccines.',exJa:'子供たちはワクチンを接種すべきです。'}],etym:'ラテン語 vacca（牛）から。牛痘を使ったワクチンが最初だったため。',derivatives:['vaccination（名）ワクチン接種','vaccinate（動）ワクチンを接種する'],idioms:[]},
+      {word:'therapy',pron:'ˈθerəpi',meanings:[{pos:'名',def:'療法、治療',ex:'He receives physical therapy for his back.',exJa:'彼は腰の理学療法を受けています。'}],etym:'ギリシャ語 therapeia ← therapeuein（世話をする）。',derivatives:['therapist（名）セラピスト','therapeutic（形）治療の'],idioms:['physical therapy / 理学療法','speech therapy / 言語療法']},
+      {word:'diagnose',pron:'ˈdaɪəɡnoʊz',meanings:[{pos:'動',def:'診断する',ex:'The doctor diagnosed her with the flu.',exJa:'医師は彼女にインフルエンザと診断した。'}],etym:'ギリシャ語 diagnoskein ← dia-（通じて）+ gnoskein（知る）。',derivatives:['diagnosis（名）診断','diagnostic（形）診断の'],idioms:[]},
+      {word:'pharmacy',pron:'ˈfɑːrməsi',meanings:[{pos:'名',def:'薬局',ex:'You can buy this at the pharmacy.',exJa:'薬局でこれを買えます。'}],etym:'ギリシャ語 pharmakon（薬）から。',derivatives:['pharmacist（名）薬剤師','pharmaceutical（形）製薬の'],idioms:[]},
+      {word:'ambulance',pron:'ˈæmbjʊləns',meanings:[{pos:'名',def:'救急車',ex:'Call an ambulance immediately.',exJa:'すぐに救急車を呼んでください。'}],etym:'フランス語 hôpital ambulant（移動病院）← ラテン語 ambulare（歩く）。',derivatives:[],idioms:['call an ambulance / 救急車を呼ぶ']},
+      {word:'wound',pron:'wuːnd',meanings:[{pos:'名',def:'傷、負傷',ex:'He had a deep wound on his hand.',exJa:'彼の手に深い傷があった。'},{pos:'動',def:'傷つける',ex:'She was wounded in the accident.',exJa:'彼女は事故で負傷した。'}],etym:'古英語 wund（傷）から。',derivatives:['wounded（形）負傷した'],idioms:[]}
+    ]
+  }
+};
+
+// ===================== 状態 =====================
+var currentCat = null;
+var words = [];
+var missedWords = [];
+var mode = 'en';
+var idx = 0, okCnt = 0, ngCnt = 0, flipped = false;
+var reviewMode = 'en';
+var ridx = 0, rokCnt = 0, rngCnt = 0, rflipped = false;
+var reviewList = [];
+var imgBase64 = '';
+var allMissed = {};
+
+// ===================== 保存・読込 =====================
+function saveState() {
+  try {
+    var saved = {};
+    Object.keys(CATALOG).forEach(function(k) {
+      saved[k] = {
+        missed: allMissed[k] || [],
+        idx: (currentCat === k ? idx : 0),
+        ok: (currentCat === k ? okCnt : 0),
+        ng: (currentCat === k ? ngCnt : 0),
+        mode: mode
+      };
+    });
+    localStorage.setItem('fc2_state', JSON.stringify(saved));
+  } catch(e){}
+}
+
+function loadState() {
+  try {
+    var s = localStorage.getItem('fc2_state');
+    if (!s) return;
+    var saved = JSON.parse(s);
+    Object.keys(saved).forEach(function(k) {
+      allMissed[k] = saved[k].missed || [];
+    });
+  } catch(e){}
+}
+
+// ===================== ホーム =====================
+function updateHomeCounts() {
+  var totalAll = 0, learnedAll = 0, missedAll = 0;
+  Object.keys(CATALOG).forEach(function(k) {
+    var cat = CATALOG[k];
+    var n = cat.words.length;
+    totalAll += n;
+    var m = (allMissed[k] || []).length;
+    missedAll += m;
+    document.getElementById('cnt-' + k).textContent = n + '語';
+  });
+  document.getElementById('hp-total').textContent = totalAll;
+  document.getElementById('hp-missed').textContent = missedAll;
+  var pct = totalAll > 0 ? Math.round((totalAll - missedAll) / totalAll * 100) : 0;
+  document.getElementById('hp-pct').textContent = pct + '%';
+  document.getElementById('hp-learned').textContent = totalAll - missedAll;
+  var hasMissed = Object.keys(allMissed).some(function(k) { return (allMissed[k] || []).length > 0; });
+  document.getElementById('review-all-btn').disabled = !hasMissed;
+}
+
+function selectCat(catKey) {
+  currentCat = catKey;
+  words = CATALOG[catKey].words.slice();
+  var saved = {};
+  try { var s = localStorage.getItem('fc2_state'); if(s) saved = JSON.parse(s); } catch(e){}
+  var catSaved = saved[catKey] || {};
+  idx = catSaved.idx || 0;
+  okCnt = catSaved.ok || 0;
+  ngCnt = catSaved.ng || 0;
+  mode = catSaved.mode || 'en';
+  if (idx >= words.length) { idx = 0; okCnt = 0; ngCnt = 0; }
+  missedWords = (allMissed[catKey] || []).slice();
+
+  document.getElementById('study-title').textContent = CATALOG[catKey].name;
+  document.getElementById('screen-home').style.display = 'none';
+  document.getElementById('screen-study').style.display = 'block';
+  showTab('tab-quiz');
+  initQuizUI();
+}
+
+function goHome() {
+  saveState();
+  document.getElementById('screen-study').style.display = 'none';
+  document.getElementById('screen-home').style.display = 'block';
+  updateHomeCounts();
+}
+
+function goReviewAll() {
+  var all = [];
+  Object.keys(allMissed).forEach(function(k) { all = all.concat(allMissed[k] || []); });
+  if (!all.length) return;
+  currentCat = '_all';
+  words = all;
+  missedWords = [];
+  idx = 0; okCnt = 0; ngCnt = 0; mode = 'en';
+  document.getElementById('study-title').textContent = '全カテゴリ復習';
+  document.getElementById('screen-home').style.display = 'none';
+  document.getElementById('screen-study').style.display = 'block';
+  showTab('tab-quiz');
+  initQuizUI();
+}
+
+// ===================== タブ切り替え =====================
+function showTab(tabId) {
+  ['tab-quiz','tab-review','tab-photo','tab-edit'].forEach(function(t) {
+    document.getElementById(t).classList.toggle('active', t === tabId);
+  });
+  document.querySelectorAll('.nav-btn').forEach(function(b,i) {
+    b.classList.toggle('active', ['tab-quiz','tab-review','tab-photo','tab-edit'][i] === tabId);
+  });
+  if (tabId === 'tab-review') initReviewTab();
+  if (tabId === 'tab-edit') renderWordList();
+}
+
+// ===================== クイズ =====================
+function initQuizUI() {
+  document.getElementById('btn-en').classList.toggle('active', mode === 'en');
+  document.getElementById('btn-ja').classList.toggle('active', mode === 'ja');
+  document.getElementById('mode-label').textContent = mode === 'en' ? '英語 → 日本語' : '日本語 → 英語';
+  document.getElementById('quiz-inner').style.display = 'block';
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('inner').classList.remove('flipped');
+  document.getElementById('btn-row').style.display = 'none';
+  flipped = false;
+  var hasSaved = idx > 0;
+  document.getElementById('saved-note').style.display = hasSaved ? 'block' : 'none';
+  renderCard();
+}
+
+function setMode(m) {
+  mode = m; idx = 0; okCnt = 0; ngCnt = 0;
+  document.getElementById('btn-en').classList.toggle('active', m === 'en');
+  document.getElementById('btn-ja').classList.toggle('active', m === 'ja');
+  document.getElementById('mode-label').textContent = m === 'en' ? '英語 → 日本語' : '日本語 → 英語';
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-inner').style.display = 'block';
+  document.getElementById('saved-note').style.display = 'none';
+  document.getElementById('inner').classList.remove('flipped');
+  document.getElementById('btn-row').style.display = 'none';
+  flipped = false;
+  renderCard();
+  saveState();
+}
+
+function renderCard() {
+  if (!words.length) return;
+  var w = words[idx];
+  document.getElementById('cur').textContent = idx + 1;
+  document.getElementById('total').textContent = words.length;
+  document.getElementById('pfill').style.width = (idx / words.length * 100) + '%';
+  document.getElementById('ok-cnt').textContent = okCnt;
+  document.getElementById('ng-cnt').textContent = ngCnt;
+  if (mode === 'en') {
+    document.getElementById('front-label').textContent = '英語';
+    document.getElementById('front-content').innerHTML = '<div class="front-word">' + w.word + '</div>';
+  } else {
+    document.getElementById('front-label').textContent = '日本語';
+    var d = w.meanings && w.meanings[0] ? w.meanings[0].def : '';
+    document.getElementById('front-content').innerHTML = '<div class="front-blank">' + d + '<br><span class="blank-span">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>';
+  }
+  document.getElementById('back-content').innerHTML = buildBackHTML(w);
+}
+
+function buildBackHTML(w) {
+  var h = '<p class="back-word">' + w.word + '</p>';
+  h += '<p class="back-pron">/' + w.pron + '/ <button class="audio-btn" onclick="speak(event,\'' + w.word.replace(/'/g,"\\'") + '\')">🔊</button></p>';
+  h += '<hr class="div">';
+  (w.meanings || []).forEach(function(m) {
+    h += '<div style="margin-bottom:6px;"><span class="pos">' + m.pos + '</span><span class="meaning-text">' + m.def + '</span>';
+    if (m.ex) h += '<p class="example">' + m.ex + '</p>';
+    if (m.exJa) h += '<p class="example-ja">' + m.exJa + '</p>';
+    h += '</div>';
+  });
+  if (w.derivatives && w.derivatives.length) {
+    h += '<div class="deriv-box"><div class="deriv-label">派生語・同語源語</div>';
+    w.derivatives.forEach(function(d) {
+      var p = d.indexOf('（');
+      if (p > 0) h += '<div class="deriv-item"><b>' + d.substring(0,p) + '</b>' + d.substring(p) + '</div>';
+      else h += '<div class="deriv-item">' + d + '</div>';
+    });
+    h += '</div>';
+  }
+  if (w.idioms && w.idioms.length) {
+    h += '<div class="idiom-box"><div class="idiom-label">イディオム・定型表現</div>';
+    w.idioms.forEach(function(item) {
+      var p = item.split(' / ');
+      if (p.length >= 2) h += '<div class="idiom-item"><span class="idiom-phrase">' + p[0] + '</span> — ' + p.slice(1).join(' / ') + '</div>';
+      else h += '<div class="idiom-item">' + item + '</div>';
+    });
+    h += '</div>';
+  }
+  if (w.etym) h += '<div class="etym-box"><div class="etym-label">語源・語幹</div><div class="etym-text">' + w.etym + '</div></div>';
+  return h;
+}
+
+function flip() {
+  if (flipped) return;
+  document.getElementById('inner').classList.add('flipped');
+  setTimeout(function() { document.getElementById('btn-row').style.display = 'flex'; }, 300);
+  flipped = true;
+}
+
+function answer(ok) {
+  if (!ok && words[idx]) {
+    if (!missedWords.find(function(w) { return w.word === words[idx].word; })) {
+      missedWords.push(words[idx]);
+    }
+  }
+  if (ok) okCnt++; else ngCnt++;
+  idx++;
+  if (currentCat && currentCat !== '_all') allMissed[currentCat] = missedWords.slice();
+  saveState();
+  if (idx >= words.length) {
+    document.getElementById('quiz-inner').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'block';
+    document.getElementById('r-score').textContent = okCnt + ' / ' + words.length;
+    var pct = Math.round(okCnt / words.length * 100);
+    document.getElementById('r-sub').textContent = '正解率 ' + pct + '%' + (pct >= 80 ? ' 素晴らしい！' : pct >= 50 ? ' もう少し！' : ' 復習しよう！');
+  } else {
+    document.getElementById('inner').classList.remove('flipped');
+    document.getElementById('btn-row').style.display = 'none';
+    flipped = false;
+    setTimeout(function() { renderCard(); }, 50);
+  }
+}
+
+function restartQuiz(m) {
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-inner').style.display = 'block';
+  idx = 0; okCnt = 0; ngCnt = 0; flipped = false; mode = m;
+  document.getElementById('btn-en').classList.toggle('active', m === 'en');
+  document.getElementById('btn-ja').classList.toggle('active', m === 'ja');
+  document.getElementById('mode-label').textContent = m === 'en' ? '英語 → 日本語' : '日本語 → 英語';
+  document.getElementById('saved-note').style.display = 'none';
+  document.getElementById('inner').classList.remove('flipped');
+  document.getElementById('btn-row').style.display = 'none';
+  renderCard(); saveState();
+}
+
+// ===================== 復習 =====================
+function initReviewTab() {
+  var missed = currentCat && currentCat !== '_all' ? (allMissed[currentCat] || []) : missedWords;
+  document.getElementById('review-badge').textContent = missed.length + '語';
+  if (!missed.length) {
+    document.getElementById('review-empty').style.display = 'block';
+    document.getElementById('review-inner').style.display = 'none';
+    document.getElementById('review-result').style.display = 'none';
+  } else {
+    document.getElementById('review-empty').style.display = 'none';
+    startReview();
+  }
+}
+
+function startReview() {
+  var missed = currentCat && currentCat !== '_all' ? (allMissed[currentCat] || []) : missedWords;
+  reviewList = missed.slice();
+  ridx = 0; rokCnt = 0; rngCnt = 0; rflipped = false;
+  document.getElementById('review-result').style.display = 'none';
+  document.getElementById('review-inner').style.display = 'block';
+  document.getElementById('rinner').classList.remove('flipped');
+  document.getElementById('rbtn-row').style.display = 'none';
+  renderReviewCard();
+}
+
+function setReviewMode(m) {
+  reviewMode = m;
+  document.getElementById('rbtn-en').classList.toggle('active', m === 'en');
+  document.getElementById('rbtn-ja').classList.toggle('active', m === 'ja');
+  document.getElementById('rinner').classList.remove('flipped');
+  document.getElementById('rbtn-row').style.display = 'none';
+  rflipped = false;
+  renderReviewCard();
+}
+
+function renderReviewCard() {
+  if (!reviewList.length) return;
+  var w = reviewList[ridx];
+  document.getElementById('rcur').textContent = ridx + 1;
+  document.getElementById('rtotal').textContent = reviewList.length;
+  document.getElementById('rpfill').style.width = (ridx / reviewList.length * 100) + '%';
+  document.getElementById('rok-cnt').textContent = rokCnt;
+  document.getElementById('rng-cnt').textContent = rngCnt;
+  if (reviewMode === 'en') {
+    document.getElementById('rfront-label').textContent = '英語';
+    document.getElementById('rfront-content').innerHTML = '<div class="front-word">' + w.word + '</div>';
+  } else {
+    document.getElementById('rfront-label').textContent = '日本語';
+    var d = w.meanings && w.meanings[0] ? w.meanings[0].def : '';
+    document.getElementById('rfront-content').innerHTML = '<div class="front-blank">' + d + '<br><span class="blank-span">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>';
+  }
+  document.getElementById('rback-content').innerHTML = buildBackHTML(w);
+}
+
+function rflip() {
+  if (rflipped) return;
+  document.getElementById('rinner').classList.add('flipped');
+  setTimeout(function() { document.getElementById('rbtn-row').style.display = 'flex'; }, 300);
+  rflipped = true;
+}
+
+function ranswer(ok) {
+  if (ok) {
+    rokCnt++;
+    if (currentCat && currentCat !== '_all') {
+      allMissed[currentCat] = (allMissed[currentCat] || []).filter(function(w) { return w.word !== reviewList[ridx].word; });
+    }
+    saveState();
+  } else { rngCnt++; }
+  ridx++;
+  if (ridx >= reviewList.length) {
+    document.getElementById('review-inner').style.display = 'none';
+    document.getElementById('review-result').style.display = 'block';
+    document.getElementById('rr-score').textContent = rokCnt + ' / ' + reviewList.length;
+    var pct = Math.round(rokCnt / reviewList.length * 100);
+    document.getElementById('rr-sub').textContent = '正解率 ' + pct + '%' + (pct >= 80 ? ' 完璧！' : ' もう一度復習しよう！');
+  } else {
+    document.getElementById('rinner').classList.remove('flipped');
+    document.getElementById('rbtn-row').style.display = 'none';
+    rflipped = false;
+    setTimeout(function() { renderReviewCard(); }, 50);
+  }
+}
+
+// ===================== 写真から生成 =====================
+var dz = document.getElementById('drop-zone');
+dz.ondragover = function(e) { e.preventDefault(); dz.style.background = '#f0ede8'; };
+dz.ondragleave = function() { dz.style.background = '#fff'; };
+dz.ondrop = function(e) { e.preventDefault(); dz.style.background = '#fff'; var f = e.dataTransfer.files[0]; if(f) loadFile(f); };
+
+function loadFile(f) {
+  if (!f) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    imgBase64 = e.target.result.split(',')[1];
+    var img = document.getElementById('preview-img');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('gen-btn').style.display = 'block';
+  };
+  reader.readAsDataURL(f);
+}
+
+async function generateFromPhoto() {
+  var btn = document.getElementById('gen-btn');
+  var status = document.getElementById('ai-status');
+  btn.disabled = true;
+  status.textContent = 'AIが画像を解析して単語カードを生成中…';
+  var n = parseInt(document.getElementById('num-q').value);
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 2000,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imgBase64 } },
+          { type: 'text', text: 'この画像から英単語を'+n+'個選び、JSONのみ返してください。前置き不要。\n形式:[{"word":"","pron":"","meanings":[{"pos":"","def":"","ex":"","exJa":""}],"etym":"","derivatives":[],"idioms":[]}]' }
+        ]}]
+      })
+    });
+    var data = await res.json();
+    var text = data.content.map(function(i) { return i.text || ''; }).join('');
+    var newWords = JSON.parse(text.replace(/```json|```/g,'').trim());
+    var added = 0;
+    newWords.forEach(function(w) {
+      if (!words.find(function(x) { return x.word === w.word; })) { words.push(w); added++; }
+    });
+    status.textContent = added + '語を追加しました！';
+    btn.disabled = false;
+  } catch(e) {
+    status.textContent = 'エラーが発生しました。';
+    btn.disabled = false;
+  }
+}
+
+// ===================== 単語追加 =====================
+function addWord() {
+  var word = document.getElementById('new-word').value.trim();
+  var def = document.getElementById('new-def').value.trim();
+  if (!word || !def) { alert('英単語と意味は必須です'); return; }
+  words.push({
+    word: word,
+    pron: document.getElementById('new-pron').value.trim() || '—',
+    meanings: [{ pos: '—', def: def, ex: document.getElementById('new-ex').value.trim(), exJa: document.getElementById('new-exja').value.trim() }],
+    etym: document.getElementById('new-etym').value.trim(),
+    derivatives: document.getElementById('new-deriv').value.trim().split('\n').filter(function(s){return s.trim();}),
+    idioms: document.getElementById('new-idiom').value.trim().split('\n').filter(function(s){return s.trim();})
+  });
+  ['new-word','new-pron','new-def','new-ex','new-exja','new-etym','new-deriv','new-idiom'].forEach(function(id){document.getElementById(id).value='';});
+  renderWordList();
+}
+
+function deleteWord(i) {
+  if (confirm('"' + words[i].word + '" を削除しますか？')) { words.splice(i,1); renderWordList(); }
+}
+
+function renderWordList() {
+  document.getElementById('word-count-badge').textContent = words.length + '語';
+  document.getElementById('word-list').innerHTML = words.map(function(w,i) {
+    return '<div class="word-item"><span><b>' + w.word + '</b> — ' + (w.meanings&&w.meanings[0]?w.meanings[0].def:'') + '</span><button class="word-item-del" onclick="deleteWord('+i+')">✕</button></div>';
+  }).join('');
+}
+
+function speak(e, word) {
+  e.stopPropagation();
+  var msg = new SpeechSynthesisUtterance(word);
+  msg.lang = 'en-US'; msg.rate = 0.9;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(msg);
+}
+
+// ===================== 初期化 =====================
+loadState();
+updateHomeCounts();
+</script>
+</body>
+</html>

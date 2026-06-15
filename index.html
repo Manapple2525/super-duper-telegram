@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学習アプリ - 科目選択</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;}
+#app{max-width:600px;margin:0 auto;padding:1.5rem 1rem;}
+.top-title{font-size:13px;color:#888;text-align:center;margin-bottom:4px;letter-spacing:0.05em;}
+.top-heading{font-size:24px;font-weight:500;text-align:center;margin-bottom:6px;}
+.top-sub{font-size:13px;color:#888;text-align:center;margin-bottom:28px;}
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.subject-card{display:block;border:1px solid #e0ddd6;border-radius:16px;padding:1.25rem;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;position:relative;overflow:hidden;}
+.subject-card:hover:not(.disabled){border-color:#aaa;background:#faf9f7;transform:translateY(-1px);}
+.subject-card:active:not(.disabled){transform:scale(0.99);}
+.subject-card.disabled{opacity:0.45;cursor:not-allowed;background:#f9f8f5;}
+.subject-icon{font-size:32px;margin-bottom:10px;}
+.subject-name{font-size:16px;font-weight:500;margin-bottom:4px;}
+.subject-desc{font-size:12px;color:#888;line-height:1.5;}
+.subject-badge{position:absolute;top:14px;right:14px;font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;}
+.badge-ready{background:#e1f5ee;color:#0F6E56;}
+.badge-soon{background:#f1efe8;color:#888;}
+.footer-note{text-align:center;font-size:12px;color:#aaa;margin-top:28px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-title">STUDY APP</div>
+  <div class="top-heading">学習アプリ</div>
+  <div class="top-sub">科目を選んでスタート</div>
+
+  <div class="subject-grid">
+    <a class="subject-card" href="eiken3.html">
+      <span class="subject-badge badge-ready">学習可</span>
+      <div class="subject-icon">📘</div>
+      <div class="subject-name">英検3級 単語</div>
+      <div class="subject-desc">テーマ別フラッシュカードで英検3級の重要単語を学習</div>
+    </a>
+
+    <div class="subject-card disabled">
+      <span class="subject-badge badge-soon">準備中</span>
+      <div class="subject-icon">🌍</div>
+      <div class="subject-name">歴史・地理</div>
+      <div class="subject-desc">世界史・日本史・地理のフラッシュカード</div>
+    </div>
+
+    <div class="subject-card disabled">
+      <span class="subject-badge badge-soon">準備中</span>
+      <div class="subject-icon">🔢</div>
+      <div class="subject-name">数学</div>
+      <div class="subject-desc">公式・基礎問題の一問一答</div>
+    </div>
+  </div>
+
+  <div class="footer-note">他の科目も今後追加予定です</div>
+</div>
+</body>
+</html>
