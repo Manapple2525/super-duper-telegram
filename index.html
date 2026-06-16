@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>学習アプリ - 科目選択</title>
+<title>Super Duper ManaViva - 科目選択</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;}
@@ -11,11 +11,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .top-title{font-size:13px;color:#888;text-align:center;margin-bottom:4px;letter-spacing:0.05em;}
 .top-heading{font-size:24px;font-weight:500;text-align:center;margin-bottom:6px;}
 .top-sub{font-size:13px;color:#888;text-align:center;margin-bottom:28px;}
+
 .subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
-.subject-card{display:block;border:1px solid #e0ddd6;border-radius:16px;padding:1.25rem;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;position:relative;overflow:hidden;}
+.subject-card{display:block;border:1px solid #e0ddd6;border-radius:16px;padding:1.25rem;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;position:relative;overflow:hidden;cursor:pointer;}
 .subject-card:hover:not(.disabled){border-color:#aaa;background:#faf9f7;transform:translateY(-1px);}
 .subject-card:active:not(.disabled){transform:scale(0.99);}
 .subject-card.disabled{opacity:0.45;cursor:not-allowed;background:#f9f8f5;}
+.subject-card.selected{border-color:#1D9E75;background:#f0faf6;}
 .subject-icon{font-size:32px;margin-bottom:10px;}
 .subject-name{font-size:16px;font-weight:500;margin-bottom:4px;}
 .subject-desc{font-size:12px;color:#888;line-height:1.5;}
@@ -23,38 +25,77 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .badge-ready{background:#e1f5ee;color:#0F6E56;}
 .badge-soon{background:#f1efe8;color:#888;}
 .footer-note{text-align:center;font-size:12px;color:#aaa;margin-top:28px;}
+
+/* サブメニュー */
+.sub-section{margin-top:18px;padding-top:18px;border-top:1px solid #e8e5de;display:none;}
+.sub-section.active{display:block;}
+.sub-label{font-size:12px;color:#888;margin-bottom:10px;letter-spacing:0.05em;}
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.sub-card{display:flex;align-items:center;gap:10px;border:1px solid #e0ddd6;border-radius:12px;padding:12px 14px;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;}
+.sub-card:hover{border-color:#aaa;background:#faf9f7;}
+.sub-card:active{transform:scale(0.99);}
+.sub-icon{font-size:20px;}
+.sub-name{font-size:13px;font-weight:500;margin-bottom:2px;}
+.sub-desc{font-size:11px;color:#888;line-height:1.4;}
+.back-arrow{display:inline-block;margin-left:auto;color:#ccc;font-size:14px;}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="top-title">STUDY APP</div>
-  <div class="top-heading">学習アプリ</div>
+  <div class="top-heading">Super Duper ManaViva</div>
   <div class="top-sub">科目を選んでスタート</div>
 
   <div class="subject-grid">
-    <a class="subject-card" href="eiken3.html">
+    <div class="subject-card" id="card-english" onclick="toggleSub('english')">
       <span class="subject-badge badge-ready">学習可</span>
       <div class="subject-icon">📘</div>
-      <div class="subject-name">英検3級 単語</div>
-      <div class="subject-desc">テーマ別フラッシュカードで英検3級の重要単語を学習</div>
-    </a>
-
-    <div class="subject-card disabled">
-      <span class="subject-badge badge-soon">準備中</span>
-      <div class="subject-icon">🌍</div>
-      <div class="subject-name">歴史・地理</div>
-      <div class="subject-desc">世界史・日本史・地理のフラッシュカード</div>
+      <div class="subject-name">英語</div>
+      <div class="subject-desc">英検3級の単語学習や、不規則変化の特訓ができます</div>
     </div>
 
     <div class="subject-card disabled">
       <span class="subject-badge badge-soon">準備中</span>
-      <div class="subject-icon">🔢</div>
-      <div class="subject-name">数学</div>
-      <div class="subject-desc">公式・基礎問題の一問一答</div>
+      <div class="subject-icon">🌍</div>
+      <div class="subject-name">歴史</div>
+      <div class="subject-desc">世界史・日本史のフラッシュカード（準備中）</div>
+    </div>
+  </div>
+
+  <!-- 英語のサブメニュー -->
+  <div class="sub-section" id="sub-english">
+    <div class="sub-label">英語のモードを選択</div>
+    <div class="sub-grid">
+      <a class="sub-card" href="eiken3.html">
+        <div class="sub-icon">📖</div>
+        <div>
+          <div class="sub-name">英検3級 単語</div>
+          <div class="sub-desc">テーマ別フラッシュカード</div>
+        </div>
+        <span class="back-arrow">→</span>
+      </a>
+      <a class="sub-card" href="irregular.html">
+        <div class="sub-icon">🔀</div>
+        <div>
+          <div class="sub-name">不規則チャレンジ</div>
+          <div class="sub-desc">動詞・形容詞・名詞の不規則変化</div>
+        </div>
+        <span class="back-arrow">→</span>
+      </a>
     </div>
   </div>
 
   <div class="footer-note">他の科目も今後追加予定です</div>
 </div>
+
+<script>
+function toggleSub(name) {
+  var sub = document.getElementById('sub-' + name);
+  var card = document.getElementById('card-' + name);
+  var isActive = sub.classList.contains('active');
+  sub.classList.toggle('active', !isActive);
+  card.classList.toggle('selected', !isActive);
+}
+</script>
 </body>
 </html>
