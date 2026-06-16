@@ -3,29 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>不規則チャレンジ</title>
+<title>不規則チャレンジ - Super Duper ManaViva</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;}
 #app{max-width:600px;margin:0 auto;padding:1rem;}
-
-/* ホーム */
 .back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#888;text-decoration:none;margin-bottom:8px;}
 .back-link:hover{color:#1a1a1a;}
 .home-title{font-size:13px;color:#888;text-align:center;margin-bottom:4px;letter-spacing:0.05em;}
 .home-heading{font-size:22px;font-weight:500;text-align:center;margin-bottom:6px;}
 .home-sub{font-size:13px;color:#888;text-align:center;margin-bottom:20px;}
-
 .progress-summary{background:#fff;border:1px solid #e0ddd6;border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:8px;}
 .prog-item{text-align:center;}
 .prog-num{font-size:20px;font-weight:500;color:#1a1a1a;}
 .prog-label{font-size:11px;color:#888;margin-top:2px;}
-
 .phase-section{margin-bottom:20px;}
-.phase-label{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.phase-label{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .phase-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
 .phase-title{font-size:14px;font-weight:500;color:#1a1a1a;}
-.phase-desc{font-size:12px;color:#888;margin-left:32px;margin-bottom:8px;margin-top:-4px;}
+.phase-desc{font-size:12px;color:#888;margin-left:32px;margin-bottom:8px;margin-top:-2px;}
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
 .cat-card{border:1px solid #e0ddd6;border-radius:12px;padding:12px 14px;background:#fff;cursor:pointer;transition:all 0.15s;position:relative;}
 .cat-card:hover:not(.disabled){border-color:#aaa;background:#faf9f7;}
@@ -39,10 +35,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .badge-ready{background:#e1f5ee;color:#0F6E56;}
 .badge-soon{background:#f1efe8;color:#888;}
 .badge-shuffle{background:#fdebd0;color:#a15c00;}
-.divider{border:none;border-top:1px solid #e8e5de;margin:20px 0;}
-
-/* 学習画面 */
-.screen-title{font-size:16px;font-weight:500;margin-bottom:16px;}
+.back-btn{background:none;border:none;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#888;margin-bottom:12px;padding:0;}
+.back-btn:hover{color:#1a1a1a;}
+.screen-title{font-size:15px;font-weight:500;margin-bottom:14px;color:#555;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .mode-toggle{display:flex;border:1px solid #ccc;border-radius:8px;overflow:hidden;}
 .mode-btn{padding:6px 12px;font-size:12px;background:transparent;border:none;cursor:pointer;color:#888;}
@@ -51,7 +46,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .progress-fill{height:100%;background:#1D9E75;border-radius:2px;transition:width 0.3s;}
 .stat-row{display:flex;gap:12px;justify-content:center;font-size:12px;color:#888;margin-bottom:14px;}
 .stat-val{font-weight:600;color:#1a1a1a;}
-
 .card-wrap{perspective:1200px;height:250px;cursor:pointer;margin-bottom:12px;}
 .card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.55s cubic-bezier(.4,0,.2,1);}
 .card-inner.flipped{transform:rotateY(180deg);}
@@ -60,27 +54,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .card-back{background:#f9f8f5;transform:rotateY(180deg);overflow-y:auto;justify-content:flex-start;padding:1rem 1.25rem;-webkit-overflow-scrolling:touch;}
 .front-label{font-size:11px;color:#aaa;letter-spacing:0.07em;margin-bottom:8px;}
 .front-word{font-size:30px;font-weight:500;color:#1a1a1a;text-align:center;}
-.front-type-badge{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;margin-top:10px;}
-.front-hint{font-size:11px;color:#ccc;margin-top:10px;}
-
-.conj-table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+.front-pron{font-size:13px;color:#aaa;margin-top:6px;}
+.front-hint{font-size:11px;color:#ccc;margin-top:12px;}
+.challenge-badge{display:inline-block;font-size:10px;font-weight:600;background:#fdebd0;color:#a15c00;padding:2px 9px;border-radius:8px;margin-top:8px;}
+.conj-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
 .conj-table th{font-size:10px;color:#aaa;font-weight:500;text-align:center;padding:4px;letter-spacing:0.05em;}
 .conj-table td{text-align:center;padding:8px 4px;border-top:1px solid #e8e5de;}
 .conj-word{font-size:17px;font-weight:600;color:#1a1a1a;}
 .conj-pron{font-size:11px;color:#999;margin-top:2px;}
+.audio-btn{cursor:pointer;background:none;border:none;padding:0 3px;font-size:16px;vertical-align:middle;}
 hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
-.back-meaning{font-size:14px;color:#1a1a1a;text-align:center;margin-bottom:6px;}
-.example{font-size:12px;color:#666;margin:4px 0 2px;padding-left:4px;font-style:italic;line-height:1.5;text-align:center;}
-.example-ja{font-size:11px;color:#999;padding-left:4px;line-height:1.4;text-align:center;margin-bottom:4px;}
-.pattern-tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;margin-top:6px;}
-.tag-aaa{background:#ffe9e9;color:#b3261e;}
-.tag-aba{background:#fff3d6;color:#a15c00;}
-.tag-abb{background:#deeaf9;color:#185FA5;}
-.tag-abc{background:#e1f5ee;color:#0F6E56;}
-.tag-noun{background:#eeedfe;color:#534AB7;}
-
-.audio-btn{font-size:18px;cursor:pointer;background:none;border:none;padding:0;line-height:1;vertical-align:middle;}
-
+.back-meaning{font-size:14px;color:#1a1a1a;text-align:center;margin-bottom:6px;font-weight:500;}
+.example{font-size:12px;color:#666;margin:4px 0 2px;font-style:italic;line-height:1.5;text-align:center;}
+.example-ja{font-size:11px;color:#999;line-height:1.4;text-align:center;}
 .btn-row{display:flex;gap:8px;justify-content:center;margin-top:6px;}
 .btn{padding:10px 22px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#1a1a1a;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
 .btn:hover{background:#f0ede8;}
@@ -88,12 +74,10 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
 .btn.ok{border-color:#1D9E75;color:#0F6E56;}
 .btn.ng{border-color:#D85A30;color:#993C1D;}
 .btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
-
 .result-box{text-align:center;padding:2.5rem 0;}
 .result-num{font-size:52px;font-weight:500;color:#1a1a1a;}
 .result-sub{font-size:15px;color:#888;margin-top:8px;}
 .result-btns{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
-
 .section{display:none;}
 .section.active{display:block;}
 </style>
@@ -103,47 +87,126 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
 
   <!-- ホーム -->
   <div id="screen-home">
-    <a href="eiken3.html" class="back-link">← 英語トップに戻る</a>
+    <a href="index.html" class="back-link">← 科目選択に戻る</a>
     <div class="home-title">IRREGULAR CHALLENGE</div>
     <div class="home-heading">不規則チャレンジ</div>
     <div class="home-sub">動詞・形容詞・名詞の不規則変化を完全制覇</div>
-
     <div class="progress-summary">
       <div class="prog-item"><div class="prog-num" id="hp-total">0</div><div class="prog-label">総語数</div></div>
       <div class="prog-item"><div class="prog-num" id="hp-missed">0</div><div class="prog-label">要復習</div></div>
       <div class="prog-item"><div class="prog-num" id="hp-pct">0%</div><div class="prog-label">達成率</div></div>
     </div>
 
+    <!-- フェーズ1: AAA -->
     <div class="phase-section">
       <div class="phase-label">
-        <div class="phase-num" style="background:#e1f5ee;color:#0F6E56;">1</div>
-        <div class="phase-title">動詞の不規則活用</div>
+        <div class="phase-num" style="background:#ffe9e9;color:#b3261e;">1</div>
+        <div class="phase-title">A-A-A型（原形＝過去形＝過去分詞）</div>
       </div>
-      <div class="phase-desc">A-A-A型、A-B-A型、A-B-B型、A-B-C型のパターン別</div>
+      <div class="phase-desc">形は変わらないが油断禁物</div>
       <div class="cat-grid">
-        <div class="cat-card" onclick="selectCat('verb_aaa')">
+        <div class="cat-card" onclick="selectCat('aaa')">
           <span class="cat-badge badge-ready">学習可</span>
           <div class="cat-name">A-A-A型</div>
-          <div class="cat-count" id="cnt-verb_aaa">0語</div>
-        </div>
-        <div class="cat-card" onclick="selectCat('verb_aba')">
-          <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">A-B-A型</div>
-          <div class="cat-count" id="cnt-verb_aba">0語</div>
-        </div>
-        <div class="cat-card" onclick="selectCat('verb_abb')">
-          <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">A-B-B型</div>
-          <div class="cat-count" id="cnt-verb_abb">0語</div>
-        </div>
-        <div class="cat-card" onclick="selectCat('verb_abc')">
-          <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">A-B-C型</div>
-          <div class="cat-count" id="cnt-verb_abc">0語</div>
+          <div class="cat-count" id="cnt-aaa">0語</div>
         </div>
       </div>
     </div>
 
+    <!-- フェーズ2: ABA -->
+    <div class="phase-section">
+      <div class="phase-label">
+        <div class="phase-num" style="background:#fff3d6;color:#a15c00;">2</div>
+        <div class="phase-title">A-B-A型（原形＝過去分詞）</div>
+      </div>
+      <div class="phase-desc">過去形だけ変化する</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="selectCat('aba')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">A-B-A型</div>
+          <div class="cat-count" id="cnt-aba">0語</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- フェーズ3: ABB サブグループ -->
+    <div class="phase-section">
+      <div class="phase-label">
+        <div class="phase-num" style="background:#deeaf9;color:#185FA5;">3</div>
+        <div class="phase-title">A-B-B型（過去形＝過去分詞）サブグループ</div>
+      </div>
+      <div class="phase-desc">音のパターンごとに分類</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="selectCat('abb_ought')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ought/-aught</div>
+          <div class="cat-count" id="cnt-abb_ought">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abb_ept')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ee→-ept/-eft</div>
+          <div class="cat-count" id="cnt-abb_ept">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abb_ound')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ind/-ell→-ound/-old</div>
+          <div class="cat-count" id="cnt-abb_ound">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abb_aid')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ay/-ake→-aid/-ade</div>
+          <div class="cat-count" id="cnt-abb_aid">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abb_other')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">その他A-B-B</div>
+          <div class="cat-count" id="cnt-abb_other">0語</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- フェーズ4: ABC サブグループ -->
+    <div class="phase-section">
+      <div class="phase-label">
+        <div class="phase-num" style="background:#e1f5ee;color:#0F6E56;">4</div>
+        <div class="phase-title">A-B-C型（全て異なる）サブグループ</div>
+      </div>
+      <div class="phase-desc">音のパターンごとに分類</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="selectCat('abc_ookoken')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ake/-eak→-ook/-oken</div>
+          <div class="cat-count" id="cnt-abc_ookoken">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abc_ew_own')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ow/-ew→-ew/-own</div>
+          <div class="cat-count" id="cnt-abc_ew_own">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abc_ate_aten')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ee/-all→-aw/-ell/-ate/-aten</div>
+          <div class="cat-count" id="cnt-abc_ate_aten">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abc_gan_gun')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-in/-ing→-an/-ang/-un/-ung</div>
+          <div class="cat-count" id="cnt-abc_gan_gun">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abc_gave_given')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">-ive/-ide/-ite→-ave/-idden</div>
+          <div class="cat-count" id="cnt-abc_gave_given">0語</div>
+        </div>
+        <div class="cat-card" onclick="selectCat('abc_other')">
+          <span class="cat-badge badge-ready">学習可</span>
+          <div class="cat-name">その他A-B-C</div>
+          <div class="cat-count" id="cnt-abc_other">0語</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- シャッフル -->
     <div class="phase-section">
       <div class="phase-label">
         <div class="phase-num" style="background:#FAEEDA;color:#854F0B;">🔀</div>
@@ -151,67 +214,34 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       </div>
       <div class="phase-desc">全パターンをランダム出題。本番形式で力を試す。</div>
       <div class="cat-grid">
-        <div class="cat-card shuffle-card" onclick="selectCat('verb_shuffle')">
-          <span class="cat-badge badge-shuffle">🔀 シャッフル</span>
+        <div class="cat-card shuffle-card" onclick="selectCat('shuffle')">
+          <span class="cat-badge badge-shuffle">🔀</span>
           <div class="cat-name">動詞シャッフル</div>
-          <div class="cat-count" id="cnt-verb_shuffle">0語</div>
+          <div class="cat-count" id="cnt-shuffle">0語</div>
         </div>
       </div>
     </div>
 
+    <!-- 準備中 -->
     <div class="phase-section">
       <div class="phase-label">
-        <div class="phase-num" style="background:#E6F1FB;color:#185FA5;">2</div>
-        <div class="phase-title">形容詞・副詞の比較変化</div>
+        <div class="phase-num" style="background:#EEEDFE;color:#534AB7;">5</div>
+        <div class="phase-title">形容詞・副詞／名詞／名前動後</div>
       </div>
-      <div class="phase-desc">good-better-best など不規則な比較級・最上級</div>
       <div class="cat-grid">
-        <div class="cat-card disabled">
-          <span class="cat-badge badge-soon">準備中</span>
-          <div class="cat-name">比較変化</div>
-          <div class="cat-count">約10語</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="phase-section">
-      <div class="phase-label">
-        <div class="phase-num" style="background:#EEEDFE;color:#534AB7;">3</div>
-        <div class="phase-title">名詞の不規則複数形</div>
-      </div>
-      <div class="phase-desc">man-men, child-children など</div>
-      <div class="cat-grid">
-        <div class="cat-card disabled">
-          <span class="cat-badge badge-soon">準備中</span>
-          <div class="cat-name">不規則複数形</div>
-          <div class="cat-count">約20語</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="phase-section">
-      <div class="phase-label">
-        <div class="phase-num" style="background:#FAECE7;color:#993C1D;">4</div>
-        <div class="phase-title">名前動後（アクセント変化）</div>
-      </div>
-      <div class="phase-desc">record, present など品詞でアクセントが変わる単語</div>
-      <div class="cat-grid">
-        <div class="cat-card disabled">
-          <span class="cat-badge badge-soon">準備中</span>
-          <div class="cat-name">名前動後</div>
-          <div class="cat-count">準備中</div>
-        </div>
+        <div class="cat-card disabled"><span class="cat-badge badge-soon">準備中</span><div class="cat-name">比較変化</div><div class="cat-count">約10語</div></div>
+        <div class="cat-card disabled"><span class="cat-badge badge-soon">準備中</span><div class="cat-name">不規則複数形</div><div class="cat-count">約20語</div></div>
+        <div class="cat-card disabled"><span class="cat-badge badge-soon">準備中</span><div class="cat-name">名前動後</div><div class="cat-count">準備中</div></div>
       </div>
     </div>
   </div>
 
   <!-- 学習画面 -->
   <div id="screen-study" style="display:none;">
-    <button class="back-link" style="background:none;border:none;cursor:pointer;font-family:inherit;" onclick="goHome()">← 不規則チャレンジに戻る</button>
+    <button class="back-btn" onclick="goHome()">← 不規則チャレンジに戻る</button>
     <div class="screen-title" id="study-title"></div>
-
     <div class="top-bar">
-      <div style="font-size:13px;color:#888;" id="mode-label">英語 → 活用形・意味</div>
+      <div style="font-size:13px;color:#888;" id="mode-label">原形 → 活用・意味</div>
       <div class="mode-toggle">
         <button class="mode-btn active" id="btn-en" onclick="setMode('en')">英→日</button>
         <button class="mode-btn" id="btn-ja" onclick="setMode('ja')">日→英</button>
@@ -223,7 +253,6 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       <span>✓ <span class="stat-val" id="ok-cnt">0</span></span>
       <span>✗ <span class="stat-val" id="ng-cnt">0</span></span>
     </div>
-
     <div id="quiz-inner">
       <div class="card-wrap" onclick="flip()">
         <div class="card-inner" id="inner">
@@ -254,349 +283,363 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
-// ===================== データ定義 =====================
-// type: aaa / aba / abb / abc
-var VERB_DATA = {
-  verb_aaa: {
-    name: 'A-A-A型（原形・過去・過去分詞が同形）',
-    type: 'aaa', tagClass:'tag-aaa', tagLabel:'A-A-A型',
-    words: [
-      {base:'cut',baseP:'kʌt',past:'cut',pastP:'kʌt',pp:'cut',ppP:'kʌt',def:'切る',ex:'She cut the paper with scissors.',exJa:'彼女はハサミで紙を切った。'},
-      {base:'hit',baseP:'hɪt',past:'hit',pastP:'hɪt',pp:'hit',ppP:'hɪt',def:'打つ、ぶつける',ex:'The ball hit the window.',exJa:'ボールが窓にぶつかった。'},
-      {base:'put',baseP:'pʊt',past:'put',pastP:'pʊt',pp:'put',ppP:'pʊt',def:'置く',ex:'Put the book on the desk.',exJa:'本を机の上に置いて。'},
-      {base:'set',baseP:'set',past:'set',pastP:'set',pp:'set',ppP:'set',def:'設定する、置く',ex:'She set the table for dinner.',exJa:'彼女は夕食のためにテーブルを準備した。'},
-      {base:'let',baseP:'let',past:'let',pastP:'let',pp:'let',ppP:'let',def:'させる、許す',ex:'Let me know if you need help.',exJa:'助けが必要なら知らせてください。'},
-      {base:'cost',baseP:'kɒst',past:'cost',pastP:'kɒst',pp:'cost',ppP:'kɒst',def:'（費用が）かかる',ex:'This bag cost me $50.',exJa:'このバッグは50ドルかかった。'},
-      {base:'hurt',baseP:'hɜːrt',past:'hurt',pastP:'hɜːrt',pp:'hurt',ppP:'hɜːrt',def:'傷つける、痛む',ex:'My leg hurts.',exJa:'足が痛い。'},
-      {base:'shut',baseP:'ʃʌt',past:'shut',pastP:'ʃʌt',pp:'shut',ppP:'ʃʌt',def:'閉める',ex:'Please shut the door.',exJa:'ドアを閉めてください。'},
-      {base:'spread',baseP:'spred',past:'spread',pastP:'spred',pp:'spread',ppP:'spred',def:'広げる、広がる',ex:'The news spread quickly.',exJa:'その news はすぐに広まった。'},
-      {base:'split',baseP:'splɪt',past:'split',pastP:'splɪt',pp:'split',ppP:'splɪt',def:'分割する、割れる',ex:'They split the bill.',exJa:'彼らは割り勘にした。'},
-      {base:'fit',baseP:'fɪt',past:'fit',pastP:'fɪt',pp:'fit',ppP:'fɪt',def:'合う、適合する',ex:'These shoes fit perfectly.',exJa:'この靴は完璧に合う。'},
-      {base:'quit',baseP:'kwɪt',past:'quit',pastP:'kwɪt',pp:'quit',ppP:'kwɪt',def:'やめる',ex:'He quit his job last month.',exJa:'彼は先月仕事をやめた。'},
-      {base:'bet',baseP:'bet',past:'bet',pastP:'bet',pp:'bet',ppP:'bet',def:'賭ける',ex:'I bet you are right.',exJa:'あなたが正しいに違いない。'},
-      {base:'broadcast',baseP:'ˈbrɔːdkæst',past:'broadcast',pastP:'ˈbrɔːdkæst',pp:'broadcast',ppP:'ˈbrɔːdkæst',def:'放送する',ex:'The game was broadcast live.',exJa:'その試合は生放送された。'},
-      {base:'forecast',baseP:'ˈfɔːrkæst',past:'forecast',pastP:'ˈfɔːrkæst',pp:'forecast',ppP:'ˈfɔːrkæst',def:'予測する',ex:'They forecast rain for tomorrow.',exJa:'彼らは明日の雨を予測した。'}
-    ]
-  },
-  verb_aba: {
-    name: 'A-B-A型（原形と過去分詞が同形）',
-    type: 'aba', tagClass:'tag-aba', tagLabel:'A-B-A型',
-    words: [
-      {base:'come',baseP:'kʌm',past:'came',pastP:'keɪm',pp:'come',ppP:'kʌm',def:'来る',ex:'She came to the party.',exJa:'彼女はパーティーに来た。'},
-      {base:'become',baseP:'bɪˈkʌm',past:'became',pastP:'bɪˈkeɪm',pp:'become',ppP:'bɪˈkʌm',def:'～になる',ex:'He became a doctor.',exJa:'彼は医者になった。'},
-      {base:'run',baseP:'rʌn',past:'ran',pastP:'ræn',pp:'run',ppP:'rʌn',def:'走る、運営する',ex:'She runs every morning.',exJa:'彼女は毎朝走る。'},
-      {base:'overcome',baseP:'ˌoʊvərˈkʌm',past:'overcame',pastP:'ˌoʊvərˈkeɪm',pp:'overcome',ppP:'ˌoʊvərˈkʌm',def:'打ち勝つ、克服する',ex:'He overcame many difficulties.',exJa:'彼は多くの困難を克服した。'}
-    ]
-  },
-  verb_abb: {
-    name: 'A-B-B型（過去形と過去分詞が同形）',
-    type: 'abb', tagClass:'tag-abb', tagLabel:'A-B-B型',
-    words: [
-      {base:'buy',baseP:'baɪ',past:'bought',pastP:'bɔːt',pp:'bought',ppP:'bɔːt',def:'買う',ex:'I bought a new phone.',exJa:'新しい電話を買った。'},
-      {base:'bring',baseP:'brɪŋ',past:'brought',pastP:'brɔːt',pp:'brought',ppP:'brɔːt',def:'持ってくる',ex:'Please bring your textbook.',exJa:'教科書を持ってきてください。'},
-      {base:'think',baseP:'θɪŋk',past:'thought',pastP:'θɔːt',pp:'thought',ppP:'θɔːt',def:'考える、思う',ex:'I think you are right.',exJa:'あなたは正しいと思う。'},
-      {base:'catch',baseP:'kætʃ',past:'caught',pastP:'kɔːt',pp:'caught',ppP:'kɔːt',def:'捕まえる',ex:'He caught the ball.',exJa:'彼はボールを捕まえた。'},
-      {base:'teach',baseP:'tiːtʃ',past:'taught',pastP:'tɔːt',pp:'taught',ppP:'tɔːt',def:'教える',ex:'She teaches English.',exJa:'彼女は英語を教えている。'},
-      {base:'fight',baseP:'faɪt',past:'fought',pastP:'fɔːt',pp:'fought',ppP:'fɔːt',def:'戦う',ex:'They fought for their rights.',exJa:'彼らは権利のために戦った。'},
-      {base:'find',baseP:'faɪnd',past:'found',pastP:'faʊnd',pp:'found',ppP:'faʊnd',def:'見つける',ex:'I found my keys.',exJa:'鍵を見つけた。'},
-      {base:'feel',baseP:'fiːl',past:'felt',pastP:'felt',pp:'felt',ppP:'felt',def:'感じる',ex:'I feel happy today.',exJa:'今日は幸せに感じる。'},
-      {base:'keep',baseP:'kiːp',past:'kept',pastP:'kept',pp:'kept',ppP:'kept',def:'保つ、維持する',ex:'Keep your promise.',exJa:'約束を守って。'},
-      {base:'sleep',baseP:'sliːp',past:'slept',pastP:'slept',pp:'slept',ppP:'slept',def:'眠る',ex:'I slept for eight hours.',exJa:'8時間眠った。'},
-      {base:'sweep',baseP:'swiːp',past:'swept',pastP:'swept',pp:'swept',ppP:'swept',def:'掃く、一掃する',ex:'She swept the floor.',exJa:'彼女は床を掃いた。'},
-      {base:'weep',baseP:'wiːp',past:'wept',pastP:'wept',pp:'wept',ppP:'wept',def:'泣く、嘆く',ex:'He wept at the news.',exJa:'彼はその知らせに泣いた。'},
-      {base:'leave',baseP:'liːv',past:'left',pastP:'left',pp:'left',ppP:'left',def:'去る、残す',ex:'She left the office at 6.',exJa:'彼女は6時に職場を出た。'},
-      {base:'lose',baseP:'luːz',past:'lost',pastP:'lɒst',pp:'lost',ppP:'lɒst',def:'失う、負ける',ex:'We lost the game.',exJa:'試合に負けた。'},
-      {base:'send',baseP:'send',past:'sent',pastP:'sent',pp:'sent',ppP:'sent',def:'送る',ex:'I sent an email.',exJa:'メールを送った。'},
-      {base:'spend',baseP:'spend',past:'spent',pastP:'spent',pp:'spent',ppP:'spent',def:'お金や時間を使う',ex:'We spent a lot of money.',exJa:'たくさんのお金を使った。'},
-      {base:'lend',baseP:'lend',past:'lent',pastP:'lent',pp:'lent',ppP:'lent',def:'貸す',ex:'Can you lend me your pen?',exJa:'ペンを貸してくれる？'},
-      {base:'build',baseP:'bɪld',past:'built',pastP:'bɪlt',pp:'built',ppP:'bɪlt',def:'建てる',ex:'They built a new house.',exJa:'彼らは新しい家を建てた。'},
-      {base:'lead',baseP:'liːd',past:'led',pastP:'led',pp:'led',ppP:'led',def:'導く、率いる',ex:'She led the team to victory.',exJa:'彼女はチームを勝利に導いた。'},
-      {base:'feed',baseP:'fiːd',past:'fed',pastP:'fed',pp:'fed',ppP:'fed',def:'食べさせる',ex:'I fed the cat this morning.',exJa:'今朝猫に餌をやった。'},
-      {base:'meet',baseP:'miːt',past:'met',pastP:'met',pp:'met',ppP:'met',def:'会う',ex:'We met at the station.',exJa:'駅で会った。'},
-      {base:'sell',baseP:'sel',past:'sold',pastP:'soʊld',pp:'sold',ppP:'soʊld',def:'売る',ex:'They sold their house.',exJa:'彼らは家を売った。'},
-      {base:'tell',baseP:'tel',past:'told',pastP:'toʊld',pp:'told',ppP:'toʊld',def:'伝える、言う',ex:'Tell me the truth.',exJa:'本当のことを教えて。'},
-      {base:'say',baseP:'seɪ',past:'said',pastP:'sed',pp:'said',ppP:'sed',def:'言う',ex:'She said hello to me.',exJa:'彼女は私に挨拶した。'},
-      {base:'pay',baseP:'peɪ',past:'paid',pastP:'peɪd',pp:'paid',ppP:'peɪd',def:'支払う',ex:'I paid for the lunch.',exJa:'昼食代を払った。'},
-      {base:'lay',baseP:'leɪ',past:'laid',pastP:'leɪd',pp:'laid',ppP:'leɪd',def:'置く、産む',ex:'The hen laid an egg.',exJa:'雌鶏が卵を産んだ。'},
-      {base:'make',baseP:'meɪk',past:'made',pastP:'meɪd',pp:'made',ppP:'meɪd',def:'作る',ex:'She made a cake.',exJa:'彼女はケーキを作った。'},
-      {base:'have',baseP:'hæv',past:'had',pastP:'hæd',pp:'had',ppP:'hæd',def:'持つ',ex:'I have a question.',exJa:'質問があります。'},
-      {base:'hear',baseP:'hɪər',past:'heard',pastP:'hɜːrd',pp:'heard',ppP:'hɜːrd',def:'聞く、聞こえる',ex:'I heard a strange noise.',exJa:'奇妙な音が聞こえた。'},
-      {base:'hold',baseP:'hoʊld',past:'held',pastP:'held',pp:'held',ppP:'held',def:'持つ、開催する',ex:'She held the baby.',exJa:'彼女は赤ちゃんを抱いた。'},
-      {base:'stand',baseP:'stænd',past:'stood',pastP:'stʊd',pp:'stood',ppP:'stʊd',def:'立つ',ex:'He stood by the door.',exJa:'彼はドアのそばに立った。'},
-      {base:'understand',baseP:'ˌʌndərˈstænd',past:'understood',pastP:'ˌʌndərˈstʊd',pp:'understood',ppP:'ˌʌndərˈstʊd',def:'理解する',ex:'I understand your point.',exJa:'あなたの言いたいことは理解できる。'},
-      {base:'win',baseP:'wɪn',past:'won',pastP:'wʌn',pp:'won',ppP:'wʌn',def:'勝つ',ex:'Our team won the match.',exJa:'私たちのチームは試合に勝った。'},
-      {base:'dig',baseP:'dɪɡ',past:'dug',pastP:'dʌɡ',pp:'dug',ppP:'dʌɡ',def:'掘る',ex:'The dog dug a hole.',exJa:'犬が穴を掘った。'},
-      {base:'shoot',baseP:'ʃuːt',past:'shot',pastP:'ʃɒt',pp:'shot',ppP:'ʃɒt',def:'撃つ、撮影する',ex:'They shot the scene yesterday.',exJa:'彼らは昨日そのシーンを撮影した。'},
-      {base:'sit',baseP:'sɪt',past:'sat',pastP:'sæt',pp:'sat',ppP:'sæt',def:'座る',ex:'Please sit down.',exJa:'座ってください。'},
-      {base:'stick',baseP:'stɪk',past:'stuck',pastP:'stʌk',pp:'stuck',ppP:'stʌk',def:'くっつく、刺す',ex:'The stamp stuck to my finger.',exJa:'切手が指についた。'},
-      {base:'strike',baseP:'straɪk',past:'struck',pastP:'strʌk',pp:'struck',ppP:'strʌk',def:'打つ、ストライキをする',ex:'Lightning struck the tree.',exJa:'雷が木に落ちた。'},
-      {base:'swing',baseP:'swɪŋ',past:'swung',pastP:'swʌŋ',pp:'swung',ppP:'swʌŋ',def:'揺れる、振る',ex:'The door swung open.',exJa:'ドアが開いた。'},
-      {base:'hang',baseP:'hæŋ',past:'hung',pastP:'hʌŋ',pp:'hung',ppP:'hʌŋ',def:'掛ける、ぶら下がる',ex:'She hung the picture on the wall.',exJa:'彼女は壁に絵をかけた。'},
-      {base:'sing',baseP:'sɪŋ',past:'sang',pastP:'sæŋ',pp:'sung',ppP:'sʌŋ',def:'歌う',ex:'They sang together.',exJa:'彼らは一緒に歌った。'},
-      {base:'spin',baseP:'spɪn',past:'spun',pastP:'spʌn',pp:'spun',ppP:'spʌn',def:'回転する',ex:'The wheel spun fast.',exJa:'車輪が速く回転した。'},
-      {base:'stink',baseP:'stɪŋk',past:'stank',pastP:'stæŋk',pp:'stunk',ppP:'stʌŋk',def:'悪臭を放つ',ex:'The garbage stank.',exJa:'ゴミが悪臭を放った。'},
-      {base:'wake',baseP:'weɪk',past:'woke',pastP:'woʊk',pp:'woken',ppP:'ˈwoʊkən',def:'目覚める',ex:'I woke up early.',exJa:'早く目が覚めた。'},
-      {base:'sink',baseP:'sɪŋk',past:'sank',pastP:'sæŋk',pp:'sunk',ppP:'sʌŋk',def:'沈む',ex:'The ship sank slowly.',exJa:'船はゆっくり沈んだ。'},
-      {base:'lie',baseP:'laɪ',past:'lay',pastP:'leɪ',pp:'lain',ppP:'leɪn',def:'横になる（自動詞）',ex:'He lay on the bed.',exJa:'彼はベッドに横になった。'}
-    ]
-  },
-  verb_abc: {
-    name: 'A-B-C型（原形・過去・過去分詞が全て異なる）',
-    type: 'abc', tagClass:'tag-abc', tagLabel:'A-B-C型',
-    words: [
-      {base:'go',baseP:'ɡoʊ',past:'went',pastP:'went',pp:'gone',ppP:'ɡɒn',def:'行く',ex:'She went to school.',exJa:'彼女は学校に行った。'},
-      {base:'see',baseP:'siː',past:'saw',pastP:'sɔː',pp:'seen',ppP:'siːn',def:'見る、見える',ex:'I saw a movie last night.',exJa:'昨夜映画を見た。'},
-      {base:'eat',baseP:'iːt',past:'ate',pastP:'eɪt',pp:'eaten',ppP:'ˈiːtən',def:'食べる',ex:'We ate dinner together.',exJa:'一緒に夕食を食べた。'},
-      {base:'give',baseP:'ɡɪv',past:'gave',pastP:'ɡeɪv',pp:'given',ppP:'ˈɡɪvən',def:'与える',ex:'He gave me a present.',exJa:'彼は私にプレゼントをくれた。'},
-      {base:'take',baseP:'teɪk',past:'took',pastP:'tʊk',pp:'taken',ppP:'ˈteɪkən',def:'取る、持っていく',ex:'She took a photo.',exJa:'彼女は写真を撮った。'},
-      {base:'write',baseP:'raɪt',past:'wrote',pastP:'roʊt',pp:'written',ppP:'ˈrɪtən',def:'書く',ex:'He wrote a letter.',exJa:'彼は手紙を書いた。'},
-      {base:'speak',baseP:'spiːk',past:'spoke',pastP:'spoʊk',pp:'spoken',ppP:'ˈspoʊkən',def:'話す',ex:'She speaks three languages.',exJa:'彼女は3つの言語を話す。'},
-      {base:'break',baseP:'breɪk',past:'broke',pastP:'broʊk',pp:'broken',ppP:'ˈbroʊkən',def:'壊す、割る',ex:'He broke the window.',exJa:'彼は窓を割った。'},
-      {base:'choose',baseP:'tʃuːz',past:'chose',pastP:'tʃoʊz',pp:'chosen',ppP:'ˈtʃoʊzən',def:'選ぶ',ex:'She chose a blue dress.',exJa:'彼女は青いドレスを選んだ。'},
-      {base:'begin',baseP:'bɪˈɡɪn',past:'began',pastP:'bɪˈɡæn',pp:'begun',ppP:'bɪˈɡʌn',def:'始まる、始める',ex:'The class began at nine.',exJa:'授業は9時に始まった。'},
-      {base:'drive',baseP:'draɪv',past:'drove',pastP:'droʊv',pp:'driven',ppP:'ˈdrɪvən',def:'運転する',ex:'He drives to work every day.',exJa:'彼は毎日車で通勤する。'},
-      {base:'ride',baseP:'raɪd',past:'rode',pastP:'roʊd',pp:'ridden',ppP:'ˈrɪdən',def:'乗る',ex:'She rode her bike to school.',exJa:'彼女は自転車で学校に行った。'},
-      {base:'rise',baseP:'raɪz',past:'rose',pastP:'roʊz',pp:'risen',ppP:'ˈrɪzən',def:'上がる、昇る',ex:'The sun rises in the east.',exJa:'太陽は東から昇る。'},
-      {base:'fall',baseP:'fɔːl',past:'fell',pastP:'fel',pp:'fallen',ppP:'ˈfɔːlən',def:'落ちる、転ぶ',ex:'The leaves fell from the tree.',exJa:'葉が木から落ちた。'},
-      {base:'know',baseP:'noʊ',past:'knew',pastP:'njuː',pp:'known',ppP:'noʊn',def:'知っている',ex:'I know the answer.',exJa:'答えを知っている。'},
-      {base:'grow',baseP:'ɡroʊ',past:'grew',pastP:'ɡruː',pp:'grown',ppP:'ɡroʊn',def:'成長する、育てる',ex:'The plant grew quickly.',exJa:'植物は早く成長した。'},
-      {base:'throw',baseP:'θroʊ',past:'threw',pastP:'θruː',pp:'thrown',ppP:'θroʊn',def:'投げる',ex:'He threw the ball.',exJa:'彼はボールを投げた。'},
-      {base:'blow',baseP:'bloʊ',past:'blew',pastP:'bluː',pp:'blown',ppP:'bloʊn',def:'吹く、吹かれる',ex:'The wind blew hard.',exJa:'風が強く吹いた。'},
-      {base:'fly',baseP:'flaɪ',past:'flew',pastP:'fluː',pp:'flown',ppP:'floʊn',def:'飛ぶ',ex:'Birds flew over the lake.',exJa:'鳥が湖の上を飛んだ。'},
-      {base:'draw',baseP:'drɔː',past:'drew',pastP:'druː',pp:'drawn',ppP:'drɔːn',def:'描く、引く',ex:'She drew a picture.',exJa:'彼女は絵を描いた。'},
-      {base:'wear',baseP:'weər',past:'wore',pastP:'wɔːr',pp:'worn',ppP:'wɔːrn',def:'着ている',ex:'He wore a black suit.',exJa:'彼は黒いスーツを着ていた。'},
-      {base:'tear',baseP:'teər',past:'tore',pastP:'tɔːr',pp:'torn',ppP:'tɔːrn',def:'引き裂く',ex:'She tore the paper.',exJa:'彼女は紙を引き裂いた。'},
-      {base:'swear',baseP:'sweər',past:'swore',pastP:'swɔːr',pp:'sworn',ppP:'swɔːrn',def:'誓う、ののしる',ex:'He swore to tell the truth.',exJa:'彼は真実を話すと誓った。'},
-      {base:'bite',baseP:'baɪt',past:'bit',pastP:'bɪt',pp:'bitten',ppP:'ˈbɪtən',def:'噛む',ex:'The dog bit the mailman.',exJa:'犬が郵便配達員を噛んだ。'},
-      {base:'hide',baseP:'haɪd',past:'hid',pastP:'hɪd',pp:'hidden',ppP:'ˈhɪdən',def:'隠す、隠れる',ex:'She hid the present.',exJa:'彼女はプレゼントを隠した。'},
-      {base:'forgive',baseP:'fərˈɡɪv',past:'forgave',pastP:'fərˈɡeɪv',pp:'forgiven',ppP:'fərˈɡɪvən',def:'許す',ex:'She forgave him.',exJa:'彼女は彼を許した。'},
-      {base:'forget',baseP:'fərˈɡet',past:'forgot',pastP:'fərˈɡɒt',pp:'forgotten',ppP:'fərˈɡɒtən',def:'忘れる',ex:'I forgot my umbrella.',exJa:'傘を忘れた。'},
-      {base:'freeze',baseP:'friːz',past:'froze',pastP:'froʊz',pp:'frozen',ppP:'ˈfroʊzən',def:'凍る',ex:'The lake froze in winter.',exJa:'湖は冬に凍った。'},
-      {base:'steal',baseP:'stiːl',past:'stole',pastP:'stoʊl',pp:'stolen',ppP:'ˈstoʊlən',def:'盗む',ex:'Someone stole my bike.',exJa:'誰かが私の自転車を盗んだ。'},
-      {base:'shake',baseP:'ʃeɪk',past:'shook',pastP:'ʃʊk',pp:'shaken',ppP:'ˈʃeɪkən',def:'振る、揺れる',ex:'The earthquake shook the building.',exJa:'地震がビルを揺らした。'},
-      {base:'lie',baseP:'laɪ',past:'lied',pastP:'laɪd',pp:'lied',ppP:'laɪd',def:'嘘をつく（規則的に活用するが注意）',ex:'He lied about his age.',exJa:'彼は年齢について嘘をついた。'},
-      {base:'arise',baseP:'əˈraɪz',past:'arose',pastP:'əˈroʊz',pp:'arisen',ppP:'əˈrɪzən',def:'生じる、起こる',ex:'A problem arose suddenly.',exJa:'突然問題が生じた。'},
-      {base:'sew',baseP:'soʊ',past:'sewed',pastP:'soʊd',pp:'sewn',ppP:'soʊn',def:'縫う',ex:'She sewed a button on the shirt.',exJa:'彼女はシャツにボタンを縫い付けた。'},
-      {base:'show',baseP:'ʃoʊ',past:'showed',pastP:'ʃoʊd',pp:'shown',ppP:'ʃoʊn',def:'見せる、示す',ex:'He showed me his new car.',exJa:'彼は私に新しい車を見せた。'},
-      {base:'do',baseP:'duː',past:'did',pastP:'dɪd',pp:'done',ppP:'dʌn',def:'する、行う',ex:'I did my homework.',exJa:'宿題をやった。'}
-    ]
-  }
+// ===================== 単語データ =====================
+// challenge: true = 英検2級以上レベル
+var CATS = {
+  aaa:{name:'A-A-A型',words:[
+    {b:'cut',ba:'cút',bp:'kʌt',pa:'cút',pp2:'kʌt',pa2:'cút',pp3:'kʌt',def:'切る',ex:'She cut the paper.',exJ:'彼女は紙を切った。'},
+    {b:'hit',ba:'hít',bp:'hɪt',pa:'hít',pp2:'hɪt',pa2:'hít',pp3:'hɪt',def:'打つ、ぶつける',ex:'The ball hit the window.',exJ:'ボールが窓にぶつかった。'},
+    {b:'put',ba:'pút',bp:'pʊt',pa:'pút',pp2:'pʊt',pa2:'pút',pp3:'pʊt',def:'置く',ex:'Put the book on the desk.',exJ:'本を机に置いて。'},
+    {b:'set',ba:'sét',bp:'set',pa:'sét',pp2:'set',pa2:'sét',pp3:'set',def:'設定する、置く',ex:'She set the alarm.',exJ:'彼女は目覚ましをセットした。'},
+    {b:'let',ba:'lét',bp:'let',pa:'lét',pp2:'let',pa2:'lét',pp3:'let',def:'させる、許す',ex:'Let me know.',exJ:'知らせてください。'},
+    {b:'cost',ba:'cóst',bp:'kɒst',pa:'cóst',pp2:'kɒst',pa2:'cóst',pp3:'kɒst',def:'費用がかかる',ex:'It cost me $50.',exJ:'50ドルかかった。'},
+    {b:'hurt',ba:'húrt',bp:'hɜːrt',pa:'húrt',pp2:'hɜːrt',pa2:'húrt',pp3:'hɜːrt',def:'傷つける、痛む',ex:'My leg hurts.',exJ:'足が痛い。'},
+    {b:'shut',ba:'shút',bp:'ʃʌt',pa:'shút',pp2:'ʃʌt',pa2:'shút',pp3:'ʃʌt',def:'閉める',ex:'Please shut the door.',exJ:'ドアを閉めてください。'},
+    {b:'spread',ba:'spréad',bp:'spred',pa:'spréad',pp2:'spred',pa2:'spréad',pp3:'spred',def:'広げる、広まる',ex:'The news spread quickly.',exJ:'ニュースはすぐに広まった。'},
+    {b:'split',ba:'splít',bp:'splɪt',pa:'splít',pp2:'splɪt',pa2:'splít',pp3:'splɪt',def:'分割する',ex:'They split the bill.',exJ:'彼らは割り勘にした。'},
+    {b:'fit',ba:'fít',bp:'fɪt',pa:'fít',pp2:'fɪt',pa2:'fít',pp3:'fɪt',def:'合う、適合する',ex:'These shoes fit perfectly.',exJ:'この靴はぴったり合う。'},
+    {b:'quit',ba:'quít',bp:'kwɪt',pa:'quít',pp2:'kwɪt',pa2:'quít',pp3:'kwɪt',def:'やめる',ex:'He quit his job.',exJ:'彼は仕事をやめた。'},
+    {b:'bet',ba:'bét',bp:'bet',pa:'bét',pp2:'bet',pa2:'bét',pp3:'bet',def:'賭ける',ex:'I bet you are right.',exJ:'あなたが正しいに違いない。'},
+    {b:'read',ba:'réad',bp:'riːd',pa:'réad',pp2:'red',pa2:'réad',pp3:'red',def:'読む',ex:'She read the book.',exJ:'彼女はその本を読んだ。',note:'過去形・過去分詞はread(red)と発音変化'},
+    {b:'broadcast',ba:'bróadcast',bp:'ˈbrɔːdkæst',pa:'bróadcast',pp2:'ˈbrɔːdkæst',pa2:'bróadcast',pp3:'ˈbrɔːdkæst',def:'放送する',ex:'The game was broadcast live.',exJ:'試合は生放送された。'},
+    {b:'forecast',ba:'fórecast',bp:'ˈfɔːrkæst',pa:'fórecast',pp2:'ˈfɔːrkæst',pa2:'fórecast',pp3:'ˈfɔːrkæst',def:'予測する',ex:'They forecast rain.',exJ:'彼らは雨を予測した。'},
+    {b:'burst',ba:'búrst',bp:'bɜːrst',pa:'búrst',pp2:'bɜːrst',pa2:'búrst',pp3:'bɜːrst',def:'破裂する',ex:'The balloon burst.',exJ:'風船が割れた。'},
+    {b:'cast',ba:'cást',bp:'kæst',pa:'cást',pp2:'kæst',pa2:'cást',pp3:'kæst',def:'投げる、配役する',ex:'He cast the line.',exJ:'彼は釣り糸を投げた。',challenge:true},
+    {b:'thrust',ba:'thrúst',bp:'θrʌst',pa:'thrúst',pp2:'θrʌst',pa2:'thrúst',pp3:'θrʌst',def:'突き刺す、押し込む',ex:'He thrust the knife in.',exJ:'彼はナイフを突き刺した。',challenge:true}
+  ]},
+  aba:{name:'A-B-A型',words:[
+    {b:'come',ba:'cóme',bp:'kʌm',pa:'cáme',pp2:'keɪm',pa2:'cóme',pp3:'kʌm',def:'来る',ex:'She came to the party.',exJ:'彼女はパーティーに来た。'},
+    {b:'become',ba:'becóme',bp:'bɪˈkʌm',pa:'becáme',pp2:'bɪˈkeɪm',pa2:'becóme',pp3:'bɪˈkʌm',def:'～になる',ex:'He became a doctor.',exJ:'彼は医者になった。'},
+    {b:'run',ba:'rún',bp:'rʌn',pa:'rán',pp2:'ræn',pa2:'rún',pp3:'rʌn',def:'走る、運営する',ex:'She runs every morning.',exJ:'彼女は毎朝走る。'},
+    {b:'overcome',ba:'overcóme',bp:'ˌoʊvərˈkʌm',pa:'overcáme',pp2:'ˌoʊvərˈkeɪm',pa2:'overcóme',pp3:'ˌoʊvərˈkʌm',def:'克服する',ex:'He overcame difficulties.',exJ:'彼は困難を克服した。',challenge:true}
+  ]},
+  abb_ought:{name:'A-B-B型 -ought/-aught グループ',words:[
+    {b:'buy',ba:'búy',bp:'baɪ',pa:'bóught',pp2:'bɔːt',pa2:'bóught',pp3:'bɔːt',def:'買う',ex:'I bought a new phone.',exJ:'新しい電話を買った。'},
+    {b:'bring',ba:'bríng',bp:'brɪŋ',pa:'bróught',pp2:'brɔːt',pa2:'bróught',pp3:'brɔːt',def:'持ってくる',ex:'Please bring your book.',exJ:'本を持ってきてください。'},
+    {b:'think',ba:'thínk',bp:'θɪŋk',pa:'thóught',pp2:'θɔːt',pa2:'thóught',pp3:'θɔːt',def:'考える、思う',ex:'I thought you were right.',exJ:'あなたが正しいと思った。'},
+    {b:'catch',ba:'cátch',bp:'kætʃ',pa:'cáught',pp2:'kɔːt',pa2:'cáught',pp3:'kɔːt',def:'捕まえる',ex:'He caught the ball.',exJ:'彼はボールを捕まえた。'},
+    {b:'teach',ba:'téach',bp:'tiːtʃ',pa:'táught',pp2:'tɔːt',pa2:'táught',pp3:'tɔːt',def:'教える',ex:'She taught English.',exJ:'彼女は英語を教えた。'},
+    {b:'fight',ba:'fíght',bp:'faɪt',pa:'fóught',pp2:'fɔːt',pa2:'fóught',pp3:'fɔːt',def:'戦う',ex:'They fought for peace.',exJ:'彼らは平和のために戦った。'},
+    {b:'seek',ba:'séek',bp:'siːk',pa:'sóught',pp2:'sɔːt',pa2:'sóught',pp3:'sɔːt',def:'求める、探す',ex:'She sought help.',exJ:'彼女は助けを求めた。',challenge:true}
+  ]},
+  abb_ept:{name:'A-B-B型 -ee/-eep→-ept/-eft グループ',words:[
+    {b:'feel',ba:'féel',bp:'fiːl',pa:'félt',pp2:'felt',pa2:'félt',pp3:'felt',def:'感じる',ex:'I felt happy.',exJ:'幸せを感じた。'},
+    {b:'keep',ba:'kéep',bp:'kiːp',pa:'képt',pp2:'kept',pa2:'képt',pp3:'kept',def:'保つ、維持する',ex:'Keep your promise.',exJ:'約束を守って。'},
+    {b:'sleep',ba:'sléep',bp:'sliːp',pa:'slépt',pp2:'slept',pa2:'slépt',pp3:'slept',def:'眠る',ex:'I slept eight hours.',exJ:'8時間眠った。'},
+    {b:'sweep',ba:'swéep',bp:'swiːp',pa:'swépt',pp2:'swept',pa2:'swépt',pp3:'swept',def:'掃く',ex:'She swept the floor.',exJ:'彼女は床を掃いた。'},
+    {b:'weep',ba:'wéep',bp:'wiːp',pa:'wépt',pp2:'wept',pa2:'wépt',pp3:'wept',def:'泣く、嘆く',ex:'He wept at the news.',exJ:'彼はその知らせに泣いた。',challenge:true},
+    {b:'leave',ba:'léave',bp:'liːv',pa:'léft',pp2:'left',pa2:'léft',pp3:'left',def:'去る、残す',ex:'She left at six.',exJ:'彼女は6時に出た。'},
+    {b:'creep',ba:'créep',bp:'kriːp',pa:'crépt',pp2:'krept',pa2:'crépt',pp3:'krept',def:'忍び寄る',ex:'He crept quietly.',exJ:'彼は静かに忍び寄った。',challenge:true}
+  ]},
+  abb_ound:{name:'A-B-B型 -ind/-ell→-ound/-old グループ',words:[
+    {b:'find',ba:'fínd',bp:'faɪnd',pa:'fóund',pp2:'faʊnd',pa2:'fóund',pp3:'faʊnd',def:'見つける',ex:'I found my keys.',exJ:'鍵を見つけた。'},
+    {b:'bind',ba:'bínd',bp:'baɪnd',pa:'bóund',pp2:'baʊnd',pa2:'bóund',pp3:'baʊnd',def:'縛る、結びつける',ex:'She bound the books.',exJ:'彼女は本を束ねた。',challenge:true},
+    {b:'wind',ba:'wínd',bp:'waɪnd',pa:'wóund',pp2:'waʊnd',pa2:'wóund',pp3:'waʊnd',def:'巻く、曲がりくねる',ex:'He wound the rope.',exJ:'彼はロープを巻いた。',challenge:true},
+    {b:'grind',ba:'grínd',bp:'ɡraɪnd',pa:'gróund',pp2:'ɡraʊnd',pa2:'gróund',pp3:'ɡraʊnd',def:'すりつぶす',ex:'Grind the coffee.',exJ:'コーヒーを挽いて。',challenge:true},
+    {b:'sell',ba:'séll',bp:'sel',pa:'sóld',pp2:'soʊld',pa2:'sóld',pp3:'soʊld',def:'売る',ex:'They sold the house.',exJ:'彼らは家を売った。'},
+    {b:'tell',ba:'téll',bp:'tel',pa:'tóld',pp2:'toʊld',pa2:'tóld',pp3:'toʊld',def:'伝える、言う',ex:'Tell me the truth.',exJ:'本当のことを教えて。'},
+    {b:'hold',ba:'hóld',bp:'hoʊld',pa:'héld',pp2:'held',pa2:'héld',pp3:'held',def:'持つ、開催する',ex:'She held the baby.',exJ:'彼女は赤ちゃんを抱いた。'},
+    {b:'stand',ba:'stánd',bp:'stænd',pa:'stóod',pp2:'stʊd',pa2:'stóod',pp3:'stʊd',def:'立つ',ex:'He stood by the door.',exJ:'彼はドアのそばに立った。'},
+    {b:'understand',ba:'understánd',bp:'ˌʌndərˈstænd',pa:'understóod',pp2:'ˌʌndərˈstʊd',pa2:'understóod',pp3:'ˌʌndərˈstʊd',def:'理解する',ex:'I understood the problem.',exJ:'その問題を理解した。'}
+  ]},
+  abb_aid:{name:'A-B-B型 -ay/-ake/-ave→-aid/-ade/-aved グループ',words:[
+    {b:'say',ba:'sáy',bp:'seɪ',pa:'sáid',pp2:'sed',pa2:'sáid',pp3:'sed',def:'言う',ex:'She said hello.',exJ:'彼女は挨拶した。'},
+    {b:'pay',ba:'páy',bp:'peɪ',pa:'páid',pp2:'peɪd',pa2:'páid',pp3:'peɪd',def:'支払う',ex:'I paid for lunch.',exJ:'昼食代を払った。'},
+    {b:'lay',ba:'láy',bp:'leɪ',pa:'láid',pp2:'leɪd',pa2:'láid',pp3:'leɪd',def:'置く、産む',ex:'The hen laid an egg.',exJ:'雌鶏が卵を産んだ。'},
+    {b:'make',ba:'máke',bp:'meɪk',pa:'máde',pp2:'meɪd',pa2:'máde',pp3:'meɪd',def:'作る',ex:'She made a cake.',exJ:'彼女はケーキを作った。'},
+    {b:'have',ba:'háve',bp:'hæv',pa:'hád',pp2:'hæd',pa2:'hád',pp3:'hæd',def:'持つ、食べる',ex:'I had lunch.',exJ:'昼食を食べた。'},
+    {b:'hear',ba:'héar',bp:'hɪər',pa:'héard',pp2:'hɜːrd',pa2:'héard',pp3:'hɜːrd',def:'聞く、聞こえる',ex:'I heard a noise.',exJ:'音が聞こえた。'},
+    {b:'meet',ba:'méet',bp:'miːt',pa:'mét',pp2:'met',pa2:'mét',pp3:'met',def:'会う',ex:'We met at the station.',exJ:'駅で会った。'},
+    {b:'lead',ba:'léad',bp:'liːd',pa:'léd',pp2:'led',pa2:'léd',pp3:'led',def:'導く、率いる',ex:'She led the team.',exJ:'彼女はチームを率いた。'},
+    {b:'feed',ba:'féed',bp:'fiːd',pa:'féd',pp2:'fed',pa2:'féd',pp3:'fed',def:'食べさせる',ex:'I fed the cat.',exJ:'猫に餌をやった。'},
+    {b:'build',ba:'búild',bp:'bɪld',pa:'búilt',pp2:'bɪlt',pa2:'búilt',pp3:'bɪlt',def:'建てる',ex:'They built a house.',exJ:'彼らは家を建てた。'},
+    {b:'send',ba:'sénd',bp:'send',pa:'sént',pp2:'sent',pa2:'sént',pp3:'sent',def:'送る',ex:'I sent an email.',exJ:'メールを送った。'},
+    {b:'spend',ba:'spénd',bp:'spend',pa:'spént',pp2:'spent',pa2:'spént',pp3:'spent',def:'使う（時間・お金）',ex:'We spent a lot.',exJ:'たくさん使った。'},
+    {b:'lend',ba:'lénd',bp:'lend',pa:'lént',pp2:'lent',pa2:'lént',pp3:'lent',def:'貸す',ex:'Can you lend me a pen?',exJ:'ペンを貸して。'},
+    {b:'bend',ba:'bénd',bp:'bend',pa:'bént',pp2:'bent',pa2:'bént',pp3:'bent',def:'曲げる、曲がる',ex:'She bent the wire.',exJ:'彼女は針金を曲げた。',challenge:true},
+    {b:'rend',ba:'rénd',bp:'rend',pa:'rént',pp2:'rent',pa2:'rént',pp3:'rent',def:'引き裂く',ex:'He rent the paper.',exJ:'彼は紙を引き裂いた。',challenge:true}
+  ]},
+  abb_other:{name:'A-B-B型 その他',words:[
+    {b:'lose',ba:'lóse',bp:'luːz',pa:'lóst',pp2:'lɒst',pa2:'lóst',pp3:'lɒst',def:'失う、負ける',ex:'We lost the game.',exJ:'試合に負けた。'},
+    {b:'win',ba:'wín',bp:'wɪn',pa:'wón',pp2:'wʌn',pa2:'wón',pp3:'wʌn',def:'勝つ',ex:'Our team won.',exJ:'私たちのチームが勝った。'},
+    {b:'sit',ba:'sít',bp:'sɪt',pa:'sát',pp2:'sæt',pa2:'sát',pp3:'sæt',def:'座る',ex:'Please sit down.',exJ:'座ってください。'},
+    {b:'shoot',ba:'shóot',bp:'ʃuːt',pa:'shót',pp2:'ʃɒt',pa2:'shót',pp3:'ʃɒt',def:'撃つ、撮影する',ex:'They shot the scene.',exJ:'彼らはシーンを撮影した。'},
+    {b:'dig',ba:'díg',bp:'dɪɡ',pa:'dúg',pp2:'dʌɡ',pa2:'dúg',pp3:'dʌɡ',def:'掘る',ex:'The dog dug a hole.',exJ:'犬が穴を掘った。'},
+    {b:'hang',ba:'háng',bp:'hæŋ',pa:'húng',pp2:'hʌŋ',pa2:'húng',pp3:'hʌŋ',def:'掛ける、ぶら下がる',ex:'She hung the picture.',exJ:'彼女は絵を掛けた。'},
+    {b:'stick',ba:'stíck',bp:'stɪk',pa:'stúck',pp2:'stʌk',pa2:'stúck',pp3:'stʌk',def:'くっつく、刺す',ex:'The stamp stuck.',exJ:'切手がくっついた。'},
+    {b:'spin',ba:'spín',bp:'spɪn',pa:'spún',pp2:'spʌn',pa2:'spún',pp3:'spʌn',def:'回転する',ex:'The wheel spun.',exJ:'車輪が回転した。'},
+    {b:'swing',ba:'swíng',bp:'swɪŋ',pa:'swúng',pp2:'swʌŋ',pa2:'swúng',pp3:'swʌŋ',def:'揺れる、振る',ex:'The door swung open.',exJ:'ドアが開いた。'},
+    {b:'sting',ba:'stíng',bp:'stɪŋ',pa:'stúng',pp2:'stʌŋ',pa2:'stúng',pp3:'stʌŋ',def:'刺す',ex:'A bee stung him.',exJ:'蜂が彼を刺した。',challenge:true},
+    {b:'strike',ba:'stríke',bp:'straɪk',pa:'strúck',pp2:'strʌk',pa2:'strúck',pp3:'strʌk',def:'打つ、ストライキする',ex:'Lightning struck the tree.',exJ:'雷が木に落ちた。',challenge:true},
+    {b:'get',ba:'gét',bp:'ɡet',pa:'gót',pp2:'ɡɒt',pa2:'gót/gótten',pp3:'ɡɒt/ˈɡɒtən',def:'得る、なる',ex:'I got a gift.',exJ:'プレゼントをもらった。'},
+    {b:'forget',ba:'forgét',bp:'fərˈɡet',pa:'forgót',pp2:'fərˈɡɒt',pa2:'forgótten',pp3:'fərˈɡɒtən',def:'忘れる',ex:'I forgot my umbrella.',exJ:'傘を忘れた。'},
+    {b:'light',ba:'líght',bp:'laɪt',pa:'lít',pp2:'lɪt',pa2:'lít',pp3:'lɪt',def:'火をつける、照らす',ex:'She lit the candle.',exJ:'彼女はろうそくに火をつけた。',challenge:true},
+    {b:'shine',ba:'shíne',bp:'ʃaɪn',pa:'shóne',pp2:'ʃɒn',pa2:'shóne',pp3:'ʃɒn',def:'輝く、磨く',ex:'The sun shone.',exJ:'太陽が輝いた。',challenge:true}
+  ]},
+  abc_ookoken:{name:'A-B-C型 -ake/-eak/-ose→-ook/-oke/-osen グループ',words:[
+    {b:'take',ba:'táke',bp:'teɪk',pa:'tóok',pp2:'tʊk',pa2:'táken',pp3:'ˈteɪkən',def:'取る、持っていく',ex:'She took a photo.',exJ:'彼女は写真を撮った。'},
+    {b:'speak',ba:'spéak',bp:'spiːk',pa:'spóke',pp2:'spoʊk',pa2:'spóken',pp3:'ˈspoʊkən',def:'話す',ex:'She speaks English.',exJ:'彼女は英語を話す。'},
+    {b:'break',ba:'bréak',bp:'breɪk',pa:'bróke',pp2:'broʊk',pa2:'bróken',pp3:'ˈbroʊkən',def:'壊す、割る',ex:'He broke the window.',exJ:'彼は窓を割った。'},
+    {b:'choose',ba:'chóose',bp:'tʃuːz',pa:'chóse',pp2:'tʃoʊz',pa2:'chósen',pp3:'ˈtʃoʊzən',def:'選ぶ',ex:'She chose a blue dress.',exJ:'彼女は青いドレスを選んだ。'},
+    {b:'wake',ba:'wáke',bp:'weɪk',pa:'wóke',pp2:'woʊk',pa2:'wóken',pp3:'ˈwoʊkən',def:'目覚める、起こす',ex:'I woke up early.',exJ:'早く目が覚めた。'},
+    {b:'shake',ba:'sháke',bp:'ʃeɪk',pa:'shóok',pp2:'ʃʊk',pa2:'sháken',pp3:'ˈʃeɪkən',def:'振る、揺れる',ex:'The quake shook the building.',exJ:'地震がビルを揺らした。'},
+    {b:'mistake',ba:'mistáke',bp:'mɪˈsteɪk',pa:'mistóok',pp2:'mɪˈstʊk',pa2:'mistáken',pp3:'mɪˈsteɪkən',def:'間違える',ex:'I mistook him for you.',exJ:'彼をあなたと間違えた。',challenge:true},
+    {b:'forsake',ba:'forsáke',bp:'fərˈseɪk',pa:'forsóok',pp2:'fərˈsʊk',pa2:'forsáken',pp3:'fərˈseɪkən',def:'見捨てる',ex:'He forsook his friends.',exJ:'彼は友人を見捨てた。',challenge:true}
+  ]},
+  abc_ew_own:{name:'A-B-C型 -ow/-w/-y→-ew/-rew→-own/-rown グループ',words:[
+    {b:'know',ba:'knów',bp:'noʊ',pa:'knéw',pp2:'njuː',pa2:'knówn',pp3:'noʊn',def:'知っている',ex:'I knew the answer.',exJ:'答えを知っていた。'},
+    {b:'grow',ba:'grów',bp:'ɡroʊ',pa:'grów',pp2:'ɡruː',pa2:'grówn',pp3:'ɡroʊn',def:'成長する、育てる',ex:'The plant grew quickly.',exJ:'植物は早く成長した。'},
+    {b:'throw',ba:'thrów',bp:'θroʊ',pa:'thréw',pp2:'θruː',pa2:'thrówn',pp3:'θroʊn',def:'投げる',ex:'He threw the ball.',exJ:'彼はボールを投げた。'},
+    {b:'blow',ba:'blów',bp:'bloʊ',pa:'blów',pp2:'bluː',pa2:'blówn',pp3:'bloʊn',def:'吹く',ex:'The wind blew hard.',exJ:'風が強く吹いた。'},
+    {b:'fly',ba:'flý',bp:'flaɪ',pa:'fléw',pp2:'fluː',pa2:'flówn',pp3:'floʊn',def:'飛ぶ',ex:'Birds flew over the lake.',exJ:'鳥が湖の上を飛んだ。'},
+    {b:'draw',ba:'dráw',bp:'drɔː',pa:'dréw',pp2:'druː',pa2:'dráwn',pp3:'drɔːn',def:'描く、引く',ex:'She drew a picture.',exJ:'彼女は絵を描いた。'},
+    {b:'show',ba:'shów',bp:'ʃoʊ',pa:'shówed',pp2:'ʃoʊd',pa2:'shówn',pp3:'ʃoʊn',def:'見せる、示す',ex:'He showed me the way.',exJ:'彼は道を教えてくれた。'},
+    {b:'withdraw',ba:'withdráw',bp:'wɪðˈdrɔː',pa:'withdrów',pp2:'wɪðˈdruː',pa2:'withdráwn',pp3:'wɪðˈdrɔːn',def:'引き出す、撤退する',ex:'She withdrew cash.',exJ:'彼女は現金を引き出した。',challenge:true},
+    {b:'overflow',ba:'ovérflow',bp:'ˌoʊvərˈfloʊ',pa:'ovérflowed',pp2:'ˌoʊvərˈfloʊd',pa2:'ovérflown',pp3:'ˌoʊvərˈfloʊn',def:'あふれる',ex:'The river overflowed.',exJ:'川があふれた。',challenge:true}
+  ]},
+  abc_ate_aten:{name:'A-B-C型 -ee/-all/-eat→-aw/-ell/-ate→-een/-allen/-aten グループ',words:[
+    {b:'see',ba:'sée',bp:'siː',pa:'sáw',pp2:'sɔː',pa2:'séen',pp3:'siːn',def:'見る、見える',ex:'I saw a movie.',exJ:'映画を見た。'},
+    {b:'eat',ba:'éat',bp:'iːt',pa:'áte',pp2:'eɪt',pa2:'éaten',pp3:'ˈiːtən',def:'食べる',ex:'We ate dinner.',exJ:'夕食を食べた。'},
+    {b:'fall',ba:'fáll',bp:'fɔːl',pa:'féll',pp2:'fel',pa2:'fállen',pp3:'ˈfɔːlən',def:'落ちる、転ぶ',ex:'The leaves fell.',exJ:'葉が落ちた。'},
+    {b:'give',ba:'gíve',bp:'ɡɪv',pa:'gáve',pp2:'ɡeɪv',pa2:'gíven',pp3:'ˈɡɪvən',def:'与える',ex:'He gave a present.',exJ:'彼はプレゼントをくれた。'},
+    {b:'forgive',ba:'forgíve',bp:'fərˈɡɪv',pa:'forgáve',pp2:'fərˈɡeɪv',pa2:'forgíven',pp3:'fərˈɡɪvən',def:'許す',ex:'She forgave him.',exJ:'彼女は彼を許した。'},
+    {b:'forget',ba:'forgét',bp:'fərˈɡet',pa:'forgót',pp2:'fərˈɡɒt',pa2:'forgótten',pp3:'fərˈɡɒtən',def:'忘れる',ex:'I forgot my keys.',exJ:'鍵を忘れた。'},
+    {b:'get',ba:'gét',bp:'ɡet',pa:'gót',pp2:'ɡɒt',pa2:'gót / gótten',pp3:'ɡɒt / ˈɡɒtən',def:'得る、なる',ex:'I got a present.',exJ:'プレゼントをもらった。'},
+    {b:'oversee',ba:'overséé',bp:'ˌoʊvərˈsiː',pa:'oversaw',pp2:'ˌoʊvərˈsɔː',pa2:'overséen',pp3:'ˌoʊvərˈsiːn',def:'監督する',ex:'He oversaw the project.',exJ:'彼はプロジェクトを監督した。',challenge:true}
+  ]},
+  abc_gan_gun:{name:'A-B-C型 -in/-ing/-ink→-an/-ang/-ank→-un/-ung/-unk グループ',words:[
+    {b:'begin',ba:'begín',bp:'bɪˈɡɪn',pa:'begán',pp2:'bɪˈɡæn',pa2:'begún',pp3:'bɪˈɡʌn',def:'始まる、始める',ex:'The class began.',exJ:'授業が始まった。'},
+    {b:'sing',ba:'síng',bp:'sɪŋ',pa:'sáng',pp2:'sæŋ',pa2:'súng',pp3:'sʌŋ',def:'歌う',ex:'They sang together.',exJ:'彼らは一緒に歌った。'},
+    {b:'ring',ba:'ríng',bp:'rɪŋ',pa:'ráng',pp2:'ræŋ',pa2:'rúng',pp3:'rʌŋ',def:'（ベルが）鳴る',ex:'The bell rang.',exJ:'ベルが鳴った。'},
+    {b:'drink',ba:'drínk',bp:'drɪŋk',pa:'dránk',pp2:'dræŋk',pa2:'drúnk',pp3:'drʌŋk',def:'飲む',ex:'She drank water.',exJ:'彼女は水を飲んだ。'},
+    {b:'sink',ba:'sínk',bp:'sɪŋk',pa:'sánk',pp2:'sæŋk',pa2:'súnk',pp3:'sʌŋk',def:'沈む',ex:'The ship sank.',exJ:'船が沈んだ。'},
+    {b:'swim',ba:'swím',bp:'swɪm',pa:'swám',pp2:'swæm',pa2:'swúm',pp3:'swʌm',def:'泳ぐ',ex:'She swam across the river.',exJ:'彼女は川を泳いで渡った。'},
+    {b:'shrink',ba:'shrínk',bp:'ʃrɪŋk',pa:'shránk',pp2:'ʃræŋk',pa2:'shrúnk',pp3:'ʃrʌŋk',def:'縮む',ex:'The shirt shrank.',exJ:'シャツが縮んだ。',challenge:true},
+    {b:'stink',ba:'stínk',bp:'stɪŋk',pa:'stánk',pp2:'stæŋk',pa2:'stúnk',pp3:'stʌŋk',def:'悪臭を放つ',ex:'The garbage stank.',exJ:'ゴミが臭った。',challenge:true},
+    {b:'spin',ba:'spín',bp:'spɪn',pa:'spán',pp2:'spæn',pa2:'spún',pp3:'spʌn',def:'回転する',ex:'The wheel spun.',exJ:'車輪が回った。'}
+  ]},
+  abc_gave_given:{name:'A-B-C型 -ive/-ide/-ite/-ise→-ode/-ote/-ose/-ove→-idden/-itten/-osen グループ',words:[
+    {b:'ride',ba:'ríde',bp:'raɪd',pa:'róde',pp2:'roʊd',pa2:'rídden',pp3:'ˈrɪdən',def:'乗る',ex:'She rode her bike.',exJ:'彼女は自転車に乗った。'},
+    {b:'write',ba:'wríte',bp:'raɪt',pa:'wróte',pp2:'roʊt',pa2:'wrítten',pp3:'ˈrɪtən',def:'書く',ex:'He wrote a letter.',exJ:'彼は手紙を書いた。'},
+    {b:'bite',ba:'bíte',bp:'baɪt',pa:'bít',pp2:'bɪt',pa2:'bítten',pp3:'ˈbɪtən',def:'噛む',ex:'The dog bit him.',exJ:'犬が彼を噛んだ。'},
+    {b:'hide',ba:'híde',bp:'haɪd',pa:'híd',pp2:'hɪd',pa2:'hídden',pp3:'ˈhɪdən',def:'隠す、隠れる',ex:'She hid the present.',exJ:'彼女はプレゼントを隠した。'},
+    {b:'rise',ba:'ríse',bp:'raɪz',pa:'róse',pp2:'roʊz',pa2:'rísen',pp3:'ˈrɪzən',def:'上がる、昇る',ex:'The sun rises in the east.',exJ:'太陽は東から昇る。'},
+    {b:'arise',ba:'aríse',bp:'əˈraɪz',pa:'aróse',pp2:'əˈroʊz',pa2:'arísen',pp3:'əˈrɪzən',def:'生じる、起こる',ex:'A problem arose.',exJ:'問題が生じた。',challenge:true},
+    {b:'drive',ba:'dríve',bp:'draɪv',pa:'dróve',pp2:'droʊv',pa2:'dríven',pp3:'ˈdrɪvən',def:'運転する',ex:'He drives to work.',exJ:'彼は車で通勤する。'},
+    {b:'strive',ba:'stríve',bp:'straɪv',pa:'stróve',pp2:'stroʊv',pa2:'stríven',pp3:'ˈstrɪvən',def:'奮闘する、努力する',ex:'She strove to succeed.',exJ:'彼女は成功しようと奮闘した。',challenge:true},
+    {b:'steal',ba:'stéal',bp:'stiːl',pa:'stóle',pp2:'stoʊl',pa2:'stólen',pp3:'ˈstoʊlən',def:'盗む',ex:'Someone stole my bike.',exJ:'誰かが自転車を盗んだ。'},
+    {b:'freeze',ba:'fréeze',bp:'friːz',pa:'fróze',pp2:'froʊz',pa2:'frózen',pp3:'ˈfroʊzən',def:'凍る',ex:'The lake froze.',exJ:'湖が凍った。'},
+    {b:'weave',ba:'wéave',bp:'wiːv',pa:'wóve',pp2:'woʊv',pa2:'wóven',pp3:'ˈwoʊvən',def:'織る',ex:'She wove a basket.',exJ:'彼女はかごを編んだ。',challenge:true}
+  ]},
+  abc_other:{name:'A-B-C型 その他',words:[
+    {b:'go',ba:'gó',bp:'ɡoʊ',pa:'wént',pp2:'went',pa2:'góne',pp3:'ɡɒn',def:'行く',ex:'She went to school.',exJ:'彼女は学校に行った。'},
+    {b:'do',ba:'dó',bp:'duː',pa:'díd',pp2:'dɪd',pa2:'dóne',pp3:'dʌn',def:'する、行う',ex:'I did my homework.',exJ:'宿題をやった。'},
+    {b:'wear',ba:'wéar',bp:'weər',pa:'wóre',pp2:'wɔːr',pa2:'wórn',pp3:'wɔːrn',def:'着ている',ex:'He wore a black suit.',exJ:'彼は黒いスーツを着ていた。'},
+    {b:'tear',ba:'téar',bp:'teər',pa:'tóre',pp2:'tɔːr',pa2:'tórn',pp3:'tɔːrn',def:'引き裂く',ex:'She tore the paper.',exJ:'彼女は紙を引き裂いた。'},
+    {b:'swear',ba:'swéar',bp:'sweər',pa:'swóre',pp2:'swɔːr',pa2:'swórn',pp3:'swɔːrn',def:'誓う、ののしる',ex:'He swore to tell truth.',exJ:'彼は真実を話すと誓った。',challenge:true},
+    {b:'bear',ba:'béar',bp:'beər',pa:'bóre',pp2:'bɔːr',pa2:'bórne',pp3:'bɔːrn',def:'運ぶ、耐える、産む',ex:'She bore the pain.',exJ:'彼女は痛みに耐えた。',challenge:true},
+    {b:'know',ba:'knów',bp:'noʊ',pa:'knéw',pp2:'njuː',pa2:'knówn',pp3:'noʊn',def:'知っている',ex:'I knew the answer.',exJ:'答えを知っていた。'},
+    {b:'fly',ba:'flý',bp:'flaɪ',pa:'fléw',pp2:'fluː',pa2:'flówn',pp3:'floʊn',def:'飛ぶ',ex:'Birds flew over the lake.',exJ:'鳥が湖の上を飛んだ。'},
+    {b:'lie',ba:'líe',bp:'laɪ',pa:'láy',pp2:'leɪ',pa2:'láin',pp3:'leɪn',def:'横になる（自動詞）',ex:'He lay on the bed.',exJ:'彼はベッドに横になった。',note:'lie(嘘をつく)はlied-liedと規則変化'},
+    {b:'sew',ba:'séw',bp:'soʊ',pa:'séwed',pp2:'soʊd',pa2:'sówn',pp3:'soʊn',def:'縫う',ex:'She sewed a button.',exJ:'彼女はボタンを縫い付けた。',challenge:true},
+    {b:'slay',ba:'sláy',bp:'sleɪ',pa:'sléw',pp2:'sluː',pa2:'sláin',pp3:'sleɪn',def:'殺す',ex:'He slew the dragon.',exJ:'彼は竜を倒した。',challenge:true}
+  ]}
 };
 
-var allWords = {};
-Object.keys(VERB_DATA).forEach(function(k) {
-  allWords[k] = VERB_DATA[k].words.map(function(w) {
-    var w2 = Object.assign({}, w);
-    w2._patternType = VERB_DATA[k].type;
-    w2._tagClass = VERB_DATA[k].tagClass;
-    w2._tagLabel = VERB_DATA[k].tagLabel;
-    return w2;
+// シャッフル用全動詞
+function getAllWords(){
+  var all=[];
+  Object.keys(CATS).forEach(function(k){
+    CATS[k].words.forEach(function(w){
+      var w2=Object.assign({},w);
+      w2._cat=k;
+      all.push(w2);
+    });
   });
-});
-// シャッフル用：全パターン結合
-var shuffleSource = [];
-['verb_aaa','verb_aba','verb_abb','verb_abc'].forEach(function(k){
-  shuffleSource = shuffleSource.concat(allWords[k]);
-});
+  return all;
+}
 
-var allMissed = {};
-var currentCat = null;
-var words = [];
-var mode = 'en';
-var idx = 0, okCnt = 0, ngCnt = 0, flipped = false;
+var allMissed={};
+var currentCat=null;
+var words=[];
+var mode='en';
+var idx=0,okCnt=0,ngCnt=0,flipped=false;
 
-function shuffleArray(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-  }
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
   return a;
 }
 
-// ===================== 保存・読込 =====================
-function saveState() {
-  try {
-    var s = {};
-    Object.keys(allWords).forEach(function(k){ s[k] = { missed: allMissed[k] || [] }; });
-    s['verb_shuffle'] = { missed: allMissed['verb_shuffle'] || [] };
-    localStorage.setItem('irr_state', JSON.stringify(s));
-  } catch(e){}
+function saveState(){
+  try{
+    var s={};
+    Object.keys(CATS).forEach(function(k){s[k]={missed:allMissed[k]||[]};});
+    localStorage.setItem('irr2_state',JSON.stringify(s));
+  }catch(e){}
 }
-function loadState() {
-  try {
-    var s = localStorage.getItem('irr_state');
-    if (!s) return;
-    var saved = JSON.parse(s);
-    Object.keys(saved).forEach(function(k){ allMissed[k] = saved[k].missed || []; });
-  } catch(e){}
+function loadState(){
+  try{
+    var s=localStorage.getItem('irr2_state');
+    if(!s)return;
+    var saved=JSON.parse(s);
+    Object.keys(saved).forEach(function(k){allMissed[k]=saved[k].missed||[];});
+  }catch(e){}
 }
 
-// ===================== ホーム =====================
-function updateHomeCounts() {
-  var totalAll = 0, missedAll = 0;
-  Object.keys(allWords).forEach(function(k) {
-    var n = allWords[k].length;
-    totalAll += n;
-    var m = (allMissed[k] || []).length;
-    missedAll += m;
-    document.getElementById('cnt-' + k).textContent = n + '語';
+function updateHomeCounts(){
+  var total=0,missed=0;
+  Object.keys(CATS).forEach(function(k){
+    var n=CATS[k].words.length;
+    total+=n;
+    var m=(allMissed[k]||[]).length;
+    missed+=m;
+    document.getElementById('cnt-'+k).textContent=n+'語';
   });
-  document.getElementById('cnt-verb_shuffle').textContent = shuffleSource.length + '語（全パターン混合）';
-  document.getElementById('hp-total').textContent = totalAll;
-  document.getElementById('hp-missed').textContent = missedAll;
-  var pct = totalAll > 0 ? Math.round((totalAll - missedAll) / totalAll * 100) : 0;
-  document.getElementById('hp-pct').textContent = pct + '%';
+  document.getElementById('cnt-shuffle').textContent=total+'語（全パターン混合）';
+  document.getElementById('hp-total').textContent=total;
+  document.getElementById('hp-missed').textContent=missed;
+  var pct=total>0?Math.round((total-missed)/total*100):0;
+  document.getElementById('hp-pct').textContent=pct+'%';
 }
 
-function selectCat(catKey) {
-  currentCat = catKey;
-  if (catKey === 'verb_shuffle') {
-    words = shuffleArray(shuffleSource);
-    document.getElementById('study-title').textContent = '🔀 動詞シャッフル（全パターン）';
-  } else {
-    words = allWords[catKey].slice();
-    document.getElementById('study-title').textContent = VERB_DATA[catKey].name;
+function selectCat(catKey){
+  currentCat=catKey;
+  if(catKey==='shuffle'){
+    words=shuffle(getAllWords());
+    document.getElementById('study-title').textContent='🔀 動詞シャッフル（全パターン）';
+  }else{
+    words=CATS[catKey].words.slice();
+    document.getElementById('study-title').textContent=CATS[catKey].name;
   }
-  idx = 0; okCnt = 0; ngCnt = 0; mode = 'en';
-  document.getElementById('screen-home').style.display = 'none';
-  document.getElementById('screen-study').style.display = 'block';
+  idx=0;okCnt=0;ngCnt=0;mode='en';
+  document.getElementById('screen-home').style.display='none';
+  document.getElementById('screen-study').style.display='block';
   initQuizUI();
 }
 
-function goHome() {
+function goHome(){
   saveState();
-  document.getElementById('screen-study').style.display = 'none';
-  document.getElementById('screen-home').style.display = 'block';
+  document.getElementById('screen-study').style.display='none';
+  document.getElementById('screen-home').style.display='block';
   updateHomeCounts();
 }
 
-// ===================== クイズ =====================
-function initQuizUI() {
-  document.getElementById('btn-en').classList.toggle('active', mode === 'en');
-  document.getElementById('btn-ja').classList.toggle('active', mode === 'ja');
-  document.getElementById('mode-label').textContent = mode === 'en' ? '原形 → 活用・意味' : '意味 → 原形・活用';
-  document.getElementById('quiz-inner').style.display = 'block';
-  document.getElementById('quiz-result').style.display = 'none';
+function initQuizUI(){
+  document.getElementById('btn-en').classList.toggle('active',mode==='en');
+  document.getElementById('btn-ja').classList.toggle('active',mode==='ja');
+  document.getElementById('mode-label').textContent=mode==='en'?'原形 → 活用・意味':'意味 → 原形・活用';
+  document.getElementById('quiz-inner').style.display='block';
+  document.getElementById('quiz-result').style.display='none';
   document.getElementById('inner').classList.remove('flipped');
-  document.getElementById('btn-row').style.display = 'none';
-  flipped = false;
+  document.getElementById('btn-row').style.display='none';
+  flipped=false;
   renderCard();
 }
 
-function setMode(m) {
-  mode = m; idx = 0; okCnt = 0; ngCnt = 0;
-  document.getElementById('btn-en').classList.toggle('active', m === 'en');
-  document.getElementById('btn-ja').classList.toggle('active', m === 'ja');
-  document.getElementById('mode-label').textContent = m === 'en' ? '原形 → 活用・意味' : '意味 → 原形・活用';
-  document.getElementById('quiz-result').style.display = 'none';
-  document.getElementById('quiz-inner').style.display = 'block';
+function setMode(m){
+  mode=m;idx=0;okCnt=0;ngCnt=0;
+  document.getElementById('btn-en').classList.toggle('active',m==='en');
+  document.getElementById('btn-ja').classList.toggle('active',m==='ja');
+  document.getElementById('mode-label').textContent=m==='en'?'原形 → 活用・意味':'意味 → 原形・活用';
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-inner').style.display='block';
   document.getElementById('inner').classList.remove('flipped');
-  document.getElementById('btn-row').style.display = 'none';
-  flipped = false;
+  document.getElementById('btn-row').style.display='none';
+  flipped=false;
   renderCard();
 }
 
-function renderCard() {
-  if (!words.length) return;
-  var w = words[idx];
-  document.getElementById('cur').textContent = idx + 1;
-  document.getElementById('total').textContent = words.length;
-  document.getElementById('pfill').style.width = (idx / words.length * 100) + '%';
-  document.getElementById('ok-cnt').textContent = okCnt;
-  document.getElementById('ng-cnt').textContent = ngCnt;
-
-  if (mode === 'en') {
-    document.getElementById('front-label').textContent = '原形';
-    document.getElementById('front-content').innerHTML =
-      '<div class="front-word">' + w.base + '</div>' +
-      '<div class="conj-pron" style="margin-top:6px;">/' + w.baseP + '/</div>' +
-      '<div class="pattern-tag ' + w._tagClass + '">' + w._tagLabel + '</div>';
-  } else {
-    document.getElementById('front-label').textContent = '日本語の意味';
-    document.getElementById('front-content').innerHTML =
-      '<div style="font-size:18px;font-weight:500;text-align:center;">' + w.def + '</div>' +
-      '<div class="pattern-tag ' + w._tagClass + '" style="margin-top:12px;">' + w._tagLabel + '</div>';
+function renderCard(){
+  if(!words.length)return;
+  var w=words[idx];
+  document.getElementById('cur').textContent=idx+1;
+  document.getElementById('total').textContent=words.length;
+  document.getElementById('pfill').style.width=(idx/words.length*100)+'%';
+  document.getElementById('ok-cnt').textContent=okCnt;
+  document.getElementById('ng-cnt').textContent=ngCnt;
+  var ch=w.challenge?'<div class="challenge-badge">🔥 チャレンジ！</div>':'';
+  if(mode==='en'){
+    document.getElementById('front-label').textContent='原形';
+    document.getElementById('front-content').innerHTML=
+      '<div class="front-word">'+w.ba+'</div>'+
+      '<div class="front-pron">/'+w.bp+'/</div>'+ch;
+  }else{
+    document.getElementById('front-label').textContent='日本語の意味';
+    document.getElementById('front-content').innerHTML=
+      '<div style="font-size:18px;font-weight:500;text-align:center;">'+w.def+'</div>'+ch;
   }
-  document.getElementById('back-content').innerHTML = buildBackHTML(w);
+  document.getElementById('back-content').innerHTML=buildBack(w);
 }
 
-function buildBackHTML(w) {
-  var h = '';
-  h += '<table class="conj-table"><tr><th>原形</th><th>過去形</th><th>過去分詞</th></tr><tr>';
-  h += '<td><div class="conj-word">' + w.base + '</div><div class="conj-pron">/' + w.baseP + '/</div></td>';
-  h += '<td><div class="conj-word">' + w.past + '</div><div class="conj-pron">/' + w.pastP + '/</div></td>';
-  h += '<td><div class="conj-word">' + w.pp + '</div><div class="conj-pron">/' + w.ppP + '/</div></td>';
-  h += '</tr></table>';
-  h += '<div style="text-align:center;margin-bottom:4px;"><button class="audio-btn" onclick="speak(event,\'' + w.base.replace(/'/g,"\\'") + '\')">🔊 ' + w.base + '</button> ';
-  h += '<button class="audio-btn" onclick="speak(event,\'' + w.past.replace(/'/g,"\\'") + '\')">🔊 ' + w.past + '</button> ';
-  h += '<button class="audio-btn" onclick="speak(event,\'' + w.pp.replace(/'/g,"\\'") + '\')">🔊 ' + w.pp + '</button></div>';
-  h += '<hr class="div">';
-  h += '<div class="back-meaning">' + w.def + '</div>';
-  if (w.ex) h += '<p class="example">' + w.ex + '</p>';
-  if (w.exJa) h += '<p class="example-ja">' + w.exJa + '</p>';
-  h += '<div style="text-align:center;"><span class="pattern-tag ' + w._tagClass + '">' + w._tagLabel + '</span></div>';
+function buildBack(w){
+  var ch=w.challenge?'<span class="challenge-badge">🔥 チャレンジ！</span> ':'';
+  var h='<table class="conj-table"><tr><th>原形</th><th>過去形</th><th>過去分詞</th></tr><tr>';
+  h+='<td><div class="conj-word">'+w.ba+'</div><div class="conj-pron">/'+w.bp+'/</div><button class="audio-btn" onclick="sp(event,\''+w.b+'\')">🔊</button></td>';
+  h+='<td><div class="conj-word">'+w.pa+'</div><div class="conj-pron">/'+w.pp2+'/</div><button class="audio-btn" onclick="sp(event,\''+w.pa.replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];})+'\')" >🔊</button></td>';
+  h+='<td><div class="conj-word">'+w.pa2+'</div><div class="conj-pron">/'+w.pp3+'/</div><button class="audio-btn" onclick="sp(event,\''+w.pa2.replace(/[áéíóú\/\s].*/g,'').replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];})+'\')">🔊</button></td>';
+  h+='</tr></table>';
+  h+='<hr class="div">';
+  h+='<div class="back-meaning">'+ch+w.def+'</div>';
+  if(w.note)h+='<div style="font-size:11px;color:#854F0B;text-align:center;margin-bottom:4px;">⚠️ '+w.note+'</div>';
+  if(w.ex)h+='<p class="example">'+w.ex+'</p>';
+  if(w.exJ)h+='<p class="example-ja">'+w.exJ+'</p>';
   return h;
 }
 
-function flip() {
-  if (flipped) return;
+function flip(){
+  if(flipped)return;
   document.getElementById('inner').classList.add('flipped');
-  setTimeout(function() { document.getElementById('btn-row').style.display = 'flex'; }, 300);
-  flipped = true;
+  setTimeout(function(){document.getElementById('btn-row').style.display='flex';},300);
+  flipped=true;
 }
 
-function answer(ok) {
-  if (!ok && words[idx]) {
-    if (!allMissed[currentCat]) allMissed[currentCat] = [];
-    if (!allMissed[currentCat].find(function(x){return x.base===words[idx].base;})) {
-      allMissed[currentCat].push(words[idx]);
-    }
+function answer(ok){
+  if(!ok&&words[idx]){
+    var cat=currentCat==='shuffle'?(words[idx]._cat||'shuffle'):currentCat;
+    if(!allMissed[cat])allMissed[cat]=[];
+    if(!allMissed[cat].find(function(x){return x.b===words[idx].b;}))allMissed[cat].push(words[idx]);
   }
-  if (ok) okCnt++; else ngCnt++;
-  idx++;
-  saveState();
-  if (idx >= words.length) {
-    document.getElementById('quiz-inner').style.display = 'none';
-    document.getElementById('quiz-result').style.display = 'block';
-    document.getElementById('r-score').textContent = okCnt + ' / ' + words.length;
-    var pct = Math.round(okCnt / words.length * 100);
-    document.getElementById('r-sub').textContent = '正解率 ' + pct + '%' + (pct >= 80 ? ' 素晴らしい！' : pct >= 50 ? ' もう少し！' : ' 復習しよう！');
-  } else {
+  if(ok)okCnt++;else ngCnt++;
+  idx++;saveState();
+  if(idx>=words.length){
+    document.getElementById('quiz-inner').style.display='none';
+    document.getElementById('quiz-result').style.display='block';
+    document.getElementById('r-score').textContent=okCnt+' / '+words.length;
+    var pct=Math.round(okCnt/words.length*100);
+    document.getElementById('r-sub').textContent='正解率 '+pct+'%'+(pct>=80?' 素晴らしい！':pct>=50?' もう少し！':' 復習しよう！');
+  }else{
     document.getElementById('inner').classList.remove('flipped');
-    document.getElementById('btn-row').style.display = 'none';
-    flipped = false;
-    setTimeout(function() { renderCard(); }, 50);
+    document.getElementById('btn-row').style.display='none';
+    flipped=false;
+    setTimeout(function(){renderCard();},50);
   }
 }
 
-function restartQuiz(m) {
-  document.getElementById('quiz-result').style.display = 'none';
-  document.getElementById('quiz-inner').style.display = 'block';
-  idx = 0; okCnt = 0; ngCnt = 0; flipped = false; mode = m;
-  if (currentCat === 'verb_shuffle') words = shuffleArray(shuffleSource);
-  document.getElementById('btn-en').classList.toggle('active', m === 'en');
-  document.getElementById('btn-ja').classList.toggle('active', m === 'ja');
-  document.getElementById('mode-label').textContent = m === 'en' ? '原形 → 活用・意味' : '意味 → 原形・活用';
+function restartQuiz(m){
+  document.getElementById('quiz-result').style.display='none';
+  document.getElementById('quiz-inner').style.display='block';
+  idx=0;okCnt=0;ngCnt=0;flipped=false;mode=m;
+  if(currentCat==='shuffle')words=shuffle(getAllWords());
+  document.getElementById('btn-en').classList.toggle('active',m==='en');
+  document.getElementById('btn-ja').classList.toggle('active',m==='ja');
+  document.getElementById('mode-label').textContent=m==='en'?'原形 → 活用・意味':'意味 → 原形・活用';
   document.getElementById('inner').classList.remove('flipped');
-  document.getElementById('btn-row').style.display = 'none';
+  document.getElementById('btn-row').style.display='none';
   renderCard();
 }
 
-// ===================== 音声 =====================
-function speak(e, word) {
+function sp(e,word){
   e.stopPropagation();
-  var msg = new SpeechSynthesisUtterance(word);
-  msg.lang = 'en-US'; msg.rate = 0.9;
+  var msg=new SpeechSynthesisUtterance(word);
+  msg.lang='en-US';msg.rate=0.9;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(msg);
 }
 
-// ===================== 初期化 =====================
 loadState();
 updateHomeCounts();
 </script>
