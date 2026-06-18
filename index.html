@@ -12,32 +12,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .top-heading{font-size:24px;font-weight:500;text-align:center;margin-bottom:6px;}
 .top-sub{font-size:13px;color:#888;text-align:center;margin-bottom:28px;}
 
-.subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
-.subject-card{display:block;border:1px solid #e0ddd6;border-radius:16px;padding:1.25rem;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;position:relative;overflow:hidden;cursor:pointer;}
-.subject-card:hover:not(.disabled){border-color:#aaa;background:#faf9f7;transform:translateY(-1px);}
-.subject-card:active:not(.disabled){transform:scale(0.99);}
-.subject-card.disabled{opacity:0.45;cursor:not-allowed;background:#f9f8f5;}
-.subject-card.selected{border-color:#1D9E75;background:#f0faf6;}
-.subject-icon{font-size:32px;margin-bottom:10px;}
-.subject-name{font-size:16px;font-weight:500;margin-bottom:4px;}
-.subject-desc{font-size:12px;color:#888;line-height:1.5;}
-.subject-badge{position:absolute;top:14px;right:14px;font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;}
+.subject-list{display:flex;flex-direction:column;gap:10px;}
+
+/* 科目カード本体 */
+.subject-item{border-radius:16px;overflow:hidden;border:1px solid #e0ddd6;background:#fff;transition:border-color 0.15s;}
+.subject-item.selected{border-color:#1D9E75;}
+
+.subject-card{display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;cursor:pointer;position:relative;transition:background 0.15s;}
+.subject-card:hover:not(.disabled){background:#faf9f7;}
+.subject-card:active:not(.disabled){background:#f0ede8;}
+.subject-card.disabled{opacity:0.45;cursor:not-allowed;}
+.subject-icon{font-size:28px;flex-shrink:0;}
+.subject-info{flex:1;}
+.subject-name{font-size:16px;font-weight:500;margin-bottom:3px;}
+.subject-desc{font-size:12px;color:#888;line-height:1.4;}
+.subject-badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;white-space:nowrap;flex-shrink:0;}
 .badge-ready{background:#e1f5ee;color:#0F6E56;}
 .badge-soon{background:#f1efe8;color:#888;}
-.footer-note{text-align:center;font-size:12px;color:#aaa;margin-top:28px;}
+.chevron{font-size:14px;color:#ccc;flex-shrink:0;transition:transform 0.25s;}
+.subject-item.selected .chevron{transform:rotate(90deg);color:#1D9E75;}
 
-/* サブメニュー */
-.sub-section{margin-top:18px;padding-top:18px;border-top:1px solid #e8e5de;display:none;}
-.sub-section.active{display:block;}
-.sub-label{font-size:12px;color:#888;margin-bottom:10px;letter-spacing:0.05em;}
-.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
-.sub-card{display:flex;align-items:center;gap:10px;border:1px solid #e0ddd6;border-radius:12px;padding:12px 14px;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;}
+/* サブメニュー（カード直下に展開） */
+.sub-menu{max-height:0;overflow:hidden;transition:max-height 0.3s ease;background:#f5f4f0;}
+.sub-menu.open{max-height:300px;}
+.sub-menu-inner{padding:10px 12px 12px;}
+.sub-label{font-size:11px;color:#888;margin-bottom:8px;padding-left:2px;letter-spacing:0.05em;}
+.sub-card{display:flex;align-items:center;gap:10px;border:1px solid #e0ddd6;border-radius:12px;padding:12px 14px;background:#fff;text-decoration:none;color:inherit;margin-bottom:8px;transition:all 0.15s;}
+.sub-card:last-child{margin-bottom:0;}
 .sub-card:hover{border-color:#aaa;background:#faf9f7;}
 .sub-card:active{transform:scale(0.99);}
-.sub-icon{font-size:20px;}
+.sub-icon{font-size:20px;flex-shrink:0;}
 .sub-name{font-size:13px;font-weight:500;margin-bottom:2px;}
 .sub-desc{font-size:11px;color:#888;line-height:1.4;}
-.back-arrow{display:inline-block;margin-left:auto;color:#ccc;font-size:14px;}
+.sub-arrow{margin-left:auto;color:#ccc;font-size:14px;flex-shrink:0;}
+
+.footer-note{text-align:center;font-size:12px;color:#aaa;margin-top:24px;}
 </style>
 </head>
 <body>
@@ -46,43 +55,54 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="top-heading">Super Duper ManaViva</div>
   <div class="top-sub">科目を選んでスタート</div>
 
-  <div class="subject-grid">
-    <div class="subject-card" id="card-english" onclick="toggleSub('english')">
-      <span class="subject-badge badge-ready">学習可</span>
-      <div class="subject-icon">📘</div>
-      <div class="subject-name">英語</div>
-      <div class="subject-desc">英検3級の単語学習や、不規則変化の特訓ができます</div>
+  <div class="subject-list">
+
+    <!-- 英語 -->
+    <div class="subject-item" id="item-english">
+      <div class="subject-card" onclick="toggleSub('english')">
+        <div class="subject-icon">📘</div>
+        <div class="subject-info">
+          <div class="subject-name">英語</div>
+          <div class="subject-desc">英検3級の単語学習や、不規則変化の特訓ができます</div>
+        </div>
+        <span class="subject-badge badge-ready">学習可</span>
+        <span class="chevron" id="chev-english">›</span>
+      </div>
+      <div class="sub-menu" id="sub-english">
+        <div class="sub-menu-inner">
+          <div class="sub-label">モードを選択</div>
+          <a class="sub-card" href="eiken3.html">
+            <div class="sub-icon">📖</div>
+            <div>
+              <div class="sub-name">英検3級 単語</div>
+              <div class="sub-desc">テーマ別フラッシュカード</div>
+            </div>
+            <span class="sub-arrow">→</span>
+          </a>
+          <a class="sub-card" href="irregular.html">
+            <div class="sub-icon">🔀</div>
+            <div>
+              <div class="sub-name">不規則チャレンジ</div>
+              <div class="sub-desc">動詞・形容詞・名詞の不規則変化</div>
+            </div>
+            <span class="sub-arrow">→</span>
+          </a>
+        </div>
+      </div>
     </div>
 
-    <div class="subject-card disabled">
-      <span class="subject-badge badge-soon">準備中</span>
-      <div class="subject-icon">🌍</div>
-      <div class="subject-name">歴史</div>
-      <div class="subject-desc">世界史・日本史のフラッシュカード（準備中）</div>
+    <!-- 歴史 -->
+    <div class="subject-item">
+      <div class="subject-card disabled">
+        <div class="subject-icon">🌍</div>
+        <div class="subject-info">
+          <div class="subject-name">歴史</div>
+          <div class="subject-desc">世界史・日本史のフラッシュカード（準備中）</div>
+        </div>
+        <span class="subject-badge badge-soon">準備中</span>
+      </div>
     </div>
-  </div>
 
-  <!-- 英語のサブメニュー -->
-  <div class="sub-section" id="sub-english">
-    <div class="sub-label">英語のモードを選択</div>
-    <div class="sub-grid">
-      <a class="sub-card" href="eiken3.html">
-        <div class="sub-icon">📖</div>
-        <div>
-          <div class="sub-name">英検3級 単語</div>
-          <div class="sub-desc">テーマ別フラッシュカード</div>
-        </div>
-        <span class="back-arrow">→</span>
-      </a>
-      <a class="sub-card" href="irregular.html">
-        <div class="sub-icon">🔀</div>
-        <div>
-          <div class="sub-name">不規則チャレンジ</div>
-          <div class="sub-desc">動詞・形容詞・名詞の不規則変化</div>
-        </div>
-        <span class="back-arrow">→</span>
-      </a>
-    </div>
   </div>
 
   <div class="footer-note">他の科目も今後追加予定です</div>
@@ -90,11 +110,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 
 <script>
 function toggleSub(name) {
+  var item = document.getElementById('item-' + name);
   var sub = document.getElementById('sub-' + name);
-  var card = document.getElementById('card-' + name);
-  var isActive = sub.classList.contains('active');
-  sub.classList.toggle('active', !isActive);
-  card.classList.toggle('selected', !isActive);
+  var isOpen = sub.classList.contains('open');
+  sub.classList.toggle('open', !isOpen);
+  item.classList.toggle('selected', !isOpen);
 }
 </script>
 </body>
