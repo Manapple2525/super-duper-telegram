@@ -139,27 +139,27 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       <div class="cat-grid">
         <div class="cat-card" onclick="selectCat('abb_ought')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ought/-aught</div>
+          <div class="cat-name">buy系</div>
           <div class="cat-count" id="cnt-abb_ought">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_ept')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ee→-ept/-eft</div>
+          <div class="cat-name">feel系</div>
           <div class="cat-count" id="cnt-abb_ept">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_ound')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ind/-ell→-ound/-old</div>
+          <div class="cat-name">find系</div>
           <div class="cat-count" id="cnt-abb_ound">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_aid')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ay/-ake→-aid/-ade</div>
+          <div class="cat-name">say系</div>
           <div class="cat-count" id="cnt-abb_aid">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_other')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">その他A-B-B</div>
+          <div class="cat-name">get系・その他</div>
           <div class="cat-count" id="cnt-abb_other">0語</div>
         </div>
       </div>
@@ -175,32 +175,32 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       <div class="cat-grid">
         <div class="cat-card" onclick="selectCat('abc_ookoken')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ake/-eak→-ook/-oken</div>
+          <div class="cat-name">take系</div>
           <div class="cat-count" id="cnt-abc_ookoken">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_ew_own')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ow/-ew→-ew/-own</div>
+          <div class="cat-name">know系</div>
           <div class="cat-count" id="cnt-abc_ew_own">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_ate_aten')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ee/-all→-aw/-ell/-ate/-aten</div>
+          <div class="cat-name">see系</div>
           <div class="cat-count" id="cnt-abc_ate_aten">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_gan_gun')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-in/-ing→-an/-ang/-un/-ung</div>
+          <div class="cat-name">begin系</div>
           <div class="cat-count" id="cnt-abc_gan_gun">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_gave_given')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">-ive/-ide/-ite→-ave/-idden</div>
+          <div class="cat-name">ride系</div>
           <div class="cat-count" id="cnt-abc_gave_given">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_other')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">その他A-B-C</div>
+          <div class="cat-name">go系・その他</div>
           <div class="cat-count" id="cnt-abc_other">0語</div>
         </div>
       </div>
@@ -577,11 +577,16 @@ function renderCard(){
 
 function buildBack(w){
   var ch=w.challenge?'<span class="challenge-badge">🔥 チャレンジ！</span> ':'';
+  // アクセント記号を除いた読み上げ用テキスト
+  function plain(s){return s.replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];}).split('/')[0].trim();}
+  var b=plain(w.b), pa=plain(w.pa), pp=plain(w.pa2);
+  var allText=b+' ... '+pa+' ... '+pp;
   var h='<table class="conj-table"><tr><th>原形</th><th>過去形</th><th>過去分詞</th></tr><tr>';
-  h+='<td><div class="conj-word">'+w.ba+'</div><div class="conj-pron">/'+w.bp+'/</div><button class="audio-btn" onclick="sp(event,\''+w.b+'\')">🔊</button></td>';
-  h+='<td><div class="conj-word">'+w.pa+'</div><div class="conj-pron">/'+w.pp2+'/</div><button class="audio-btn" onclick="sp(event,\''+w.pa.replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];})+'\')" >🔊</button></td>';
-  h+='<td><div class="conj-word">'+w.pa2+'</div><div class="conj-pron">/'+w.pp3+'/</div><button class="audio-btn" onclick="sp(event,\''+w.pa2.replace(/[áéíóú\/\s].*/g,'').replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];})+'\')">🔊</button></td>';
+  h+='<td><div class="conj-word">'+w.ba+'</div><div class="conj-pron">/'+w.bp+'/</div></td>';
+  h+='<td><div class="conj-word">'+w.pa+'</div><div class="conj-pron">/'+w.pp2+'/</div></td>';
+  h+='<td><div class="conj-word">'+w.pa2+'</div><div class="conj-pron">/'+w.pp3+'/</div></td>';
   h+='</tr></table>';
+  h+='<div style="text-align:center;margin-bottom:8px;"><button class="audio-btn" style="font-size:13px;border:1px solid #e0ddd6;border-radius:8px;padding:6px 14px;background:#fff;" onclick="spAll(event,\''+allText+'\')">🔊 まとめて聞く</button></div>';
   h+='<hr class="div">';
   h+='<div class="back-meaning">'+ch+w.def+'</div>';
   if(w.note)h+='<div style="font-size:11px;color:#854F0B;text-align:center;margin-bottom:4px;">⚠️ '+w.note+'</div>';
@@ -638,6 +643,22 @@ function sp(e,word){
   msg.lang='en-US';msg.rate=0.9;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(msg);
+}
+
+function spAll(e,text){
+  e.stopPropagation();
+  window.speechSynthesis.cancel();
+  // "buy ... bought ... bought" を1語ずつ間を空けて読む
+  var parts=text.split(' ... ');
+  var i=0;
+  function next(){
+    if(i>=parts.length)return;
+    var msg=new SpeechSynthesisUtterance(parts[i]);
+    msg.lang='en-US';msg.rate=0.85;
+    msg.onend=function(){i++;setTimeout(next,400);};
+    window.speechSynthesis.speak(msg);
+  }
+  next();
 }
 
 loadState();
