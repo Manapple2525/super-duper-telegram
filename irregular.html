@@ -62,6 +62,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .front-label{font-size:11px;color:#aaa;letter-spacing:0.07em;margin-bottom:8px;}
 .front-word{font-size:30px;font-weight:500;color:#1a1a1a;text-align:center;}
 .front-pron{font-size:13px;color:#aaa;margin-top:6px;}
+.front-meaning-hint{font-size:14px;color:#555;margin-top:8px;}
+.blank-sentence{font-size:clamp(15px,4.5vw,19px);color:#1a1a1a;text-align:center;line-height:1.7;padding:0 4px;}
+.blank-sentence-ja{font-size:13px;color:#888;text-align:center;margin-top:10px;line-height:1.5;}
+.blank-box{display:inline-block;border-bottom:2px solid #1a1a1a;background:#f0ede8;border-radius:3px;padding:1px 4px;min-width:60px;color:transparent;user-select:none;}
 .front-hint{font-size:11px;color:#ccc;margin-top:12px;}
 .challenge-badge{display:inline-block;font-size:10px;font-weight:600;background:#fdebd0;color:#a15c00;padding:2px 9px;border-radius:8px;margin-top:8px;}
 .conj-table{width:100%;border-collapse:collapse;margin-bottom:10px;table-layout:fixed;}
@@ -253,7 +257,7 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
     <button class="back-btn" onclick="goHome()">← 不規則チャレンジに戻る</button>
     <div class="screen-title" id="study-title"></div>
     <div class="top-bar">
-      <div style="font-size:13px;color:#888;" id="mode-label">原形 → 活用・意味</div>
+      <div style="font-size:13px;color:#888;" id="mode-label"></div>
       <div class="mode-toggle">
         <button class="mode-btn active" id="btn-en" onclick="setMode('en')">英→日</button>
         <button class="mode-btn" id="btn-ja" onclick="setMode('ja')">日→英</button>
@@ -269,7 +273,6 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       <div class="card-wrap" onclick="flip()">
         <div class="card-inner" id="inner">
           <div class="card-face card-front">
-            <div class="front-label" id="front-label">原形</div>
             <div id="front-content"></div>
             <div class="front-hint">タップしてめくる</div>
           </div>
@@ -315,7 +318,7 @@ var CATS = {
     {b:'fit',ba:'fít',bp:'fɪt',pa:'fít',pp2:'fɪt',pa2:'fít',pp3:'fɪt',def:'合う、適合する',ex:'These shoes fit perfectly.',exJ:'この靴はぴったり合う。'},
     {b:'quit',ba:'quít',bp:'kwɪt',pa:'quít',pp2:'kwɪt',pa2:'quít',pp3:'kwɪt',def:'やめる',ex:'He quit his job.',exJ:'彼は仕事をやめた。'},
     {b:'bet',ba:'bét',bp:'bet',pa:'bét',pp2:'bet',pa2:'bét',pp3:'bet',def:'賭ける',ex:'I bet you are right.',exJ:'あなたが正しいに違いない。'},
-    {b:'read',ba:'réad',bp:'riːd',pa:'réad',pp2:'red',pa2:'réad',pp3:'red',def:'読む',ex:'She read the book.',exJ:'彼女はその本を読んだ。',note:'過去形・過去分詞はread(red)と発音変化'},
+    {b:'read',ba:'réad',bp:'riːd',pa:'réad',pp2:'red',pa2:'réad',pp3:'red',def:'読む',ex:'She read the book.',exJ:'彼女はその本を読んだ。',note:'過去形・過去分詞はread(red)と発音変化',pSpeak:'red',ppSpeak:'red'},
     {b:'broadcast',ba:'bróadcast',bp:'ˈbrɔːdkæst',pa:'bróadcast',pp2:'ˈbrɔːdkæst',pa2:'bróadcast',pp3:'ˈbrɔːdkæst',def:'放送する',ex:'The game was broadcast live.',exJ:'試合は生放送された。'},
     {b:'forecast',ba:'fórecast',bp:'ˈfɔːrkæst',pa:'fórecast',pp2:'ˈfɔːrkæst',pa2:'fórecast',pp3:'ˈfɔːrkæst',def:'予測する',ex:'They forecast rain.',exJ:'彼らは雨を予測した。'},
     {b:'burst',ba:'búrst',bp:'bɜːrst',pa:'búrst',pp2:'bɜːrst',pa2:'búrst',pp3:'bɜːrst',def:'破裂する',ex:'The balloon burst.',exJ:'風船が割れた。'},
@@ -326,7 +329,7 @@ var CATS = {
     {b:'come',ba:'cóme',bp:'kʌm',pa:'cáme',pp2:'keɪm',pa2:'cóme',pp3:'kʌm',def:'来る',ex:'She came to the party.',exJ:'彼女はパーティーに来た。'},
     {b:'become',ba:'becóme',bp:'bɪˈkʌm',pa:'becáme',pp2:'bɪˈkeɪm',pa2:'becóme',pp3:'bɪˈkʌm',def:'～になる',ex:'He became a doctor.',exJ:'彼は医者になった。'},
     {b:'run',ba:'rún',bp:'rʌn',pa:'rán',pp2:'ræn',pa2:'rún',pp3:'rʌn',def:'走る、運営する',ex:'She runs every morning.',exJ:'彼女は毎朝走る。'},
-    {b:'overcome',ba:'overcóme',bp:'ˌoʊvərˈkʌm',pa:'overcáme',pp2:'ˌoʊvərˈkeɪm',pa2:'overcóme',pp3:'ˌoʊvərˈkʌm',def:'克服する',ex:'He overcame difficulties.',exJ:'彼は困難を克服した。',challenge:true}
+    {b:'overcome',ba:'overcóme',bp:'ˌoʊvərˈkʌm',pa:'overcáme',pp2:'ˌoʊvərˈkeɪm',pa2:'overcóme',pp3:'ˌoʊvərˈkʌm',def:'克服する',ex:'He overcame difficulties.',exJ:'彼は困難を克服した。'}
   ]},
   abb_ought:{name:'buyグループ（A-B-B型）',words:[
     {b:'buy',ba:'búy',bp:'baɪ',pa:'bóught',pp2:'bɔːt',pa2:'bóught',pp3:'bɔːt',def:'買う',ex:'I bought a new phone.',exJ:'新しい電話を買った。'},
@@ -335,7 +338,7 @@ var CATS = {
     {b:'catch',ba:'cátch',bp:'kætʃ',pa:'cáught',pp2:'kɔːt',pa2:'cáught',pp3:'kɔːt',def:'捕まえる',ex:'He caught the ball.',exJ:'彼はボールを捕まえた。'},
     {b:'teach',ba:'téach',bp:'tiːtʃ',pa:'táught',pp2:'tɔːt',pa2:'táught',pp3:'tɔːt',def:'教える',ex:'She taught English.',exJ:'彼女は英語を教えた。'},
     {b:'fight',ba:'fíght',bp:'faɪt',pa:'fóught',pp2:'fɔːt',pa2:'fóught',pp3:'fɔːt',def:'戦う',ex:'They fought for peace.',exJ:'彼らは平和のために戦った。'},
-    {b:'seek',ba:'séek',bp:'siːk',pa:'sóught',pp2:'sɔːt',pa2:'sóught',pp3:'sɔːt',def:'求める、探す',ex:'She sought help.',exJ:'彼女は助けを求めた。',challenge:true}
+    {b:'seek',ba:'séek',bp:'siːk',pa:'sóught',pp2:'sɔːt',pa2:'sóught',pp3:'sɔːt',def:'求める、探す',ex:'She sought help.',exJ:'彼女は助けを求めた。'}
   ]},
   abb_ept:{name:'feelグループ（A-B-B型）',words:[
     {b:'feel',ba:'féel',bp:'fiːl',pa:'félt',pp2:'felt',pa2:'félt',pp3:'felt',def:'感じる',ex:'I felt happy.',exJ:'幸せを感じた。'},
@@ -371,7 +374,7 @@ var CATS = {
     {b:'send',ba:'sénd',bp:'send',pa:'sént',pp2:'sent',pa2:'sént',pp3:'sent',def:'送る',ex:'I sent an email.',exJ:'メールを送った。'},
     {b:'spend',ba:'spénd',bp:'spend',pa:'spént',pp2:'spent',pa2:'spént',pp3:'spent',def:'使う（時間・お金）',ex:'We spent a lot.',exJ:'たくさん使った。'},
     {b:'lend',ba:'lénd',bp:'lend',pa:'lént',pp2:'lent',pa2:'lént',pp3:'lent',def:'貸す',ex:'Can you lend me a pen?',exJ:'ペンを貸して。'},
-    {b:'bend',ba:'bénd',bp:'bend',pa:'bént',pp2:'bent',pa2:'bént',pp3:'bent',def:'曲げる、曲がる',ex:'She bent the wire.',exJ:'彼女は針金を曲げた。',challenge:true},
+    {b:'bend',ba:'bénd',bp:'bend',pa:'bént',pp2:'bent',pa2:'bént',pp3:'bent',def:'曲げる、曲がる',ex:'She bent the wire.',exJ:'彼女は針金を曲げた。'},
     {b:'rend',ba:'rénd',bp:'rend',pa:'rént',pp2:'rent',pa2:'rént',pp3:'rent',def:'引き裂く',ex:'He rent the paper.',exJ:'彼は紙を引き裂いた。',challenge:true}
   ]},
   abb_other:{name:'getグループ・その他（A-B-B型）',words:[
@@ -388,8 +391,8 @@ var CATS = {
     {b:'strike',ba:'stríke',bp:'straɪk',pa:'strúck',pp2:'strʌk',pa2:'strúck',pp3:'strʌk',def:'打つ、ストライキする',ex:'Lightning struck the tree.',exJ:'雷が木に落ちた。',challenge:true},
     {b:'get',ba:'gét',bp:'ɡet',pa:'gót',pp2:'ɡɒt',pa2:'gót/gótten',pp3:'ɡɒt/ˈɡɒtən',def:'得る、なる',ex:'I got a gift.',exJ:'プレゼントをもらった。'},
     {b:'forget',ba:'forgét',bp:'fərˈɡet',pa:'forgót',pp2:'fərˈɡɒt',pa2:'forgótten',pp3:'fərˈɡɒtən',def:'忘れる',ex:'I forgot my umbrella.',exJ:'傘を忘れた。'},
-    {b:'light',ba:'líght',bp:'laɪt',pa:'lít',pp2:'lɪt',pa2:'lít',pp3:'lɪt',def:'火をつける、照らす',ex:'She lit the candle.',exJ:'彼女はろうそくに火をつけた。',challenge:true},
-    {b:'shine',ba:'shíne',bp:'ʃaɪn',pa:'shóne',pp2:'ʃɒn',pa2:'shóne',pp3:'ʃɒn',def:'輝く、磨く',ex:'The sun shone.',exJ:'太陽が輝いた。',challenge:true}
+    {b:'light',ba:'líght',bp:'laɪt',pa:'lít',pp2:'lɪt',pa2:'lít',pp3:'lɪt',def:'火をつける、照らす',ex:'She lit the candle.',exJ:'彼女はろうそくに火をつけた。'},
+    {b:'shine',ba:'shíne',bp:'ʃaɪn',pa:'shóne',pp2:'ʃɒn',pa2:'shóne',pp3:'ʃɒn',def:'輝く、磨く',ex:'The sun shone.',exJ:'太陽が輝いた。'}
   ]},
   abc_ookoken:{name:'takeグループ（A-B-C型）',words:[
     {b:'take',ba:'táke',bp:'teɪk',pa:'tóok',pp2:'tʊk',pa2:'táken',pp3:'ˈteɪkən',def:'取る、持っていく',ex:'She took a photo.',exJ:'彼女は写真を撮った。'},
@@ -398,7 +401,7 @@ var CATS = {
     {b:'choose',ba:'chóose',bp:'tʃuːz',pa:'chóse',pp2:'tʃoʊz',pa2:'chósen',pp3:'ˈtʃoʊzən',def:'選ぶ',ex:'She chose a blue dress.',exJ:'彼女は青いドレスを選んだ。'},
     {b:'wake',ba:'wáke',bp:'weɪk',pa:'wóke',pp2:'woʊk',pa2:'wóken',pp3:'ˈwoʊkən',def:'目覚める、起こす',ex:'I woke up early.',exJ:'早く目が覚めた。'},
     {b:'shake',ba:'sháke',bp:'ʃeɪk',pa:'shóok',pp2:'ʃʊk',pa2:'sháken',pp3:'ˈʃeɪkən',def:'振る、揺れる',ex:'The quake shook the building.',exJ:'地震がビルを揺らした。'},
-    {b:'mistake',ba:'mistáke',bp:'mɪˈsteɪk',pa:'mistóok',pp2:'mɪˈstʊk',pa2:'mistáken',pp3:'mɪˈsteɪkən',def:'間違える',ex:'I mistook him for you.',exJ:'彼をあなたと間違えた。',challenge:true},
+    {b:'mistake',ba:'mistáke',bp:'mɪˈsteɪk',pa:'mistóok',pp2:'mɪˈstʊk',pa2:'mistáken',pp3:'mɪˈsteɪkən',def:'間違える',ex:'I mistook him for you.',exJ:'彼をあなたと間違えた。'},
     {b:'forsake',ba:'forsáke',bp:'fərˈseɪk',pa:'forsóok',pp2:'fərˈsʊk',pa2:'forsáken',pp3:'fərˈseɪkən',def:'見捨てる',ex:'He forsook his friends.',exJ:'彼は友人を見捨てた。',challenge:true}
   ]},
   abc_ew_own:{name:'knowグループ（A-B-C型）',words:[
@@ -550,7 +553,6 @@ function goHome(){
 function initQuizUI(){
   document.getElementById('btn-en').classList.toggle('active',mode==='en');
   document.getElementById('btn-ja').classList.toggle('active',mode==='ja');
-  document.getElementById('mode-label').textContent=mode==='en'?'原形 → 活用・意味':'意味 → 原形・活用';
   document.getElementById('quiz-inner').style.display='block';
   document.getElementById('quiz-result').style.display='none';
   document.getElementById('inner').classList.remove('flipped');
@@ -563,7 +565,6 @@ function setMode(m){
   mode=m;idx=0;okCnt=0;ngCnt=0;
   document.getElementById('btn-en').classList.toggle('active',m==='en');
   document.getElementById('btn-ja').classList.toggle('active',m==='ja');
-  document.getElementById('mode-label').textContent=m==='en'?'原形 → 活用・意味':'意味 → 原形・活用';
   document.getElementById('quiz-result').style.display='none';
   document.getElementById('quiz-inner').style.display='block';
   document.getElementById('inner').classList.remove('flipped');
@@ -571,6 +572,8 @@ function setMode(m){
   flipped=false;
   renderCard();
 }
+
+var currentBlankSlot = 'base'; // 'base' / 'past' / 'pp' のどれを穴埋めにするか
 
 function renderCard(){
   if(!words.length)return;
@@ -581,25 +584,54 @@ function renderCard(){
   document.getElementById('ok-cnt').textContent=okCnt;
   document.getElementById('ng-cnt').textContent=ngCnt;
   var ch=w.challenge?'<div class="challenge-badge">🔥 チャレンジ！</div>':'';
+
   if(mode==='en'){
-    document.getElementById('front-label').textContent='原形';
     document.getElementById('front-content').innerHTML=
       '<div class="front-word">'+w.ba+'</div>'+
-      '<div class="front-pron">/'+w.bp+'/</div>'+ch;
+      '<div class="front-pron">/'+w.bp+'/</div>'+
+      '<div class="front-meaning-hint">'+w.def+'</div>'+ch;
   }else{
-    document.getElementById('front-label').textContent='日本語の意味';
+    // 穴埋め問題：原形・過去形・過去分詞のどれかをランダムに選んで例文中で隠す
+    var slots = ['base','past','pp'];
+    currentBlankSlot = slots[Math.floor(Math.random()*slots.length)];
+    var sentence = buildBlankSentence(w, currentBlankSlot);
     document.getElementById('front-content').innerHTML=
-      '<div style="font-size:18px;font-weight:500;text-align:center;">'+w.def+'</div>'+ch;
+      '<div class="blank-sentence">'+sentence.en+'</div>'+
+      '<div class="blank-sentence-ja">'+sentence.ja+'</div>'+ch;
   }
   document.getElementById('back-content').innerHTML=buildBack(w);
 }
 
+function buildBlankSentence(w, slot){
+  // exに含まれる活用形を探して空欄化する。見つからなければ簡易文を生成。
+  var target, label;
+  if(slot==='base'){ target=w.b; label='原形'; }
+  else if(slot==='past'){ target=plainSpell(w.pa); label='過去形'; }
+  else { target=plainSpell(w.pa2).split('/')[0].trim(); label='過去分詞'; }
+
+  var ex = w.ex || '';
+  var exJ = w.exJ || '';
+  var regex = new RegExp('\\b'+target+'\\b','i');
+  var blanked;
+  if(regex.test(ex)){
+    blanked = ex.replace(regex, '<span class="blank-box">　　　　</span>');
+  } else {
+    // 例文に活用形が含まれない場合は単純な文を作る
+    blanked = '<span class="blank-box">　　　　</span>　…（'+label+'を考えよう）';
+  }
+  return {en: blanked, ja: exJ};
+}
+
+function plainSpell(s){
+  return s.replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];}).split('/')[0].trim();
+}
+
 function buildBack(w){
   var ch=w.challenge?'<span class="challenge-badge">🔥 チャレンジ！</span> ':'';
-  // アクセント記号を除いた読み上げ用テキスト
-  function plain(s){return s.replace(/[áéíóú]/g,function(m){return {á:'a',é:'e',í:'i',ó:'o',ú:'u'}[m];}).split('/')[0].trim();}
-  var b=plain(w.b), pa=plain(w.pa), pp=plain(w.pa2);
-  var allText=b+' ... '+pa+' ... '+pp;
+  var bSpeak = w.b;
+  var paSpeak = w.pSpeak || plainSpell(w.pa);
+  var ppSpeak = w.ppSpeak || plainSpell(w.pa2).split('/')[0].trim();
+  var allText = bSpeak+' ... '+paSpeak+' ... '+ppSpeak;
   var h='<table class="conj-table"><tr><th>原形</th><th>過去形</th><th>過去分詞</th></tr><tr>';
   h+='<td><div class="conj-word">'+w.ba+'</div><div class="conj-pron">/'+w.bp+'/</div></td>';
   h+='<td><div class="conj-word">'+w.pa+'</div><div class="conj-pron">/'+w.pp2+'/</div></td>';
@@ -607,7 +639,7 @@ function buildBack(w){
   h+='</tr></table>';
   h+='<div style="text-align:center;margin-bottom:8px;"><button class="audio-btn" style="font-size:13px;border:1px solid #e0ddd6;border-radius:8px;padding:6px 14px;background:#fff;" onclick="spAll(event,\''+allText+'\')">🔊 まとめて聞く</button></div>';
   h+='<hr class="div">';
-  h+='<div class="back-meaning">'+ch+w.def+'</div>';
+  h+='<div class="back-meaning">'+ch+w.b+'　'+w.def+'</div>';
   if(w.note)h+='<div style="font-size:11px;color:#854F0B;text-align:center;margin-bottom:4px;">⚠️ '+w.note+'</div>';
   if(w.ex)h+='<p class="example">'+w.ex+'</p>';
   if(w.exJ)h+='<p class="example-ja">'+w.exJ+'</p>';
@@ -651,13 +683,20 @@ function restartQuiz(m){
   document.getElementById('quiz-result').style.display='none';
   document.getElementById('quiz-inner').style.display='block';
   idx=0;okCnt=0;ngCnt=0;flipped=false;mode=m;
-  if(currentCat==='shuffle')words=shuffle(getAllWords());
+  if(currentCat==='shuffle'){
+    words=shuffle(getAllWords());
+    if(excludeChallenge)words=words.filter(function(w){return !w.challenge;});
+  }
   document.getElementById('btn-en').classList.toggle('active',m==='en');
   document.getElementById('btn-ja').classList.toggle('active',m==='ja');
-  document.getElementById('mode-label').textContent=m==='en'?'原形 → 活用・意味':'意味 → 原形・活用';
   document.getElementById('inner').classList.remove('flipped');
   document.getElementById('btn-row').style.display='none';
   renderCard();
+}
+
+function toggleChallenge(){
+  excludeChallenge=!excludeChallenge;
+  document.getElementById('toggle-switch').classList.toggle('on',excludeChallenge);
 }
 
 function sp(e,word){
