@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ぶんぽうガチャ - Super Duper ManaViva</title>
+<title>エドシーラン的文法のすゝめ - Super Duper ManaViva</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#FFF9F0;color:#3a2e1f;min-height:100vh;}
@@ -13,31 +13,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .back-link:hover{color:#3a2e1f;}
 .home-title{font-size:12px;color:#a15c00;text-align:center;margin-bottom:4px;letter-spacing:0.08em;}
 .home-heading{font-size:22px;font-weight:600;text-align:center;margin-bottom:6px;}
-.home-sub{font-size:13px;color:#8a7860;text-align:center;margin-bottom:24px;}
+.home-sub{font-size:13px;color:#8a7860;text-align:center;margin-bottom:20px;}
 
-.cat-section{margin-bottom:22px;}
-.cat-section-title{font-size:13px;font-weight:600;color:#3a2e1f;margin-bottom:10px;padding-left:2px;}
-.point-list{display:flex;flex-direction:column;gap:8px;}
-.point-card{display:flex;align-items:center;gap:12px;background:#fff;border:0.5px solid #ecd9b8;border-radius:12px;padding:12px 14px;cursor:pointer;transition:all 0.15s;}
-.point-card:hover{border-color:#c9a876;background:#FFFCF7;}
-.point-card:active{transform:scale(0.99);}
-.point-num{width:26px;height:26px;border-radius:50%;background:#FAEEDA;color:#a15c00;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.point-name{font-size:13px;font-weight:500;color:#3a2e1f;}
-.point-arrow{margin-left:auto;color:#c9a876;font-size:14px;}
+.start-card{background:linear-gradient(180deg,#FFFCF7,#FFFFFF);border:0.5px solid #ecd9b8;border-radius:18px;padding:1.5rem 1.25rem;text-align:center;cursor:pointer;transition:all 0.15s;}
+.start-card:hover{border-color:#c9a876;}
+.start-card:active{transform:scale(0.99);}
+.start-icon{font-size:32px;margin-bottom:10px;}
+.start-name{font-size:16px;font-weight:600;color:#3a2e1f;margin-bottom:4px;}
+.start-desc{font-size:12px;color:#8a7860;}
+.start-progress{font-size:11px;color:#a15c00;margin-top:10px;}
 
 .section{display:none;}
 .section.active{display:block;}
 
-/* 学習画面 */
 .back-btn{background:none;border:none;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#8a7860;margin-bottom:10px;padding:0;}
 .back-btn:hover{color:#3a2e1f;}
-.point-title{font-size:14px;font-weight:600;color:#3a2e1f;margin-bottom:14px;}
-.mode-tag{font-size:11px;font-weight:500;color:#a15c00;background:#FAEEDA;display:inline-block;padding:3px 10px;border-radius:10px;margin-bottom:14px;letter-spacing:0.02em;}
+.mode-tag{font-size:11px;font-weight:500;color:#a15c00;background:#FAEEDA;display:inline-block;padding:3px 10px;border-radius:10px;margin-bottom:10px;letter-spacing:0.02em;}
+
+.progress-bar{height:3px;background:#ecd9b8;border-radius:2px;overflow:hidden;margin-bottom:8px;}
+.progress-fill{height:100%;background:#a15c00;border-radius:2px;transition:width 0.3s;}
+.progress-row{display:flex;gap:12px;justify-content:center;font-size:12px;color:#8a7860;margin-bottom:14px;}
+.progress-val{font-weight:600;color:#3a2e1f;}
+
+.rule-intro{background:#FAEEDA;border-radius:14px;padding:14px 16px;margin-bottom:12px;}
+.rule-intro-label{font-size:11px;font-weight:600;color:#854F0B;margin-bottom:8px;letter-spacing:0.03em;}
+.rule-intro-text{font-size:13px;color:#5c4422;line-height:1.7;}
+.rule-intro-text b{color:#854F0B;}
 
 .card{background:linear-gradient(180deg,#FFFCF7,#FFFFFF);border:0.5px solid #ecd9b8;border-radius:18px;padding:1.4rem 1.25rem;margin-bottom:10px;}
 .instruction-big{font-size:16px;font-weight:600;color:#3a2e1f;text-align:center;margin-bottom:16px;line-height:1.5;}
-.q-sentence{font-size:22px;line-height:1.8;color:#3a2e1f;text-align:center;margin-bottom:4px;font-style:italic;font-family:Georgia,'Hiragino Mincho ProN',serif;}
+.q-sentence{font-size:22px;line-height:1.8;color:#3a2e1f;text-align:center;margin-bottom:8px;font-style:italic;font-family:Georgia,'Hiragino Mincho ProN',serif;}
 .blank{display:inline-block;border-bottom:2px solid #b8895a;min-width:80px;text-align:center;color:#c9a876;font-size:14px;}
+.q-ja{font-size:13px;color:#8a7860;text-align:center;line-height:1.6;}
 
 .hint-toggle{font-size:12px;color:#a15c00;text-align:center;cursor:pointer;margin-top:14px;text-decoration:underline;text-underline-offset:2px;}
 .hint-box{display:none;background:#FAEEDA;border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px;color:#854F0B;line-height:1.6;}
@@ -63,7 +70,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .btn:hover{background:#FFF9F0;}
 .btn:active{transform:scale(0.97);}
 .btn.primary{background:#a15c00;color:#fff;border-color:#a15c00;}
+.btn.ok{border-color:#1D9E75;color:#0F6E56;}
+.btn.ng{border-color:#D85A30;color:#993C1D;}
 .toggle-btn{width:100%;padding:11px;margin-top:4px;}
+.btn-row{display:flex;gap:8px;justify-content:center;margin-top:12px;}
 
 .answer-box{display:none;}
 .answer-box.show{display:block;}
@@ -80,7 +90,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .tip-label{font-size:11px;font-weight:600;color:#185FA5;margin-bottom:6px;}
 .tip-text{font-size:12px;color:#3a2e1f;line-height:1.6;}
 
-.nav-btns{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;}
+/* エンディング */
+.ending-box{text-align:center;padding:2rem 0;}
+.ending-score{font-size:44px;font-weight:600;color:#3a2e1f;margin-bottom:6px;}
+.ending-sub{font-size:13px;color:#8a7860;margin-bottom:24px;}
+.ending-quote-card{background:linear-gradient(180deg,#3a2e1f,#2a2014);border-radius:18px;padding:1.8rem 1.5rem;margin-bottom:20px;}
+.ending-quote-en{font-size:18px;line-height:1.7;color:#FFF9F0;text-align:center;font-style:italic;font-family:Georgia,'Hiragino Mincho ProN',serif;margin-bottom:10px;}
+.ending-quote-ja{font-size:13px;color:#d9c9a8;text-align:center;line-height:1.6;}
+.ending-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
 </style>
 </head>
 <body>
@@ -88,32 +105,46 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 
   <!-- ホーム -->
   <div id="screen-home">
-    <a href="index.html" class="back-link">← 英語トップに戻る</a>
-    <div class="home-title">GRAMMAR GACHA</div>
-    <div class="home-heading">ぶんぽうガチャ</div>
+    <a href="index.html" class="back-link">← トップに戻る</a>
+    <div class="home-title">ED SHEERAN GRAMMAR</div>
+    <div class="home-heading">エドシーラン的文法のすゝめ</div>
     <div class="home-sub">例文で覚える、高校受験レベルの英文法</div>
 
-    <div class="cat-section">
-      <div class="cat-section-title">未来形</div>
-      <div class="point-list" id="point-list-future"></div>
+    <div class="start-card" onclick="startQuiz()">
+      <div class="start-icon">🎸</div>
+      <div class="start-name">未来形</div>
+      <div class="start-desc">will / be going to / 未来進行形 など、全7ポイント</div>
+      <div class="start-progress" id="home-progress">0 / 7 クリア</div>
     </div>
   </div>
 
   <!-- 学習画面 -->
-  <div id="screen-study" style="display:none;">
-    <button class="back-btn" onclick="goHome()">← ぶんぽうガチャに戻る</button>
-    <div class="point-title" id="point-title"></div>
-    <span class="mode-tag">🎸 Ed Sheeran mode</span>
+  <div id="screen-study" class="section">
+    <button class="back-btn" onclick="goHome()">← トップに戻る</button>
+    <span class="mode-tag">🎸 Ed Sheeran mode ・ 未来形</span>
+
+    <div class="progress-bar"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+    <div class="progress-row">
+      <span><span class="progress-val" id="cur">1</span> / <span id="total">7</span></span>
+      <span>✓ <span class="progress-val" id="ok-cnt">0</span></span>
+      <span>✗ <span class="progress-val" id="ng-cnt">0</span></span>
+    </div>
+
+    <div class="rule-intro">
+      <div class="rule-intro-label">📖 今日学ぶルール</div>
+      <div class="rule-intro-text" id="rule-intro-text"></div>
+    </div>
 
     <div class="card">
       <div class="instruction-big" id="instruction"></div>
       <div class="q-sentence" id="q-sentence"></div>
+      <div class="q-ja" id="q-ja"></div>
 
       <div class="hint-toggle" id="hint-toggle" onclick="toggleHint()">ヒントを見る</div>
       <div class="hint-box" id="hint-box"></div>
 
       <div class="trans-toggle-row">
-        <span class="trans-toggle-label">意味を見る</span>
+        <span class="trans-toggle-label">分解モード（チャンクごとの意味）</span>
         <div class="trans-switch" id="trans-switch" onclick="toggleTrans()">
           <div class="trans-knob"></div>
         </div>
@@ -131,11 +162,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
         <div class="tip-label" id="tip-label"></div>
         <div class="tip-text" id="tip-text"></div>
       </div>
+      <div class="btn-row">
+        <button class="btn ng" onclick="answer(false)">✗ もう一度</button>
+        <button class="btn ok" onclick="answer(true)">✓ 覚えた！</button>
+      </div>
     </div>
+  </div>
 
-    <div class="nav-btns">
-      <button class="btn" onclick="prevPoint()">← 前のポイント</button>
-      <button class="btn primary" onclick="nextPoint()">次のポイント →</button>
+  <!-- エンディング -->
+  <div id="screen-ending" class="section">
+    <div class="ending-box">
+      <div class="ending-score" id="ending-score"></div>
+      <div class="ending-sub" id="ending-sub"></div>
+      <div class="ending-quote-card">
+        <div class="ending-quote-en" id="ending-quote-en"></div>
+        <div class="ending-quote-ja" id="ending-quote-ja"></div>
+      </div>
+      <div class="ending-btns">
+        <button class="btn" onclick="startQuiz()">もう一度挑戦</button>
+        <button class="btn primary" onclick="goHome()">トップに戻る</button>
+      </div>
     </div>
   </div>
 
@@ -145,9 +191,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 // ===================== データ：未来形 7ポイント（エド・シーランモード）=====================
 var FUTURE_POINTS = [
   {
-    name: '① willの基本',
+    rule: '未来のことを表すとき、その場で「よし、〜しよう」と決めた意志や予測には助動詞 <b>will</b> を使う。will のあとの動詞は必ず<b>原形</b>（s や ed はつけない）。',
     instruction: 'help を当てはまる形に変えよう',
-    q: ['Don\'t worry, I ', '___', ' you tonight.'],
+    q: ['Don\'t worry, I ', '___', ' you tonight, whatever it takes.'],
+    qJa: '心配しないで、今夜は何があっても君を助けるから。',
     blankWord: 'help',
     hints: [
       'その場で「よし、〜しよう」と決めた意志を表すときは will を使う。',
@@ -157,22 +204,23 @@ var FUTURE_POINTS = [
     chunks: [
       ['Don\'t worry,', '心配しないで'],
       ['I ___ ', '私は〜するつもりだ'],
-      ['you', '君を'],
-      ['tonight', '今夜']
+      ['you tonight,', '今夜君を'],
+      ['whatever it takes', 'どんなことがあっても']
     ],
-    ansSentence: ['Don\'t worry, I ', 'will help', ' you tonight.'],
-    ansJa: '心配しないで、今夜君を助けるよ。',
+    ansSentence: ['Don\'t worry, I ', 'will help', ' you tonight, whatever it takes.'],
+    ansJa: '心配しないで、今夜は何があっても君を助けるよ。',
     rules: [
       'will は「その場で決めた意志」や「未来の予測」を表すときに使う助動詞。',
       'will のあとの動詞は必ず原形。３人称単数でも helps にはならない。',
       '「今、この瞬間に決めた」感じが will の特徴。前から計画していたことには使わない。'
     ],
-    tip: { label: '📌 覚えておこう：短縮形', text: 'I will は I\'ll、you will は you\'ll のように短縮できる。会話や歌詞ではこの形がよく使われる。' }
+    tip: { label: '📌 Tips：whatever it takes', text: '直訳すると「それが何を取ろうとも」。そこから「どんな犠牲を払っても、何があっても」という意味になる、決め台詞でよく使われる表現。' }
   },
   {
-    name: '② be going toの基本',
+    rule: '前からすでに決まっていた予定や、根拠のある未来の予測には <b>be going to</b> を使う。形は be動詞（am/is/are）＋ going to ＋ 動詞の<b>原形</b>。',
     instruction: 'see を当てはまる形に変えよう',
-    q: ['We ', '___', ' the sunset together, I promise.'],
+    q: ['We ', '___', ' the sunset together tonight, just you and me.'],
+    qJa: '今夜、君と私だけで一緒に夕日を見るんだ。',
     blankWord: 'see',
     hints: [
       'be going to は「前から決めていた予定」を表すときに使う。',
@@ -181,23 +229,24 @@ var FUTURE_POINTS = [
     ],
     chunks: [
       ['We ___ ', '私たちは〜する予定だ'],
-      ['the sunset', '夕日を'],
-      ['together,', '一緒に'],
-      ['I promise', '約束するよ']
+      ['the sunset together', '一緒に夕日を'],
+      ['tonight,', '今夜'],
+      ['just you and me', '君と私だけで']
     ],
-    ansSentence: ['We ', 'are going to see', ' the sunset together, I promise.'],
-    ansJa: '一緒に夕日を見るんだ、約束するよ。',
+    ansSentence: ['We ', 'are going to see', ' the sunset together tonight, just you and me.'],
+    ansJa: '今夜、君と私だけで一緒に夕日を見るんだ。',
     rules: [
       'be going to は「前もって決めていた予定」や「すでにその兆候がある未来」を表す。',
       '形は be動詞（am/is/are）＋ going to ＋ 動詞の原形。',
       '主語が We（複数）なので be動詞は are。We are going to see で「私たちは見る予定だ」。'
     ],
-    tip: { label: '📌 覚えておこう：会話での短縮', text: 'going to は会話では gonna と発音されることがある（くだけた言い方）。書くときは going to のまま使うのが基本。' }
+    tip: { label: '📌 Tips：just you and me', text: '「ちょうど君と私」という、口語でよく使われる省略表現。本来は It\'s just you and me だが、感情を込めて短く言うことが多い。' }
   },
   {
-    name: '③ will vs be going toの使い分け',
+    rule: 'will と be going to はどちらも未来を表すが使い分けがある。<b>その場で決めたこと</b>には will、<b>前から決まっていたこと</b>には be going to を使う。',
     instruction: 'call を当てはまる形に変えよう（その場で決めた気持ち）',
-    q: ['Wait, my phone is ringing — I ', '___', ' you back in a minute.'],
+    q: ['Wait, my phone is ringing — I ', '___', ' you back the moment I\'m free.'],
+    qJa: '待って、電話が鳴ってる。手が空いたらすぐに折り返すから。',
     blankWord: 'call',
     hints: [
       'この文は「今この瞬間に決めた」内容。前から決めていた予定ではない。',
@@ -206,23 +255,24 @@ var FUTURE_POINTS = [
     ],
     chunks: [
       ['Wait, my phone is ringing —', '待って、電話が鳴ってる'],
-      ['I ___ ', '私は〜するつもりだ'],
-      ['you back', '君に折り返し'],
-      ['in a minute', 'すぐに']
+      ['I ___ you back', '私は君に折り返すつもりだ'],
+      ['the moment', '〜する瞬間に'],
+      ['I\'m free', '私が手が空いたら']
     ],
-    ansSentence: ['Wait, my phone is ringing — I ', 'will call', ' you back in a minute.'],
-    ansJa: '待って、電話が鳴ってる。すぐに折り返すよ。',
+    ansSentence: ['Wait, my phone is ringing — I ', 'will call', ' you back the moment I\'m free.'],
+    ansJa: '待って、電話が鳴ってる。手が空いたらすぐに折り返すよ。',
     rules: [
       'will：その場で決めた意志、急な思いつき、予測。',
       'be going to：前から決めていた予定、すでに準備や兆候がある未来。',
       'この文は「電話が鳴った今」決めたことなので will を使う。前から決めていたら I am going to call you back になる。'
     ],
-    tip: { label: '📌 覚えておこう：見分け方のコツ', text: '「今、思いついた」なら will。「前から決まってた」なら be going to。迷ったら、いつ決めたかを考えると判断しやすい。' }
+    tip: { label: '📌 Tips：the moment + 文', text: 'the moment は「〜する瞬間に」という意味で接続詞のように使える便利な表現。when と同じように後ろに文を続けられる。' }
   },
   {
-    name: '④ 未来進行形（will be -ing）',
+    rule: '未来のある時点で「ちょうど進行中であること」を表すときは<b>未来進行形（will be -ing）</b>を使う。',
     instruction: 'dance を当てはまる形に変えよう',
-    q: ['This time tomorrow, we ', '___', ' under the city lights.'],
+    q: ['This time tomorrow, we ', '___', ' so close, lost in the music, lost in us.'],
+    qJa: '明日の今ごろ、私たちは音楽に、お互いに溶けるくらい近くで踊っているだろう。',
     blankWord: 'dance',
     hints: [
       '「明日の今ごろ」という、未来のある時点で進行中のことを表す文。',
@@ -231,48 +281,50 @@ var FUTURE_POINTS = [
     ],
     chunks: [
       ['This time tomorrow,', '明日の今ごろ'],
-      ['we ___ ', '私たちは〜しているだろう'],
-      ['under', '〜の下で'],
-      ['the city lights', '街の明かり']
+      ['we ___ so close,', '私たちはとても近くで踊っているだろう'],
+      ['lost in the music,', '音楽に溶けて'],
+      ['lost in us', 'お互いに溶けて']
     ],
-    ansSentence: ['This time tomorrow, we ', 'will be dancing', ' under the city lights.'],
-    ansJa: '明日の今ごろ、私たちは街の明かりの下で踊っているだろう。',
+    ansSentence: ['This time tomorrow, we ', 'will be dancing', ' so close, lost in the music, lost in us.'],
+    ansJa: '明日の今ごろ、私たちは音楽に、お互いに溶けるくらい近くで踊っているだろう。',
     rules: [
       '未来進行形は「未来のある時点で、進行中であること」を表す。',
       '形は will be ＋ 動詞のing形。',
       'will（未来）＋ be -ing（進行中）が組み合わさって「そのとき進行している最中」のイメージになる。'
     ],
-    tip: { label: '📌 覚えておこう：使うタイミング', text: '「This time tomorrow（明日の今ごろ）」「at 8 tonight（今夜8時に）」のような、未来の決まった時点を指す言葉と一緒によく使われる。' }
+    tip: { label: '📌 Tips：lost in 〜', text: '「〜に夢中になって、〜に我を忘れて」という意味。lost（迷子になった）という単語が「自分を見失うほど何かに浸る」感情表現としてよく使われる。' }
   },
   {
-    name: '⑤ 現在形で表す確定した予定',
+    rule: '時刻表や確定したスケジュールなど、<b>変わらない予定</b>は未来のことでも<b>現在形</b>で表す。',
     instruction: 'leave を当てはまる形に変えよう',
-    q: ['The train ', '___', ' at nine, so don\'t be late, darling.'],
+    q: ['The last train ', '___', ' at midnight, so stay with me a little longer.'],
+    qJa: '終電は深夜0時に出るから、もう少し一緒にいて。',
     blankWord: 'leave',
     hints: [
       '時刻表やスケジュールなど、確定していて変わらない予定には現在形を使う。',
-      '主語が The train（単数）なので、動詞には s をつける。',
+      '主語が The last train（単数）なので、動詞には s をつける。',
       '未来のことでも、will や be going to を使わないパターン。'
     ],
     chunks: [
-      ['The train ___ ', '電車は〜する'],
-      ['at nine,', '9時に'],
-      ['so don\'t be late,', 'だから遅れないで'],
-      ['darling', 'ねえ君']
+      ['The last train ___ ', '終電は〜出る'],
+      ['at midnight,', '深夜0時に'],
+      ['so stay with me', 'だから一緒にいて'],
+      ['a little longer', 'もう少しだけ']
     ],
-    ansSentence: ['The train ', 'leaves', ' at nine, so don\'t be late, darling.'],
-    ansJa: '電車は9時に出発するよ、だから遅れないでね。',
+    ansSentence: ['The last train ', 'leaves', ' at midnight, so stay with me a little longer.'],
+    ansJa: '終電は深夜0時に出るから、もう少し一緒にいて。',
     rules: [
       '時刻表・営業時間など「確定していて変わらない予定」は、未来のことでも現在形で表す。',
-      '主語が3人称単数（The train）なので、動詞に s をつけて leaves にする。',
+      '主語が3人称単数（The last train）なので、動詞に s をつけて leaves にする。',
       'will や be going to を使う文と違い、「人が決めた予定」ではなく「もともと決まっている事実」というニュアンス。'
     ],
-    tip: { label: '📌 覚えておこう：似た例', text: 'The movie starts at 7.（映画は7時に始まる）、School begins in April.（学校は4月に始まる）なども同じパターン。' }
+    tip: { label: '📌 Tips：a little longer', text: 'a little は「少し」、longer は long（長く）の比較級。合わせて「もう少し長く＝もう少しだけ」という、切ない別れの場面で使われやすい表現。' }
   },
   {
-    name: '⑥ 現在進行形で表す近い未来の予定',
+    rule: 'すでに約束・手配されている近い未来の予定は、<b>現在進行形（be動詞＋ing）</b>でも表せる。',
     instruction: 'meet を当てはまる形に変えよう',
-    q: ['I ', '___', ' her at the station tomorrow night.'],
+    q: ['I ', '___', ' her at the station tomorrow night, and my heart won\'t stop racing.'],
+    qJa: '明日の夜、駅で彼女と会うことになっていて、心臓が高鳴り続けて止まらない。',
     blankWord: 'meet',
     hints: [
       'すでに約束・手配されている、近い未来の予定を表すときは現在進行形を使うことがある。',
@@ -280,24 +332,25 @@ var FUTURE_POINTS = [
       '「明日の夜、彼女と会う」という、すでに決まっている個人的な予定の文。'
     ],
     chunks: [
-      ['I ___ ', '私は〜することになっている'],
-      ['her', '彼女に'],
+      ['I ___ her', '私は彼女に会うことになっている'],
       ['at the station', '駅で'],
-      ['tomorrow night', '明日の夜']
+      ['tomorrow night,', '明日の夜'],
+      ['and my heart won\'t stop racing', 'そして私の心臓は高鳴り続けて止まらない']
     ],
-    ansSentence: ['I ', 'am meeting', ' her at the station tomorrow night.'],
-    ansJa: '明日の夜、駅で彼女と会うことになっている。',
+    ansSentence: ['I ', 'am meeting', ' her at the station tomorrow night, and my heart won\'t stop racing.'],
+    ansJa: '明日の夜、駅で彼女と会うことになっていて、心臓が高鳴り続けて止まらない。',
     rules: [
       '現在進行形（be動詞＋ing）は、すでに手配・約束された近い未来の予定にも使える。',
       '主語が I なので be動詞は am。am meeting で「会うことになっている」。',
       'be going to と似ているが、現在進行形は「すでに約束済み」というニュアンスがより強い。'
     ],
-    tip: { label: '📌 覚えておこう：be going to との違い', text: 'I am going to meet her.（会うつもりだ＝意図）よりも、I am meeting her.（会うことになっている＝もう約束済み）の方が、予定がより確定しているニュアンスになる。' }
+    tip: { label: '📌 Tips：can\'t stop -ing', text: '「〜し続けることをやめられない」という、感情の高まりを表すときの定番表現。won\'t stop racing で「高鳴り続けて止まらない」という強い気持ちを表せる。' }
   },
   {
-    name: '⑦ if・whenの中は未来でも現在形',
+    rule: 'if（もし〜なら）や when（〜のとき）で始まる節の中では、未来のことでも<b>現在形</b>を使う。文の後半（メイン）には will を使ってよい。',
     instruction: 'rain を当てはまる形に変えよう',
-    q: ['If it ', '___', ' tonight, I will hold you closer.'],
+    q: ['If it ', '___', ' tonight, I will hold you closer than I ever have.'],
+    qJa: 'もし今夜雨が降ったら、これまでで一番近くに君を抱きしめるよ。',
     blankWord: 'rain',
     hints: [
       'if（もし〜なら）や when（〜のとき）で始まる節の中は、未来のことでも現在形を使う。',
@@ -305,67 +358,90 @@ var FUTURE_POINTS = [
       'メインの文（I will hold you closer）には will を使ってOK。ルールが適用されるのは if/when の中だけ。'
     ],
     chunks: [
-      ['If it ___ ', 'もし〜が降ったら'],
-      ['tonight,', '今夜'],
-      ['I will hold', '私は抱きしめるだろう'],
-      ['you closer', '君をもっと近くに']
+      ['If it ___ tonight,', 'もし今夜雨が降ったら'],
+      ['I will hold you', '私は君を抱きしめるだろう'],
+      ['closer', 'もっと近くに'],
+      ['than I ever have', 'これまでで一番']
     ],
-    ansSentence: ['If it ', 'rains', ' tonight, I will hold you closer.'],
-    ansJa: 'もし今夜雨が降ったら、君をもっと近くに抱きしめるよ。',
+    ansSentence: ['If it ', 'rains', ' tonight, I will hold you closer than I ever have.'],
+    ansJa: 'もし今夜雨が降ったら、これまでで一番近くに君を抱きしめるよ。',
     rules: [
       'if（もし〜なら）や when（〜のとき）で始まる「時・条件」を表す節の中では、未来のことでも現在形を使う。',
       '主語が it（3人称単数）なので、動詞に s をつけて rains にする。',
       '文の後半（メインの文）には will を使ってよい。ルールが効くのは if/when の節の中だけという点に注意。'
     ],
-    tip: { label: '📌 覚えておこう：間違えやすいポイント', text: 'If it will rain tonight... としてしまうのはよくある間違い。if の中では will を使わず、現在形のままにする。' }
+    tip: { label: '📌 Tips：間違えやすいポイント', text: 'If it will rain tonight... としてしまうのはよくある間違い。if の中では will を使わず、現在形のままにする。' }
   }
+];
+
+// エンディングで表示する決め台詞（英語＋和訳）
+var ENDING_QUOTES = [
+  { en: 'I found a love, to carry more than just my secrets.', ja: '僕は、自分の秘密以上のものを運んでくれる愛を見つけたんだ。' },
+  { en: 'You are the one I\'ve been waiting for, in every single lifetime.', ja: '何度生まれ変わっても、君こそがずっと待っていた人だ。' },
+  { en: 'No matter how far the road goes, I will walk it with you.', ja: 'どんなに道が長くても、僕は君と一緒に歩いていくよ。' },
+  { en: 'Your smile is the only light I need to find my way home.', ja: '君の笑顔さえあれば、帰り道なんて迷わない。' },
+  { en: 'Some people search forever for what we found in a moment.', ja: '人は一生かけて探すものを、僕らは一瞬で見つけたんだ。' }
 ];
 
 var currentList = FUTURE_POINTS;
 var currentIndex = 0;
-var hintIndex = 0;
+var okCount = 0, ngCount = 0;
 
-// ===================== ホーム画面の初期化 =====================
-function renderPointList(){
-  var container = document.getElementById('point-list-future');
-  container.innerHTML = FUTURE_POINTS.map(function(p, i){
-    return '<div class="point-card" onclick="openPoint('+i+')">'+
-      '<div class="point-num">'+(i+1)+'</div>'+
-      '<div class="point-name">'+p.name.replace(/^[①-⑩]\s*/,'')+'</div>'+
-      '<div class="point-arrow">→</div>'+
-    '</div>';
-  }).join('');
+// ===================== localStorage =====================
+function saveProgress(){
+  try{
+    localStorage.setItem('grammar_future_progress', JSON.stringify({okCount: okCount}));
+  }catch(e){}
+}
+function loadProgress(){
+  try{
+    var s = localStorage.getItem('grammar_future_progress');
+    if(s){
+      var d = JSON.parse(s);
+      document.getElementById('home-progress').textContent = (d.okCount||0) + ' / ' + FUTURE_POINTS.length + ' クリア';
+    }
+  }catch(e){}
 }
 
-function openPoint(i){
-  currentIndex = i;
+// ===================== 画面切り替え =====================
+function showSection(name){
+  document.getElementById('screen-home').style.display = name==='home' ? 'block' : 'none';
+  document.getElementById('screen-study').classList.toggle('active', name==='study');
+  document.getElementById('screen-ending').classList.toggle('active', name==='ending');
+}
+
+function startQuiz(){
+  currentIndex = 0;
+  okCount = 0; ngCount = 0;
   showSection('study');
   renderCard();
 }
 
 function goHome(){
   showSection('home');
-}
-
-function showSection(name){
-  document.getElementById('screen-home').style.display = name==='home' ? 'block' : 'none';
-  document.getElementById('screen-study').style.display = name==='study' ? 'block' : 'none';
+  loadProgress();
 }
 
 // ===================== 学習カードの描画 =====================
 function renderCard(){
   var p = currentList[currentIndex];
-  document.getElementById('point-title').textContent = p.name;
+
+  document.getElementById('cur').textContent = currentIndex + 1;
+  document.getElementById('total').textContent = currentList.length;
+  document.getElementById('pfill').style.width = (currentIndex / currentList.length * 100) + '%';
+  document.getElementById('ok-cnt').textContent = okCount;
+  document.getElementById('ng-cnt').textContent = ngCount;
+
+  document.getElementById('rule-intro-text').innerHTML = p.rule;
+
   document.getElementById('instruction').textContent = p.instruction;
   document.getElementById('q-sentence').innerHTML = p.q[0] + '<span class="blank">？</span>' + p.q[2];
+  document.getElementById('q-ja').textContent = p.qJa;
 
-  // ヒント初期化
-  hintIndex = 0;
   document.getElementById('hint-box').classList.remove('show');
   document.getElementById('hint-box').innerHTML = '<ul class="hint-list">' + p.hints.map(function(h){return '<li>'+h+'</li>';}).join('') + '</ul>';
   document.getElementById('hint-toggle').textContent = 'ヒントを見る';
 
-  // 意味トグル初期化
   document.getElementById('trans-switch').classList.remove('on');
   var grid = document.getElementById('chunk-grid');
   grid.classList.remove('show');
@@ -373,9 +449,9 @@ function renderCard(){
     return '<div class="chunk-box"><div class="chunk-box-en">'+c[0]+'</div><div class="chunk-box-ja">'+c[1]+'</div></div>';
   }).join('');
 
-  // 答え初期化
   document.getElementById('answer-box').classList.remove('show');
   document.getElementById('ans-toggle-btn').textContent = '答え・解説を見る';
+  document.getElementById('ans-toggle-btn').style.display = 'block';
   document.getElementById('ans-sentence').innerHTML = p.ansSentence[0] + '<span class="ans-key">'+p.ansSentence[1]+'</span>' + p.ansSentence[2];
   document.getElementById('ans-ja').textContent = p.ansJa;
   document.getElementById('rule-section').innerHTML = p.rules.map(function(r,i){
@@ -403,21 +479,33 @@ function toggleTrans(){
 
 function toggleAnswer(){
   var box = document.getElementById('answer-box');
-  var isShow = box.classList.toggle('show');
-  document.getElementById('ans-toggle-btn').textContent = isShow ? '隠す' : '答え・解説を見る';
+  box.classList.add('show');
+  document.getElementById('ans-toggle-btn').style.display = 'none';
 }
 
-function nextPoint(){
-  currentIndex = (currentIndex + 1) % currentList.length;
-  renderCard();
+function answer(ok){
+  if(ok) okCount++; else ngCount++;
+  saveProgress();
+  currentIndex++;
+  if(currentIndex >= currentList.length){
+    showEnding();
+  } else {
+    renderCard();
+  }
 }
-function prevPoint(){
-  currentIndex = (currentIndex - 1 + currentList.length) % currentList.length;
-  renderCard();
+
+function showEnding(){
+  showSection('ending');
+  document.getElementById('ending-score').textContent = okCount + ' / ' + currentList.length;
+  var pct = Math.round(okCount / currentList.length * 100);
+  document.getElementById('ending-sub').textContent = '正解率 ' + pct + '%　お疲れさま、よく頑張ったね。';
+  var q = ENDING_QUOTES[Math.floor(Math.random() * ENDING_QUOTES.length)];
+  document.getElementById('ending-quote-en').textContent = q.en;
+  document.getElementById('ending-quote-ja').textContent = q.ja;
 }
 
 // ===================== 初期化 =====================
-renderPointList();
+loadProgress();
 </script>
 </body>
 </html>

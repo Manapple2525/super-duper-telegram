@@ -3,115 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Super Duper ManaViva - 科目選択</title>
+<title>Super Duper ManaViva</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;}
 #app{max-width:600px;margin:0 auto;padding:1.5rem 1rem;}
 .top-title{font-size:13px;color:#888;text-align:center;margin-bottom:4px;letter-spacing:0.05em;}
-.top-heading{font-size:24px;font-weight:500;text-align:center;margin-bottom:6px;}
-.top-sub{font-size:13px;color:#888;text-align:center;margin-bottom:28px;}
+.top-heading{font-size:24px;font-weight:500;text-align:center;margin-bottom:24px;}
 
 .subject-list{display:flex;flex-direction:column;gap:10px;}
 
-/* 科目カード本体 */
-.subject-item{border-radius:16px;overflow:hidden;border:1px solid #e0ddd6;background:#fff;transition:border-color 0.15s;}
-.subject-item.selected{border-color:#1D9E75;}
-
-.subject-card{display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;cursor:pointer;position:relative;transition:background 0.15s;}
-.subject-card:hover:not(.disabled){background:#faf9f7;}
-.subject-card:active:not(.disabled){background:#f0ede8;}
-.subject-card.disabled{opacity:0.45;cursor:not-allowed;}
-.subject-icon{font-size:28px;flex-shrink:0;}
-.subject-info{flex:1;}
-.subject-name{font-size:16px;font-weight:500;margin-bottom:3px;}
-.subject-desc{font-size:12px;color:#888;line-height:1.4;}
-.subject-badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;white-space:nowrap;flex-shrink:0;}
-.badge-ready{background:#e1f5ee;color:#0F6E56;}
-.badge-soon{background:#f1efe8;color:#888;}
-.chevron{font-size:14px;color:#ccc;flex-shrink:0;transition:transform 0.25s;}
-.subject-item.selected .chevron{transform:rotate(90deg);color:#1D9E75;}
-
-/* サブメニュー（カード直下に展開） */
-.sub-menu{max-height:0;overflow:hidden;transition:max-height 0.3s ease;background:#f5f4f0;}
-.sub-menu.open{max-height:300px;}
-.sub-menu-inner{padding:10px 12px 12px;}
-.sub-label{font-size:11px;color:#888;margin-bottom:8px;padding-left:2px;letter-spacing:0.05em;}
-.sub-card{display:flex;align-items:center;gap:10px;border:1px solid #e0ddd6;border-radius:12px;padding:12px 14px;background:#fff;text-decoration:none;color:inherit;margin-bottom:8px;transition:all 0.15s;}
-.sub-card:last-child{margin-bottom:0;}
+.sub-card{display:flex;align-items:center;gap:14px;border:1px solid #e0ddd6;border-radius:16px;padding:1rem 1.25rem;background:#fff;text-decoration:none;color:inherit;transition:all 0.15s;}
 .sub-card:hover{border-color:#aaa;background:#faf9f7;}
 .sub-card:active{transform:scale(0.99);}
-.sub-icon{font-size:20px;flex-shrink:0;}
-.sub-name{font-size:13px;font-weight:500;margin-bottom:2px;}
-.sub-desc{font-size:11px;color:#888;line-height:1.4;}
-.sub-arrow{margin-left:auto;color:#ccc;font-size:14px;flex-shrink:0;}
-
-.footer-note{text-align:center;font-size:12px;color:#aaa;margin-top:24px;}
+.sub-icon{font-size:26px;flex-shrink:0;}
+.sub-info{flex:1;}
+.sub-name{font-size:15px;font-weight:500;margin-bottom:3px;}
+.sub-desc{font-size:12px;color:#888;line-height:1.4;}
+.sub-arrow{color:#ccc;font-size:16px;flex-shrink:0;}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="top-title">STUDY APP</div>
   <div class="top-heading">Super Duper ManaViva</div>
-  <div class="top-sub">科目を選んでスタート</div>
 
   <div class="subject-list">
-
-    <!-- 英語 -->
-    <div class="subject-item" id="item-english">
-      <div class="subject-card" onclick="toggleSub('english')">
-        <div class="subject-icon">📘</div>
-        <div class="subject-info">
-          <div class="subject-name">英語</div>
-          <div class="subject-desc">英検3級の単語学習や、不規則変化の特訓ができます</div>
-        </div>
-        <span class="subject-badge badge-ready">学習可</span>
-        <span class="chevron" id="chev-english">›</span>
+    <a class="sub-card" href="eiken3.html">
+      <div class="sub-icon">📖</div>
+      <div class="sub-info">
+        <div class="sub-name">英検3級 単語</div>
+        <div class="sub-desc">テーマ別フラッシュカード</div>
       </div>
-      <div class="sub-menu" id="sub-english">
-        <div class="sub-menu-inner">
-          <div class="sub-label">モードを選択</div>
-          <a class="sub-card" href="eiken3.html">
-            <div class="sub-icon">📖</div>
-            <div>
-              <div class="sub-name">英検3級 単語</div>
-              <div class="sub-desc">テーマ別フラッシュカード</div>
-            </div>
-            <span class="sub-arrow">→</span>
-          </a>
-          <a class="sub-card" href="irregular.html">
-            <div class="sub-icon">🔀</div>
-            <div>
-              <div class="sub-name">不規則チャレンジ</div>
-              <div class="sub-desc">動詞・形容詞・名詞の不規則変化</div>
-            </div>
-            <span class="sub-arrow">→</span>
-          </a>
-          <a class="sub-card" href="grammar.html">
-            <div class="sub-icon">🎸</div>
-            <div>
-              <div class="sub-name">ぶんぽうガチャ</div>
-              <div class="sub-desc">例文で覚える高校受験レベルの文法</div>
-            </div>
-            <span class="sub-arrow">→</span>
-          </a>
-        </div>
+      <span class="sub-arrow">→</span>
+    </a>
+    <a class="sub-card" href="irregular.html">
+      <div class="sub-icon">🔀</div>
+      <div class="sub-info">
+        <div class="sub-name">不規則チャレンジ</div>
+        <div class="sub-desc">動詞・形容詞・名詞の不規則変化</div>
       </div>
-    </div>
-
+      <span class="sub-arrow">→</span>
+    </a>
+    <a class="sub-card" href="grammar.html">
+      <div class="sub-icon">🎸</div>
+      <div class="sub-info">
+        <div class="sub-name">エドシーラン的文法のすゝめ</div>
+        <div class="sub-desc">例文で覚える高校受験レベルの文法</div>
+      </div>
+      <span class="sub-arrow">→</span>
+    </a>
   </div>
-
-  <div class="footer-note">他の科目も今後追加予定です</div>
 </div>
-
-<script>
-function toggleSub(name) {
-  var item = document.getElementById('item-' + name);
-  var sub = document.getElementById('sub-' + name);
-  var isOpen = sub.classList.contains('open');
-  sub.classList.toggle('open', !isOpen);
-  item.classList.toggle('selected', !isOpen);
-}
-</script>
 </body>
 </html>
