@@ -17,6 +17,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .prog-item{text-align:center;}
 .prog-num{font-size:20px;font-weight:500;color:#1a1a1a;}
 .prog-label{font-size:11px;color:#888;margin-top:2px;}
+.toggle-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e0ddd6;border-radius:12px;padding:10px 14px;margin-bottom:20px;cursor:pointer;transition:background 0.15s;}
+.toggle-row:hover{background:#faf9f7;}
+.toggle-switch{width:38px;height:22px;border-radius:11px;background:#ddd;position:relative;flex-shrink:0;transition:background 0.2s;}
+.toggle-switch.on{background:#1D9E75;}
+.toggle-knob{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle-switch.on .toggle-knob{left:18px;}
+.toggle-label{font-size:12px;color:#555;}
 .phase-section{margin-bottom:20px;}
 .phase-label{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .phase-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
@@ -57,11 +64,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .front-pron{font-size:13px;color:#aaa;margin-top:6px;}
 .front-hint{font-size:11px;color:#ccc;margin-top:12px;}
 .challenge-badge{display:inline-block;font-size:10px;font-weight:600;background:#fdebd0;color:#a15c00;padding:2px 9px;border-radius:8px;margin-top:8px;}
-.conj-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
-.conj-table th{font-size:10px;color:#aaa;font-weight:500;text-align:center;padding:4px;letter-spacing:0.05em;}
-.conj-table td{text-align:center;padding:8px 4px;border-top:1px solid #e8e5de;}
-.conj-word{font-size:17px;font-weight:600;color:#1a1a1a;}
-.conj-pron{font-size:11px;color:#999;margin-top:2px;}
+.conj-table{width:100%;border-collapse:collapse;margin-bottom:10px;table-layout:fixed;}
+.conj-table th{font-size:11px;color:#aaa;font-weight:500;text-align:center;padding:4px 2px;letter-spacing:0.05em;}
+.conj-table td{text-align:center;padding:10px 3px;border-top:1px solid #e8e5de;width:33.33%;overflow:hidden;}
+.conj-word{font-size:clamp(13px,5.2vw,22px);font-weight:700;color:#1a1a1a;line-height:1.2;word-break:break-word;}
+.conj-pron{font-size:11px;color:#999;margin-top:4px;}
 .audio-btn{cursor:pointer;background:none;border:none;padding:0 3px;font-size:16px;vertical-align:middle;}
 hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
 .back-meaning{font-size:14px;color:#1a1a1a;text-align:center;margin-bottom:6px;font-weight:500;}
@@ -95,6 +102,11 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
       <div class="prog-item"><div class="prog-num" id="hp-total">0</div><div class="prog-label">総語数</div></div>
       <div class="prog-item"><div class="prog-num" id="hp-missed">0</div><div class="prog-label">要復習</div></div>
       <div class="prog-item"><div class="prog-num" id="hp-pct">0%</div><div class="prog-label">達成率</div></div>
+    </div>
+
+    <div class="toggle-row" onclick="toggleChallenge()" id="toggle-challenge-row">
+      <div class="toggle-switch" id="toggle-switch"><div class="toggle-knob" id="toggle-knob"></div></div>
+      <div class="toggle-label">🔥 チャレンジ問題（英検2級以上）を除いて出題する</div>
     </div>
 
     <!-- フェーズ1: AAA -->
@@ -133,33 +145,33 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
     <div class="phase-section">
       <div class="phase-label">
         <div class="phase-num" style="background:#deeaf9;color:#185FA5;">3</div>
-        <div class="phase-title">A-B-B型（過去形＝過去分詞）サブグループ</div>
+        <div class="phase-title">A-B-B型（過去形＝過去分詞）</div>
       </div>
       <div class="phase-desc">音のパターンごとに分類</div>
       <div class="cat-grid">
         <div class="cat-card" onclick="selectCat('abb_ought')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">buy系</div>
+          <div class="cat-name">buyグループ</div>
           <div class="cat-count" id="cnt-abb_ought">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_ept')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">feel系</div>
+          <div class="cat-name">feelグループ</div>
           <div class="cat-count" id="cnt-abb_ept">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_ound')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">find系</div>
+          <div class="cat-name">findグループ</div>
           <div class="cat-count" id="cnt-abb_ound">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_aid')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">say系</div>
+          <div class="cat-name">sayグループ</div>
           <div class="cat-count" id="cnt-abb_aid">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abb_other')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">get系・その他</div>
+          <div class="cat-name">getグループ・その他</div>
           <div class="cat-count" id="cnt-abb_other">0語</div>
         </div>
       </div>
@@ -169,38 +181,38 @@ hr.div{border:none;border-top:1px solid #e8e5de;margin:8px 0;}
     <div class="phase-section">
       <div class="phase-label">
         <div class="phase-num" style="background:#e1f5ee;color:#0F6E56;">4</div>
-        <div class="phase-title">A-B-C型（全て異なる）サブグループ</div>
+        <div class="phase-title">A-B-C型（全て異なる）</div>
       </div>
       <div class="phase-desc">音のパターンごとに分類</div>
       <div class="cat-grid">
         <div class="cat-card" onclick="selectCat('abc_ookoken')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">take系</div>
+          <div class="cat-name">takeグループ</div>
           <div class="cat-count" id="cnt-abc_ookoken">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_ew_own')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">know系</div>
+          <div class="cat-name">knowグループ</div>
           <div class="cat-count" id="cnt-abc_ew_own">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_ate_aten')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">see系</div>
+          <div class="cat-name">seeグループ</div>
           <div class="cat-count" id="cnt-abc_ate_aten">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_gan_gun')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">begin系</div>
+          <div class="cat-name">beginグループ</div>
           <div class="cat-count" id="cnt-abc_gan_gun">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_gave_given')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">ride系</div>
+          <div class="cat-name">rideグループ</div>
           <div class="cat-count" id="cnt-abc_gave_given">0語</div>
         </div>
         <div class="cat-card" onclick="selectCat('abc_other')">
           <span class="cat-badge badge-ready">学習可</span>
-          <div class="cat-name">go系・その他</div>
+          <div class="cat-name">goグループ・その他</div>
           <div class="cat-count" id="cnt-abc_other">0語</div>
         </div>
       </div>
@@ -316,7 +328,7 @@ var CATS = {
     {b:'run',ba:'rún',bp:'rʌn',pa:'rán',pp2:'ræn',pa2:'rún',pp3:'rʌn',def:'走る、運営する',ex:'She runs every morning.',exJ:'彼女は毎朝走る。'},
     {b:'overcome',ba:'overcóme',bp:'ˌoʊvərˈkʌm',pa:'overcáme',pp2:'ˌoʊvərˈkeɪm',pa2:'overcóme',pp3:'ˌoʊvərˈkʌm',def:'克服する',ex:'He overcame difficulties.',exJ:'彼は困難を克服した。',challenge:true}
   ]},
-  abb_ought:{name:'A-B-B型 -ought/-aught グループ',words:[
+  abb_ought:{name:'buyグループ（A-B-B型）',words:[
     {b:'buy',ba:'búy',bp:'baɪ',pa:'bóught',pp2:'bɔːt',pa2:'bóught',pp3:'bɔːt',def:'買う',ex:'I bought a new phone.',exJ:'新しい電話を買った。'},
     {b:'bring',ba:'bríng',bp:'brɪŋ',pa:'bróught',pp2:'brɔːt',pa2:'bróught',pp3:'brɔːt',def:'持ってくる',ex:'Please bring your book.',exJ:'本を持ってきてください。'},
     {b:'think',ba:'thínk',bp:'θɪŋk',pa:'thóught',pp2:'θɔːt',pa2:'thóught',pp3:'θɔːt',def:'考える、思う',ex:'I thought you were right.',exJ:'あなたが正しいと思った。'},
@@ -325,7 +337,7 @@ var CATS = {
     {b:'fight',ba:'fíght',bp:'faɪt',pa:'fóught',pp2:'fɔːt',pa2:'fóught',pp3:'fɔːt',def:'戦う',ex:'They fought for peace.',exJ:'彼らは平和のために戦った。'},
     {b:'seek',ba:'séek',bp:'siːk',pa:'sóught',pp2:'sɔːt',pa2:'sóught',pp3:'sɔːt',def:'求める、探す',ex:'She sought help.',exJ:'彼女は助けを求めた。',challenge:true}
   ]},
-  abb_ept:{name:'A-B-B型 -ee/-eep→-ept/-eft グループ',words:[
+  abb_ept:{name:'feelグループ（A-B-B型）',words:[
     {b:'feel',ba:'féel',bp:'fiːl',pa:'félt',pp2:'felt',pa2:'félt',pp3:'felt',def:'感じる',ex:'I felt happy.',exJ:'幸せを感じた。'},
     {b:'keep',ba:'kéep',bp:'kiːp',pa:'képt',pp2:'kept',pa2:'képt',pp3:'kept',def:'保つ、維持する',ex:'Keep your promise.',exJ:'約束を守って。'},
     {b:'sleep',ba:'sléep',bp:'sliːp',pa:'slépt',pp2:'slept',pa2:'slépt',pp3:'slept',def:'眠る',ex:'I slept eight hours.',exJ:'8時間眠った。'},
@@ -334,7 +346,7 @@ var CATS = {
     {b:'leave',ba:'léave',bp:'liːv',pa:'léft',pp2:'left',pa2:'léft',pp3:'left',def:'去る、残す',ex:'She left at six.',exJ:'彼女は6時に出た。'},
     {b:'creep',ba:'créep',bp:'kriːp',pa:'crépt',pp2:'krept',pa2:'crépt',pp3:'krept',def:'忍び寄る',ex:'He crept quietly.',exJ:'彼は静かに忍び寄った。',challenge:true}
   ]},
-  abb_ound:{name:'A-B-B型 -ind/-ell→-ound/-old グループ',words:[
+  abb_ound:{name:'findグループ（A-B-B型）',words:[
     {b:'find',ba:'fínd',bp:'faɪnd',pa:'fóund',pp2:'faʊnd',pa2:'fóund',pp3:'faʊnd',def:'見つける',ex:'I found my keys.',exJ:'鍵を見つけた。'},
     {b:'bind',ba:'bínd',bp:'baɪnd',pa:'bóund',pp2:'baʊnd',pa2:'bóund',pp3:'baʊnd',def:'縛る、結びつける',ex:'She bound the books.',exJ:'彼女は本を束ねた。',challenge:true},
     {b:'wind',ba:'wínd',bp:'waɪnd',pa:'wóund',pp2:'waʊnd',pa2:'wóund',pp3:'waʊnd',def:'巻く、曲がりくねる',ex:'He wound the rope.',exJ:'彼はロープを巻いた。',challenge:true},
@@ -345,7 +357,7 @@ var CATS = {
     {b:'stand',ba:'stánd',bp:'stænd',pa:'stóod',pp2:'stʊd',pa2:'stóod',pp3:'stʊd',def:'立つ',ex:'He stood by the door.',exJ:'彼はドアのそばに立った。'},
     {b:'understand',ba:'understánd',bp:'ˌʌndərˈstænd',pa:'understóod',pp2:'ˌʌndərˈstʊd',pa2:'understóod',pp3:'ˌʌndərˈstʊd',def:'理解する',ex:'I understood the problem.',exJ:'その問題を理解した。'}
   ]},
-  abb_aid:{name:'A-B-B型 -ay/-ake/-ave→-aid/-ade/-aved グループ',words:[
+  abb_aid:{name:'sayグループ（A-B-B型）',words:[
     {b:'say',ba:'sáy',bp:'seɪ',pa:'sáid',pp2:'sed',pa2:'sáid',pp3:'sed',def:'言う',ex:'She said hello.',exJ:'彼女は挨拶した。'},
     {b:'pay',ba:'páy',bp:'peɪ',pa:'páid',pp2:'peɪd',pa2:'páid',pp3:'peɪd',def:'支払う',ex:'I paid for lunch.',exJ:'昼食代を払った。'},
     {b:'lay',ba:'láy',bp:'leɪ',pa:'láid',pp2:'leɪd',pa2:'láid',pp3:'leɪd',def:'置く、産む',ex:'The hen laid an egg.',exJ:'雌鶏が卵を産んだ。'},
@@ -362,7 +374,7 @@ var CATS = {
     {b:'bend',ba:'bénd',bp:'bend',pa:'bént',pp2:'bent',pa2:'bént',pp3:'bent',def:'曲げる、曲がる',ex:'She bent the wire.',exJ:'彼女は針金を曲げた。',challenge:true},
     {b:'rend',ba:'rénd',bp:'rend',pa:'rént',pp2:'rent',pa2:'rént',pp3:'rent',def:'引き裂く',ex:'He rent the paper.',exJ:'彼は紙を引き裂いた。',challenge:true}
   ]},
-  abb_other:{name:'A-B-B型 その他',words:[
+  abb_other:{name:'getグループ・その他（A-B-B型）',words:[
     {b:'lose',ba:'lóse',bp:'luːz',pa:'lóst',pp2:'lɒst',pa2:'lóst',pp3:'lɒst',def:'失う、負ける',ex:'We lost the game.',exJ:'試合に負けた。'},
     {b:'win',ba:'wín',bp:'wɪn',pa:'wón',pp2:'wʌn',pa2:'wón',pp3:'wʌn',def:'勝つ',ex:'Our team won.',exJ:'私たちのチームが勝った。'},
     {b:'sit',ba:'sít',bp:'sɪt',pa:'sát',pp2:'sæt',pa2:'sát',pp3:'sæt',def:'座る',ex:'Please sit down.',exJ:'座ってください。'},
@@ -379,7 +391,7 @@ var CATS = {
     {b:'light',ba:'líght',bp:'laɪt',pa:'lít',pp2:'lɪt',pa2:'lít',pp3:'lɪt',def:'火をつける、照らす',ex:'She lit the candle.',exJ:'彼女はろうそくに火をつけた。',challenge:true},
     {b:'shine',ba:'shíne',bp:'ʃaɪn',pa:'shóne',pp2:'ʃɒn',pa2:'shóne',pp3:'ʃɒn',def:'輝く、磨く',ex:'The sun shone.',exJ:'太陽が輝いた。',challenge:true}
   ]},
-  abc_ookoken:{name:'A-B-C型 -ake/-eak/-ose→-ook/-oke/-osen グループ',words:[
+  abc_ookoken:{name:'takeグループ（A-B-C型）',words:[
     {b:'take',ba:'táke',bp:'teɪk',pa:'tóok',pp2:'tʊk',pa2:'táken',pp3:'ˈteɪkən',def:'取る、持っていく',ex:'She took a photo.',exJ:'彼女は写真を撮った。'},
     {b:'speak',ba:'spéak',bp:'spiːk',pa:'spóke',pp2:'spoʊk',pa2:'spóken',pp3:'ˈspoʊkən',def:'話す',ex:'She speaks English.',exJ:'彼女は英語を話す。'},
     {b:'break',ba:'bréak',bp:'breɪk',pa:'bróke',pp2:'broʊk',pa2:'bróken',pp3:'ˈbroʊkən',def:'壊す、割る',ex:'He broke the window.',exJ:'彼は窓を割った。'},
@@ -389,7 +401,7 @@ var CATS = {
     {b:'mistake',ba:'mistáke',bp:'mɪˈsteɪk',pa:'mistóok',pp2:'mɪˈstʊk',pa2:'mistáken',pp3:'mɪˈsteɪkən',def:'間違える',ex:'I mistook him for you.',exJ:'彼をあなたと間違えた。',challenge:true},
     {b:'forsake',ba:'forsáke',bp:'fərˈseɪk',pa:'forsóok',pp2:'fərˈsʊk',pa2:'forsáken',pp3:'fərˈseɪkən',def:'見捨てる',ex:'He forsook his friends.',exJ:'彼は友人を見捨てた。',challenge:true}
   ]},
-  abc_ew_own:{name:'A-B-C型 -ow/-w/-y→-ew/-rew→-own/-rown グループ',words:[
+  abc_ew_own:{name:'knowグループ（A-B-C型）',words:[
     {b:'know',ba:'knów',bp:'noʊ',pa:'knéw',pp2:'njuː',pa2:'knówn',pp3:'noʊn',def:'知っている',ex:'I knew the answer.',exJ:'答えを知っていた。'},
     {b:'grow',ba:'grów',bp:'ɡroʊ',pa:'grów',pp2:'ɡruː',pa2:'grówn',pp3:'ɡroʊn',def:'成長する、育てる',ex:'The plant grew quickly.',exJ:'植物は早く成長した。'},
     {b:'throw',ba:'thrów',bp:'θroʊ',pa:'thréw',pp2:'θruː',pa2:'thrówn',pp3:'θroʊn',def:'投げる',ex:'He threw the ball.',exJ:'彼はボールを投げた。'},
@@ -400,7 +412,7 @@ var CATS = {
     {b:'withdraw',ba:'withdráw',bp:'wɪðˈdrɔː',pa:'withdrów',pp2:'wɪðˈdruː',pa2:'withdráwn',pp3:'wɪðˈdrɔːn',def:'引き出す、撤退する',ex:'She withdrew cash.',exJ:'彼女は現金を引き出した。',challenge:true},
     {b:'overflow',ba:'ovérflow',bp:'ˌoʊvərˈfloʊ',pa:'ovérflowed',pp2:'ˌoʊvərˈfloʊd',pa2:'ovérflown',pp3:'ˌoʊvərˈfloʊn',def:'あふれる',ex:'The river overflowed.',exJ:'川があふれた。',challenge:true}
   ]},
-  abc_ate_aten:{name:'A-B-C型 -ee/-all/-eat→-aw/-ell/-ate→-een/-allen/-aten グループ',words:[
+  abc_ate_aten:{name:'seeグループ（A-B-C型）',words:[
     {b:'see',ba:'sée',bp:'siː',pa:'sáw',pp2:'sɔː',pa2:'séen',pp3:'siːn',def:'見る、見える',ex:'I saw a movie.',exJ:'映画を見た。'},
     {b:'eat',ba:'éat',bp:'iːt',pa:'áte',pp2:'eɪt',pa2:'éaten',pp3:'ˈiːtən',def:'食べる',ex:'We ate dinner.',exJ:'夕食を食べた。'},
     {b:'fall',ba:'fáll',bp:'fɔːl',pa:'féll',pp2:'fel',pa2:'fállen',pp3:'ˈfɔːlən',def:'落ちる、転ぶ',ex:'The leaves fell.',exJ:'葉が落ちた。'},
@@ -410,7 +422,7 @@ var CATS = {
     {b:'get',ba:'gét',bp:'ɡet',pa:'gót',pp2:'ɡɒt',pa2:'gót / gótten',pp3:'ɡɒt / ˈɡɒtən',def:'得る、なる',ex:'I got a present.',exJ:'プレゼントをもらった。'},
     {b:'oversee',ba:'overséé',bp:'ˌoʊvərˈsiː',pa:'oversaw',pp2:'ˌoʊvərˈsɔː',pa2:'overséen',pp3:'ˌoʊvərˈsiːn',def:'監督する',ex:'He oversaw the project.',exJ:'彼はプロジェクトを監督した。',challenge:true}
   ]},
-  abc_gan_gun:{name:'A-B-C型 -in/-ing/-ink→-an/-ang/-ank→-un/-ung/-unk グループ',words:[
+  abc_gan_gun:{name:'beginグループ（A-B-C型）',words:[
     {b:'begin',ba:'begín',bp:'bɪˈɡɪn',pa:'begán',pp2:'bɪˈɡæn',pa2:'begún',pp3:'bɪˈɡʌn',def:'始まる、始める',ex:'The class began.',exJ:'授業が始まった。'},
     {b:'sing',ba:'síng',bp:'sɪŋ',pa:'sáng',pp2:'sæŋ',pa2:'súng',pp3:'sʌŋ',def:'歌う',ex:'They sang together.',exJ:'彼らは一緒に歌った。'},
     {b:'ring',ba:'ríng',bp:'rɪŋ',pa:'ráng',pp2:'ræŋ',pa2:'rúng',pp3:'rʌŋ',def:'（ベルが）鳴る',ex:'The bell rang.',exJ:'ベルが鳴った。'},
@@ -421,7 +433,7 @@ var CATS = {
     {b:'stink',ba:'stínk',bp:'stɪŋk',pa:'stánk',pp2:'stæŋk',pa2:'stúnk',pp3:'stʌŋk',def:'悪臭を放つ',ex:'The garbage stank.',exJ:'ゴミが臭った。',challenge:true},
     {b:'spin',ba:'spín',bp:'spɪn',pa:'spán',pp2:'spæn',pa2:'spún',pp3:'spʌn',def:'回転する',ex:'The wheel spun.',exJ:'車輪が回った。'}
   ]},
-  abc_gave_given:{name:'A-B-C型 -ive/-ide/-ite/-ise→-ode/-ote/-ose/-ove→-idden/-itten/-osen グループ',words:[
+  abc_gave_given:{name:'rideグループ（A-B-C型）',words:[
     {b:'ride',ba:'ríde',bp:'raɪd',pa:'róde',pp2:'roʊd',pa2:'rídden',pp3:'ˈrɪdən',def:'乗る',ex:'She rode her bike.',exJ:'彼女は自転車に乗った。'},
     {b:'write',ba:'wríte',bp:'raɪt',pa:'wróte',pp2:'roʊt',pa2:'wrítten',pp3:'ˈrɪtən',def:'書く',ex:'He wrote a letter.',exJ:'彼は手紙を書いた。'},
     {b:'bite',ba:'bíte',bp:'baɪt',pa:'bít',pp2:'bɪt',pa2:'bítten',pp3:'ˈbɪtən',def:'噛む',ex:'The dog bit him.',exJ:'犬が彼を噛んだ。'},
@@ -434,7 +446,7 @@ var CATS = {
     {b:'freeze',ba:'fréeze',bp:'friːz',pa:'fróze',pp2:'froʊz',pa2:'frózen',pp3:'ˈfroʊzən',def:'凍る',ex:'The lake froze.',exJ:'湖が凍った。'},
     {b:'weave',ba:'wéave',bp:'wiːv',pa:'wóve',pp2:'woʊv',pa2:'wóven',pp3:'ˈwoʊvən',def:'織る',ex:'She wove a basket.',exJ:'彼女はかごを編んだ。',challenge:true}
   ]},
-  abc_other:{name:'A-B-C型 その他',words:[
+  abc_other:{name:'goグループ・その他（A-B-C型）',words:[
     {b:'go',ba:'gó',bp:'ɡoʊ',pa:'wént',pp2:'went',pa2:'góne',pp3:'ɡɒn',def:'行く',ex:'She went to school.',exJ:'彼女は学校に行った。'},
     {b:'do',ba:'dó',bp:'duː',pa:'díd',pp2:'dɪd',pa2:'dóne',pp3:'dʌn',def:'する、行う',ex:'I did my homework.',exJ:'宿題をやった。'},
     {b:'wear',ba:'wéar',bp:'weər',pa:'wóre',pp2:'wɔːr',pa2:'wórn',pp3:'wɔːrn',def:'着ている',ex:'He wore a black suit.',exJ:'彼は黒いスーツを着ていた。'},
@@ -463,10 +475,12 @@ function getAllWords(){
 }
 
 var allMissed={};
+var allLearned={};
 var currentCat=null;
 var words=[];
 var mode='en';
 var idx=0,okCnt=0,ngCnt=0,flipped=false;
+var excludeChallenge=false;
 
 function shuffle(arr){
   var a=arr.slice();
@@ -477,7 +491,7 @@ function shuffle(arr){
 function saveState(){
   try{
     var s={};
-    Object.keys(CATS).forEach(function(k){s[k]={missed:allMissed[k]||[]};});
+    Object.keys(CATS).forEach(function(k){s[k]={missed:allMissed[k]||[],learned:allLearned[k]||[]};});
     localStorage.setItem('irr2_state',JSON.stringify(s));
   }catch(e){}
 }
@@ -486,23 +500,27 @@ function loadState(){
     var s=localStorage.getItem('irr2_state');
     if(!s)return;
     var saved=JSON.parse(s);
-    Object.keys(saved).forEach(function(k){allMissed[k]=saved[k].missed||[];});
+    Object.keys(saved).forEach(function(k){
+      allMissed[k]=saved[k].missed||[];
+      allLearned[k]=saved[k].learned||[];
+    });
   }catch(e){}
 }
 
 function updateHomeCounts(){
-  var total=0,missed=0;
+  var total=0,learnedCount=0;
   Object.keys(CATS).forEach(function(k){
     var n=CATS[k].words.length;
     total+=n;
-    var m=(allMissed[k]||[]).length;
-    missed+=m;
+    learnedCount+=(allLearned[k]||[]).length;
     document.getElementById('cnt-'+k).textContent=n+'語';
   });
   document.getElementById('cnt-shuffle').textContent=total+'語（全パターン混合）';
   document.getElementById('hp-total').textContent=total;
-  document.getElementById('hp-missed').textContent=missed;
-  var pct=total>0?Math.round((total-missed)/total*100):0;
+  var missedTotal=0;
+  Object.keys(allMissed).forEach(function(k){missedTotal+=(allMissed[k]||[]).length;});
+  document.getElementById('hp-missed').textContent=missedTotal;
+  var pct=total>0?Math.round(learnedCount/total*100):0;
   document.getElementById('hp-pct').textContent=pct+'%';
 }
 
@@ -515,6 +533,7 @@ function selectCat(catKey){
     words=CATS[catKey].words.slice();
     document.getElementById('study-title').textContent=CATS[catKey].name;
   }
+  if(excludeChallenge)words=words.filter(function(w){return !w.challenge;});
   idx=0;okCnt=0;ngCnt=0;mode='en';
   document.getElementById('screen-home').style.display='none';
   document.getElementById('screen-study').style.display='block';
@@ -603,9 +622,13 @@ function flip(){
 }
 
 function answer(ok){
-  if(!ok&&words[idx]){
-    var cat=currentCat==='shuffle'?(words[idx]._cat||'shuffle'):currentCat;
-    if(!allMissed[cat])allMissed[cat]=[];
+  var cat=currentCat==='shuffle'?(words[idx]._cat||'shuffle'):currentCat;
+  if(!allMissed[cat])allMissed[cat]=[];
+  if(!allLearned[cat])allLearned[cat]=[];
+  if(ok){
+    if(!allLearned[cat].find(function(x){return x===words[idx].b;}))allLearned[cat].push(words[idx].b);
+    allMissed[cat]=allMissed[cat].filter(function(x){return x.b!==words[idx].b;});
+  }else{
     if(!allMissed[cat].find(function(x){return x.b===words[idx].b;}))allMissed[cat].push(words[idx]);
   }
   if(ok)okCnt++;else ngCnt++;
